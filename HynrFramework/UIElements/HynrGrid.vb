@@ -1,0 +1,74 @@
+﻿Imports System.ComponentModel
+Imports System.Windows.Forms
+
+Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(Of dataitem))
+    Inherits DataGridView
+    Implements IBindableListControl(Of dataitem, viewmodelidem)
+    Implements INotifyPropertyChanged
+    Implements IHasHynrSettings
+
+#Region "PROPERTIES"
+    Private Property _BindingSource As New BindingSource
+    Public Property BindingSourceDataSource As Object
+        Get
+            If IsNothing(_BindingSource) Then
+                Return _BindingSource.DataSource
+            Else
+                Return Nothing
+            End If
+        End Get
+        Set(value As Object)
+            If Not IsNothing(value) Then
+                _BindingSource.DataSource = value
+            End If
+        End Set
+    End Property
+    Private Property _SelectedItem As viewmodelidem
+    Public Property SelectedItem As viewmodelidem Implements IBindableListControl(Of dataitem, viewmodelidem).SelectedItem
+        Get
+            Return _SelectedItem
+        End Get
+        Set(value As viewmodelidem)
+            _SelectedItem = value
+            OnPropertyChanged("SelectedItem")
+        End Set
+    End Property
+    Private _HynrSettings As HynrUISettings
+    Public Property HynrSettings As HynrUISettings Implements IHasHynrSettings.HynrSettings
+        Get
+            Return _HynrSettings
+        End Get
+        Set(value As HynrUISettings)
+            If Not IsNothing(value) Then
+                _HynrSettings = value
+                ApplyHynrSettings()
+            End If
+        End Set
+    End Property
+#End Region
+
+#Region "METHODS"
+    Public Sub New()
+        DataSource = _BindingSource
+        AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
+    End Sub
+    Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
+        DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
+        DefaultCellStyle.SelectionForeColor = HynrSettings.SelectedForecolor
+        GridColor = HynrSettings.GridColor
+        BackgroundColor = HynrSettings.GridBackcolor
+    End Sub
+    Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
+        If Me.PropertyChangedEvent IsNot Nothing Then
+            RaiseEvent PropertyChanged(Me, New System.ComponentModel.PropertyChangedEventArgs(strPropertyName))
+        End If
+    End Sub
+    Private Sub SelectedItemChanged()
+        SelectedItem = _BindingSource.Current
+    End Sub
+#End Region
+
+#Region "EVENTS"
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+#End Region
+End Class
