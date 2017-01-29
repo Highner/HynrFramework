@@ -31,6 +31,18 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
         Return True
     End Function
 
+    Public Function GetAllObjects(ByVal parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
+        If parameters = "" Then
+            Return DataContext.Set(GetType(entityclass))
+        Else
+            Try
+                Dim objects As IEnumerable(Of entityclass) = DataContext.Set(GetType(entityclass))
+                Return (From o In objects Where (parameters) Select o).ToList
+            Catch
+                Return New List(Of entityclass)
+            End Try
+        End If
+    End Function
     Public Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
         Return DataContext.Set(GetType(entityclass))
     End Function
@@ -38,4 +50,6 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     Public Function GetObject(id As Integer) As entityclass Implements IDataContext(Of entityclass).GetObject
         Return DataContext.Set(GetType(entityclass)).Find(id)
     End Function
+
+
 End Class

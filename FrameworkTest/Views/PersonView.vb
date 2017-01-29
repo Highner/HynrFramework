@@ -1,15 +1,15 @@
 ﻿Public Class PersonView
-    Inherits HynrFramework.HynrItemViewForm(Of PersonData, PersonItemViewModel)
+    Inherits HynrFramework.HynrItemViewForm
 
     Friend WithEvents TextBox1 As TextBox
 
-    Public Sub New(ByRef settings As HynrFramework.HynrUISettings, ByRef datacontext As PersonsListViewModel)
+    Public Sub New(ByRef settings As HynrFramework.HynrUISettings, ByRef datacontext As PersonItemViewModel)
         MyBase.New(settings, datacontext)
         InitializeComponent()
     End Sub
 
     Private Sub LoadMe() Handles Me.Load
-        TextBox1.DataBindings.Add("Text", SelectedItem, "Name", True, DataSourceUpdateMode.OnPropertyChanged)
+        TextBox1.DataBindings.Add("Text", DataContext, "Name", True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
 
     Private Sub InitializeComponent()

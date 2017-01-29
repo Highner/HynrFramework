@@ -4,7 +4,7 @@ Public Class PersonsListViewModel
     Inherits HynrFramework.ListViewModelBase(Of Person, PersonData, PersonsDataController, PersonItemViewModel)
 
     Public Sub New(ByRef datacontroller As PersonsDataController, ByRef Optional bindingsource As BindingSource = Nothing)
-        MyBase.New(datacontroller, bindingsource)
+        MyBase.New(datacontroller, bindingsource, New WindowFactory)
     End Sub
 
     Public Overrides Sub CreateNewItem()

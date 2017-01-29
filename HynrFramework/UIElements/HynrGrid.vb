@@ -66,9 +66,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
     Private Sub SelectedItemChanged()
         SelectedItem = _BindingSource.Current
     End Sub
+    Private Sub ItemDoubleClicked() Handles Me.MouseDoubleClick
+        RaiseEvent ItemDoubleClick(SelectedItem)
+    End Sub
 #End Region
 
 #Region "EVENTS"
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+    Public Event ItemDoubleClick(ByRef item As viewmodelidem)
 #End Region
 End Class

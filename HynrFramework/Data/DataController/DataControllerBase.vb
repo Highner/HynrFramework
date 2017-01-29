@@ -24,9 +24,9 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         End If
         Return GetItem(dataitem.ID)
     End Function
-    Public Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetAllItems
+    Public Overridable Function GetAllItems(Optional ByVal parameters As String = "") As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetAllItems
         Dim list As New List(Of dataclass)
-        For Each entityitem In DataContext.GetAllObjects
+        For Each entityitem In DataContext.GetAllObjects(parameters)
             Dim newdataitem As dataclass = ToData(entityitem)
             list.Add(newdataitem)
         Next

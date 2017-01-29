@@ -28,15 +28,14 @@ Partial Class Form1
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.PersonsGrid = New FrameworkTest.PersonsGrid()
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
+        Me.PersonsGrid = New FrameworkTest.PersonsGrid()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(287, 56)
+        Me.Button1.Location = New System.Drawing.Point(12, 28)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(96, 34)
         Me.Button1.TabIndex = 1
@@ -45,71 +44,68 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(424, 61)
+        Me.Button2.Location = New System.Drawing.Point(114, 28)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(121, 28)
+        Me.Button2.Size = New System.Drawing.Size(96, 34)
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "delete selected"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(596, 32)
+        Me.TextBox1.Location = New System.Drawing.Point(420, 36)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(181, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(422, 20)
         Me.TextBox1.TabIndex = 4
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(596, 61)
+        Me.Button3.Location = New System.Drawing.Point(216, 28)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 23)
+        Me.Button3.Size = New System.Drawing.Size(96, 34)
         Me.Button3.TabIndex = 5
         Me.Button3.Text = "save"
         Me.Button3.UseVisualStyleBackColor = True
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(255, 455)
+        Me.Button4.Location = New System.Drawing.Point(318, 28)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(75, 23)
+        Me.Button4.Size = New System.Drawing.Size(96, 34)
         Me.Button4.TabIndex = 6
         Me.Button4.Text = "Button4"
         Me.Button4.UseVisualStyleBackColor = True
-        '
-        'PersonsGrid
-        '
-        Me.PersonsGrid.AllowUserToAddRows = False
-        Me.PersonsGrid.AllowUserToDeleteRows = False
-        Me.PersonsGrid.AutoGenerateColumns = False
-        Me.PersonsGrid.BindingSourceDataSource = Nothing
-        Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1})
-        Me.PersonsGrid.HynrSettings = Nothing
-        Me.PersonsGrid.Location = New System.Drawing.Point(150, 108)
-        Me.PersonsGrid.Name = "PersonsGrid"
-        Me.PersonsGrid.RowHeadersVisible = False
-        Me.PersonsGrid.SelectedItem = Nothing
-        Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.PersonsGrid.Size = New System.Drawing.Size(588, 309)
-        Me.PersonsGrid.TabIndex = 3
-        '
-        'Column1
-        '
-        Me.Column1.DataPropertyName = "Name"
-        Me.Column1.HeaderText = "Column1"
-        Me.Column1.Name = "Column1"
         '
         'HynrLabelStrip1
         '
         Me.HynrLabelStrip1.HynrSettings = Nothing
         Me.HynrLabelStrip1.LabelText = Nothing
-        Me.HynrLabelStrip1.Location = New System.Drawing.Point(324, 13)
+        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
         Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
-        Me.HynrLabelStrip1.Size = New System.Drawing.Size(111, 25)
+        Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.HynrLabelStrip1.Size = New System.Drawing.Size(854, 25)
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
+        '
+        'PersonsGrid
+        '
+        Me.PersonsGrid.AllowUserToAddRows = False
+        Me.PersonsGrid.AllowUserToDeleteRows = False
+        Me.PersonsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PersonsGrid.AutoGenerateColumns = False
+        Me.PersonsGrid.BindingSourceDataSource = Nothing
+        Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.PersonsGrid.HynrSettings = Nothing
+        Me.PersonsGrid.Location = New System.Drawing.Point(12, 68)
+        Me.PersonsGrid.Name = "PersonsGrid"
+        Me.PersonsGrid.RowHeadersVisible = False
+        Me.PersonsGrid.SelectedItem = Nothing
+        Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.PersonsGrid.Size = New System.Drawing.Size(830, 437)
+        Me.PersonsGrid.TabIndex = 3
         '
         'Form1
         '
@@ -138,6 +134,5 @@ Partial Class Form1
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Button3 As Button
     Friend WithEvents Button4 As Button
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents HynrLabelStrip1 As HynrFramework.HynrLabelStrip
 End Class

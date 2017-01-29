@@ -39,6 +39,8 @@ Public Class HynrLabelStrip
     Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         BackColor = HynrSettings.CompanyColor
         _Label.ForeColor = HynrSettings.LabelstripColor
+        RenderMode = ToolStripRenderMode.System
+        GripStyle = ToolStripGripStyle.Hidden
     End Sub
 #End Region
 

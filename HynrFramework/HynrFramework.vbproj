@@ -60,6 +60,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -112,14 +116,16 @@
     <Compile Include="UIElements\HynrItemViewForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIElements\UIBase\IBindableControl.vb" />
     <Compile Include="UIElements\UIBase\IBindableListControl.vb" />
     <Compile Include="UIElements\UIBase\IHasHynrSettings.vb" />
+    <Compile Include="UIElements\UIBase\IWindowFactory.vb" />
     <Compile Include="UIElements\UISettings\HynrUISettings.vb" />
     <Compile Include="Utility\DynamicExtension.vb" />
     <Compile Include="Utility\GenericObjectInstantiator.vb" />
     <Compile Include="Utility\ObjectMapper.vb" />
     <Compile Include="Utility\ObservableListSource.vb" />
-    <Compile Include="ViewModel\Command.vb" />
+    <Compile Include="Utility\Command.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IViewModelItem.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />

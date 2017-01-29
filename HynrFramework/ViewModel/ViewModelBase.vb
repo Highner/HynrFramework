@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
+Imports HynrFramework
 
 Public Class ViewModelBase
     Implements INotifyPropertyChanged
@@ -9,7 +10,6 @@ Public Class ViewModelBase
             RaiseEvent PropertyChanged(Me, New System.ComponentModel.PropertyChangedEventArgs(strPropertyName))
         End If
     End Sub
-
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 End Class

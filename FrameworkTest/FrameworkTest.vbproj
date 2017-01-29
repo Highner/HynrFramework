@@ -60,6 +60,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
@@ -83,6 +87,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Models\DataCarriers\PersonData.vb" />
     <Compile Include="Models\DataContexts\PersonsDataContext.vb" />
     <Compile Include="Models\DataControllers\DataFactory.vb" />
@@ -140,6 +145,7 @@
     <Compile Include="Views\UIElements\PersonsGrid.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Views\WindowFactory.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -175,7 +181,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HynrFramework\HynrFramework.vbproj">
+      <Project>{a1aa7416-61d9-4d2d-b02c-3981e5a4cd5d}</Project>
+      <Name>HynrFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Models\Entities\FrameworkTestModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -190,12 +201,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\DAKFramework\HynrFramework.vbproj">
-      <Project>{a1aa7416-61d9-4d2d-b02c-3981e5a4cd5d}</Project>
-      <Name>HynrFramework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

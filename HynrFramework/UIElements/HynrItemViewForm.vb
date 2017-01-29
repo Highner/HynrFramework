@@ -1,25 +1,24 @@
 ﻿Imports System.ComponentModel
 Imports System.Windows.Forms
 
-Public Class HynrItemViewForm(Of dataitem, viewmodelitem As IViewModelItem(Of dataitem))
+Public Class HynrItemViewForm
     Inherits HynrForm
-    Implements INotifyPropertyChanged
+    Implements IBindableControl
 
-
-    Private _ItemViewModel As IViewModelItem(Of dataitem)
-    Public Property SelectedItem As IViewModelItem(Of dataitem)
+    Private _DataContext As Object
+    Public Property DataContext As Object Implements IBindableControl.DataContext
         Get
-            Return _ItemViewModel
+            Return _DataContext
         End Get
-        Set(value As IViewModelItem(Of dataitem))
-            _ItemViewModel = value
+        Set(value As Object)
+            _DataContext = value
             OnPropertyChanged("SelectedItem")
         End Set
     End Property
 
     Public Sub New(ByRef settings As HynrUISettings, ByRef datacontext As Object)
         MyBase.New(settings)
-        DataBindings.Add("SelectedItem", datacontext, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
+        _DataContext = datacontext
     End Sub
 
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)

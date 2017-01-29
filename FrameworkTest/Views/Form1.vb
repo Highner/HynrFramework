@@ -25,8 +25,9 @@
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        Dim form As New PersonView(Settings, ViewModel)
-
-        form.Show()
+        ViewModel.OpenNewFormCommand.Execute(Nothing)
+    End Sub
+    Private Sub itemdoubleclicked(ByRef item As PersonItemViewModel) Handles PersonsGrid.ItemDoubleClick
+        ViewModel.OpenNewFormCommand.Execute(Nothing)
     End Sub
 End Class
