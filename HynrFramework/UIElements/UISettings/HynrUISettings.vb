@@ -99,6 +99,15 @@ Public Class HynrUISettings
     Private _DefaultFontName As String = "Arial"
 #End Region
 
+#Region "CONTROLS"
+#Region "HYNRGRID"
+    Public RowHeadersVisible As Boolean = False
+    Public GridBorderStyle As BorderStyle = BorderStyle.None
+    Public GridColumHeaderBorderStyle As ColumnHeaderStyle = ColumnHeaderStyle.Nonclickable
+#End Region
+
+#End Region
+
 #Region "METHODS"
     Sub ApplyToControlContainer(ByRef container As ContainerControl)
         For Each control In container.Controls

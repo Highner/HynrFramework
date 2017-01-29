@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Windows.Forms
+Imports HynrFramework
 
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(Of dataitem))
     Inherits DataGridView
@@ -9,7 +10,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
 
 #Region "PROPERTIES"
     Private Property _BindingSource As New BindingSource
-    Public Property BindingSourceDataSource As Object
+    Public Property BindingSourceDataSource As Object Implements IBindableListControl(Of dataitem, viewmodelidem).BindingSourceDataSource
         Get
             If IsNothing(_BindingSource) Then
                 Return _BindingSource.DataSource
@@ -45,6 +46,12 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
             End If
         End Set
     End Property
+
+    Public ReadOnly Property ControlDataBindings As ControlBindingsCollection Implements IBindableListControl(Of dataitem, viewmodelidem).ControlDataBindings
+        Get
+            Return DataBindings
+        End Get
+    End Property
 #End Region
 
 #Region "METHODS"
@@ -57,6 +64,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
         DefaultCellStyle.SelectionForeColor = HynrSettings.SelectedForecolor
         GridColor = HynrSettings.GridColor
         BackgroundColor = HynrSettings.GridBackcolor
+        RowHeadersVisible = HynrSettings.RowHeadersVisible
+        BorderStyle = HynrSettings.GridBorderStyle
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
         If Me.PropertyChangedEvent IsNot Nothing Then

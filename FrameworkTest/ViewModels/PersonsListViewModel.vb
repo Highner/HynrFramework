@@ -8,7 +8,7 @@ Public Class PersonsListViewModel
     End Sub
 
     Public Overrides Sub CreateNewItem()
-        DataController.CreateNewItem(DataFactory.CreateNewPersonDataItem)
+        _DataController.CreateNewItem(DataFactory.CreateNewPersonDataItem)
         GetData()
     End Sub
 End Class

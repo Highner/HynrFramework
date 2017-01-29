@@ -1,5 +1,6 @@
 ﻿Imports System.Data.Entity
 Imports HynrFramework
+Imports System.Linq.Dynamic
 
 Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = entity, T5 = DbContext
     Implements IDataContext(Of entityclass)
@@ -36,8 +37,8 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
             Return DataContext.Set(GetType(entityclass))
         Else
             Try
-                Dim objects As IEnumerable(Of entityclass) = DataContext.Set(GetType(entityclass))
-                Return (From o In objects Where (parameters) Select o).ToList
+                Dim objects As IEnumerable(Of entityclass) = DataContext.Set(GetType(entityclass)).Where(parameters)
+                Return objects.ToList
             Catch
                 Return New List(Of entityclass)
             End Try

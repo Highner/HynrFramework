@@ -6,8 +6,7 @@
         ViewModel.GetData()
         PersonsGrid.AutoGenerateColumns = True
 
-        PersonsGrid.DataBindings.Add("BindingSourceDataSource", ViewModel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
-        PersonsGrid.DataBindings.Add("SelectedItem", ViewModel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
+        ViewModel.BindToListControl(PersonsGrid)
         TextBox1.DataBindings.Add("Text", ViewModel, "SelectedItem.Name", True, DataSourceUpdateMode.OnPropertyChanged)
         HynrLabelStrip1.DataBindings.Add("LabelText", ViewModel, "SelectedItem.Header", True, DataSourceUpdateMode.Never)
     End Sub

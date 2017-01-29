@@ -126,8 +126,9 @@
     <Compile Include="Utility\ObjectMapper.vb" />
     <Compile Include="Utility\ObservableListSource.vb" />
     <Compile Include="Utility\Command.vb" />
+    <Compile Include="ViewModel\IListViewModel.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
-    <Compile Include="ViewModel\IViewModelItem.vb" />
+    <Compile Include="ViewModel\IItemViewModel.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />
     <Compile Include="ViewModel\ViewModelBase.vb" />
   </ItemGroup>
