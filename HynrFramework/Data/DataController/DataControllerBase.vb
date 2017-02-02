@@ -4,7 +4,6 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Implements IDataController(Of entityclass, dataclass)
 #Region "PROPERTIES"
     Protected DataContext As datacontextclass
-    Private KeepEntityProperties As Boolean = False
 #End Region
 
 #Region "METHODS"
@@ -52,19 +51,14 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
 #End Region
 
 #Region "DATA MAPPING"
-    'override this to fill custom properties etc., but include call to mybase.ToData to map the base properties. set KeepEntityProperties to false in that case
+    'override this to fill custom properties etc., but include call to mybase.ToData to map the base properties.
     Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToData
         Dim newdataitem As Object
-        'If KeepEntityProperties = True Then
-        'TODO: extend base dataclass with entity properties
-        ' newdataitem = New DynamicExtension(Of DataCarriersBase)().ExtendWith(Of entity)
-        'Else
         newdataitem = GetInstance(GetType(dataclass))
-        'End If
         MapProperties(entityitem, newdataitem)
         Return newdataitem
     End Function
-    'override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties
+    'override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties.
     Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToEntity
         MapProperties(dataitem, entityitem)
         Return dataitem

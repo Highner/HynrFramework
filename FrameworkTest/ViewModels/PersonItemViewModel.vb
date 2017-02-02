@@ -31,6 +31,11 @@ Public Class PersonItemViewModel
             OnPropertyChanged("Age")
         End Set
     End Property
+    Public ReadOnly Property Country As String
+        Get
+            Return Data.Country
+        End Get
+    End Property
     <Browsable(False)>
     Public Property Header As String
         Get

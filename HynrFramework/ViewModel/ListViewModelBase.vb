@@ -6,29 +6,41 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Inherits ViewModelBase
     Implements IListViewModel
 
-    Protected Property _DataController As datacontrollerclass
+#Region "COMMANDS"
     Public Property CreateCommand As ICommand = New Command(AddressOf CreateNewItem)
     Public Property UpdateAllCommand As ICommand = New Command(AddressOf UpdateAll)
     Public Property DeleteSelectedItemCommand As ICommand = New Command(AddressOf DeleteSelectedItem)
     Public Property OpenNewFormCommand As ICommand = New Command(AddressOf OpenNewForm)
+#End Region
 
+#Region "PROPERTIES"
+    Protected Property _DataController As datacontrollerclass
     Protected ReadOnly Property _WindowFactory As IWindowFactory
     Protected _ParentIDColumn As String
+    Protected _ParentIDValue As String
     Protected _Parameters As String ' e.g.: "Name = " & Chr(34) & "Donald" & Chr(34) or use _SelectedParent.ID for child objects of _Parentobject --- set when initializing after calling mybase.new
-    Protected _ParentListViewModel As IListViewModel
-    Private _SelectedParent As IItemViewModel(Of IHasID)
-    Protected Property SelectedParent As IItemViewModel(Of IHasID)
+    Protected ReadOnly Property Parameters As String
         Get
-            Return _SelectedParent
+            If _Parameters = "" Then
+                If _ParentIDColumn <> "" And _ParentIDValue <> "" Then
+                    Return _ParentIDColumn + " = " + _ParentIDValue
+                End If
+            End If
+            Return _Parameters
         End Get
-        Set(value As IItemViewModel(Of IHasID))
-            _SelectedParent = value
-            _Parameters = _ParentIDColumn + "=" + SelectedParent.ID
-            GetData()
-        End Set
     End Property
-
-
+    'Protected _ParentListViewModel As IListViewModel
+    'Private _SelectedParent As IItemViewModel(Of IHasID)
+    'Protected Property SelectedParent As IItemViewModel(Of IHasID)
+    '    Get
+    '        Return _SelectedParent
+    '    End Get
+    '    Set(value As IItemViewModel(Of IHasID))
+    '        _SelectedParent = value
+    '        _Parameters = _ParentIDColumn + "=" + SelectedParent.ID
+    '        GetData()
+    '    End Set
+    'End Property
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
         Get
@@ -47,21 +59,28 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Set(ByVal value As Object)
             If Not IsNothing(value) Then
                 _SelectedItem = value
-                _SelectedItem.GetData()
+                If _SelectedItem.GetDataOnSelected Then _SelectedItem.GetData()
                 OnPropertyChanged("SelectedItem")
             End If
         End Set
     End Property
+#End Region
 
-    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef bindingsource As BindingSource = Nothing, Optional ByRef windowfactory As IWindowFactory = Nothing, Optional ByRef parentlist As IListViewModel = Nothing)
+#Region "METHODS"
+    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
-        If Not IsNothing(bindingsource) Then bindingsource.DataSource = ItemList
-        _ParentListViewModel = parentlist
-        If Not IsNothing(parentlist) Then
-
-        End If
     End Sub
+    Protected Overridable Sub OpenNewForm()
+        If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
+    End Sub
+    Public Sub BindToListControl(ByRef control As IBindableListControl(Of dataitem, viewmodelitem))
+        control.ControlDataBindings.Add("BindingSourceDataSource", Me, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
+        control.ControlDataBindings.Add("SelectedItem", Me, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
+    End Sub
+#End Region
+
+#Region "CRUD"
     'override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass)
     Public Overridable Sub CreateNewItem()
     End Sub
@@ -87,7 +106,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Overridable Sub GetData()
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
         Dim list = New ObservableListSource(Of viewmodelitem)
-        For Each dataitem In _DataController.GetAllItems(_Parameters)
+        For Each dataitem In _DataController.GetAllItems(Parameters)
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
             AddHandler newvmitem.Deleted, AddressOf DeleteItem
@@ -100,12 +119,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End If
         If ItemList.Count > 0 Then SelectedItem = ItemList(0)
     End Sub
-    Protected Overridable Sub OpenNewForm()
-        If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
+    Public Sub GetData(ByVal parameters As String)
+        _Parameters = parameters
+        GetData()
+        _Parameters = ""
     End Sub
-    Public Sub BindToListControl(ByRef control As IBindableListControl(Of dataitem, viewmodelitem))
-        control.ControlDataBindings.Add("BindingSourceDataSource", Me, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
-        control.ControlDataBindings.Add("SelectedItem", Me, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
-    End Sub
-
+#End Region
 End Class

@@ -22,7 +22,6 @@ Partial Class Form1
     'Das Bearbeiten mit dem Code-Editor ist nicht möglich.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -83,7 +82,7 @@ Partial Class Form1
         Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
         Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
         Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.HynrLabelStrip1.Size = New System.Drawing.Size(854, 25)
+        Me.HynrLabelStrip1.Size = New System.Drawing.Size(894, 25)
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
@@ -94,7 +93,6 @@ Partial Class Form1
         Me.PersonsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PersonsGrid.AutoGenerateColumns = False
         Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
@@ -104,14 +102,14 @@ Partial Class Form1
         Me.PersonsGrid.RowHeadersVisible = False
         Me.PersonsGrid.SelectedItem = Nothing
         Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.PersonsGrid.Size = New System.Drawing.Size(830, 437)
+        Me.PersonsGrid.Size = New System.Drawing.Size(870, 228)
         Me.PersonsGrid.TabIndex = 3
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(854, 517)
+        Me.ClientSize = New System.Drawing.Size(894, 517)
         Me.Controls.Add(Me.HynrLabelStrip1)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)

@@ -15,4 +15,6 @@ Partial Public Class Country
     Public Property Name As String
     Public Property Remarks As String
 
+    Public Overridable Property People As ICollection(Of Person) = New HashSet(Of Person)
+
 End Class

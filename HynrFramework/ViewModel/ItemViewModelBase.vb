@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Windows.Input
+Imports HynrFramework
 
 Public Class ItemViewModelBase(Of dataclass As IHasID)
     Inherits ViewModelBase
@@ -24,22 +25,23 @@ Public Class ItemViewModelBase(Of dataclass As IHasID)
             Data.ID = value
         End Set
     End Property
+
+    <Browsable(False)>
+    Public Property GetDataOnSelected As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnSelected
 #End Region
 
 #Region "METHODS"
     'no parameter allowed!
     Public Sub New()
     End Sub
-
+    'in case child lists need to be updated. insert every child listviewmodels getdata() here.
+    Public Overridable Sub GetData()
+    End Sub
     Private Sub RaiseDeletedEvent()
         RaiseEvent Deleted(Me, Nothing)
     End Sub
     Private Sub RaiseUpdatedEvent()
         RaiseEvent Updated(Me, Nothing)
-    End Sub
-
-    'override to get data for each child list when also using listviewmodels as properties for child items of this
-    Public Overridable Sub GetData() Implements IItemViewModel(Of dataclass).GetData
     End Sub
 #End Region
 

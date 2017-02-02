@@ -88,8 +88,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Models\DataCarriers\CountryData.vb" />
     <Compile Include="Models\DataCarriers\PersonData.vb" />
+    <Compile Include="Models\DataContexts\CountriesDataContext.vb" />
     <Compile Include="Models\DataContexts\PersonsDataContext.vb" />
+    <Compile Include="Models\DataControllers\CountriesDataController.vb" />
     <Compile Include="Models\DataControllers\DataFactory.vb" />
     <Compile Include="Models\DataControllers\PersonsDataController.vb" />
     <Compile Include="Models\Entities\Country.vb">
@@ -173,6 +176,7 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+    <None Include="My Project\DataSources\PersonItemViewModel.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>

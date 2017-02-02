@@ -15,6 +15,8 @@ Partial Public Class Person
     Public Property Name As String
     Public Property Remarks As String
     Public Property Birthday As Nullable(Of Date)
-    Public Property Birthplace As Nullable(Of Integer)
+    Public Property CountryID As Nullable(Of Integer)
+
+    Public Overridable Property Country As Country
 
 End Class

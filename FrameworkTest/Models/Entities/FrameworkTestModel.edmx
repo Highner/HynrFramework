@@ -21,11 +21,29 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Remarks" Type="text" />
           <Property Name="Birthday" Type="date" />
-          <Property Name="Birthplace" Type="int" />
+          <Property Name="CountryID" Type="int" />
         </EntityType>
+        <Association Name="FK_Person_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Person" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="FrameworkTestDBModelStoreContainer">
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Person_Country" Association="Self.FK_Person_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -38,6 +56,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="People" Relationship="FrameworkTestDBModel.FK_Person_Country" FromRole="Country" ToRole="Person" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -47,12 +66,31 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Birthday" Type="DateTime" Precision="0" />
-          <Property Name="Birthplace" Type="Int32" />
-        </EntityType>
+          <Property Name="CountryID" Type="Int32" />
+          <NavigationProperty Name="Country" Relationship="FrameworkTestDBModel.FK_Person_Country" FromRole="Person" ToRole="Country" />
+          </EntityType>
         <EntityContainer Name="FrameworkTestDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Countries" EntityType="Self.Country" />
           <EntitySet Name="People" EntityType="Self.Person" />
+          <AssociationSet Name="FK_Person_Country" Association="FrameworkTestDBModel.FK_Person_Country">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Person" EntitySet="People" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_Person_Country">
+          <End Type="FrameworkTestDBModel.Country" Role="Country" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FrameworkTestDBModel.Person" Role="Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -71,11 +109,11 @@
           <EntitySetMapping Name="People">
             <EntityTypeMapping TypeName="FrameworkTestDBModel.Person">
               <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="Birthplace" ColumnName="Birthplace" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

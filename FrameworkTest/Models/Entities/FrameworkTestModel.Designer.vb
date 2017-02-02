@@ -1,4 +1,4 @@
-﻿' Die T4-Codegenerierung ist für Modell 'C:\Users\hvran\OneDrive\Software Projekte\HynrFramework\FrameworkTest\Models\Entities\FrameworkTestModel.edmx' aktiviert. 
+﻿' Die T4-Codegenerierung ist für Modell 'C:\Users\hvran\Desktop\HynrFramework\FrameworkTest\Models\Entities\FrameworkTestModel.edmx' aktiviert. 
 ' Um die Generierung von Legacycode zu aktivieren, ändern Sie den Wert der Designer-Eigenschaft 'Code Generation Strategy'
 ' in 'Legacy ObjectContext'. Diese Eigenschaft wird im Eigenschaftenfenster angezeigt, wenn das Modell
 ' im Designer geöffnet ist.
