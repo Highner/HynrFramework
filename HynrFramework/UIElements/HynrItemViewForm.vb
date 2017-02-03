@@ -16,6 +16,8 @@ Public Class HynrItemViewForm
         End Set
     End Property
 
+    Public Sub New()
+    End Sub
     Public Sub New(ByRef settings As HynrUISettings, ByRef datacontext As Object)
         MyBase.New(settings)
         _DataContext = datacontext

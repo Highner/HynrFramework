@@ -4,34 +4,34 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A1AA7416-61D9-4D2D-B02C-3981E5A4CD5D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>HynrFramework</RootNamespace>
-    <AssemblyName>HynrFramework</AssemblyName>
+    <ProjectGuid>{25F3486C-D6B5-45BC-B023-919CA289401F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>DAKAdminTaskmanagerTest.My.MyApplication</StartupObject>
+    <RootNamespace>DAKAdminTaskmanagerTest</RootNamespace>
+    <AssemblyName>DAKAdminTaskmanagerTest</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
+    <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>HynrFramework.xml</DocumentationFile>
+    <DocumentationFile>DAKAdminTaskmanagerTest.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>HynrFramework.xml</DocumentationFile>
+    <DocumentationFile>DAKAdminTaskmanagerTest.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -47,23 +47,10 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -77,18 +64,21 @@
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\DataCarrier\DataCarriersBase.vb" />
-    <Compile Include="Data\DataCarrier\IHasID.vb" />
-    <Compile Include="Data\DataContext\DataContextBase.vb" />
-    <Compile Include="Data\DataContext\IDataContext.vb" />
-    <Compile Include="Data\DataController\DataControllerBase.vb" />
-    <Compile Include="Data\DataController\IDataController.vb" />
+    <Compile Include="Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -104,35 +94,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="UIElements\HynrForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UIElements\HynrGrid.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UIElements\HynrLabelStrip.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UIElements\HynrItemViewForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UIElements\UIBase\IBindableControl.vb" />
-    <Compile Include="UIElements\UIBase\IBindableListControl.vb" />
-    <Compile Include="UIElements\UIBase\IHasHynrSettings.vb" />
-    <Compile Include="UIElements\UIBase\IWindowFactory.vb" />
-    <Compile Include="UIElements\UISettings\HynrUISettings.vb" />
-    <Compile Include="Utility\DynamicExtension.vb" />
-    <Compile Include="Utility\GenericObjectInstantiator.vb" />
-    <Compile Include="Utility\ObjectMapper.vb" />
-    <Compile Include="Utility\ObservableListSource.vb" />
-    <Compile Include="Utility\Command.vb" />
-    <Compile Include="ViewModel\IListViewModel.vb" />
-    <Compile Include="ViewModel\ItemViewModelBase.vb" />
-    <Compile Include="ViewModel\IItemViewModel.vb" />
-    <Compile Include="ViewModel\ListViewModelBase.vb" />
-    <Compile Include="ViewModel\ViewModelBase.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -141,7 +107,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -151,9 +116,14 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HynrFramework\HynrFramework.vbproj">
+      <Project>{a1aa7416-61d9-4d2d-b02c-3981e5a4cd5d}</Project>
+      <Name>HynrFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

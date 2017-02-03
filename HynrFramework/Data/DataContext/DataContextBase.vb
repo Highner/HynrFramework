@@ -14,7 +14,7 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
         DataContext.SaveChanges()
     End Sub
 
-    Public Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass).AddObject
+    Public Overridable Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass).AddObject
         Try
             DataContext.Set(GetType(entityclass)).Add(entityobject)
         Catch
@@ -23,7 +23,7 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
         Return True
     End Function
 
-    Public Function DeleteObject(id As Integer) As Boolean Implements IDataContext(Of entityclass).DeleteObject
+    Public Overridable Function DeleteObject(id As Integer) As Boolean Implements IDataContext(Of entityclass).DeleteObject
         Try
             DataContext.Set(GetType(entityclass)).Remove(GetObject(id))
         Catch
@@ -32,23 +32,11 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
         Return True
     End Function
 
-    Public Function GetAllObjects(ByVal parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
-        If parameters = "" Then
-            Return DataContext.Set(GetType(entityclass))
-        Else
-            Try
-                Dim objects As IEnumerable(Of entityclass) = DataContext.Set(GetType(entityclass)).Where(parameters)
-                Return objects.ToList
-            Catch
-                Return New List(Of entityclass)
-            End Try
-        End If
-    End Function
-    Public Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
+    Public Overridable Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
         Return DataContext.Set(GetType(entityclass))
     End Function
 
-    Public Function GetObject(id As Integer) As entityclass Implements IDataContext(Of entityclass).GetObject
+    Public Overridable Function GetObject(id As Integer) As entityclass Implements IDataContext(Of entityclass).GetObject
         Return DataContext.Set(GetType(entityclass)).Find(id)
     End Function
 

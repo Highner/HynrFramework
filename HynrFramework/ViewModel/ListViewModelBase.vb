@@ -17,30 +17,18 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Protected Property _DataController As datacontrollerclass
     Protected ReadOnly Property _WindowFactory As IWindowFactory
     Protected _ParentIDColumn As String
-    Protected _ParentIDValue As String
+    Protected _ParentItem As IHasID
     Protected _Parameters As String ' e.g.: "Name = " & Chr(34) & "Donald" & Chr(34) or use _SelectedParent.ID for child objects of _Parentobject --- set when initializing after calling mybase.new
     Protected ReadOnly Property Parameters As String
         Get
             If _Parameters = "" Then
-                If _ParentIDColumn <> "" And _ParentIDValue <> "" Then
-                    Return _ParentIDColumn + " = " + _ParentIDValue
+                If _ParentIDColumn <> "" And Not IsNothing(_ParentItem) Then
+                    Return _ParentIDColumn + " = " + _ParentItem.ID
                 End If
             End If
             Return _Parameters
         End Get
     End Property
-    'Protected _ParentListViewModel As IListViewModel
-    'Private _SelectedParent As IItemViewModel(Of IHasID)
-    'Protected Property SelectedParent As IItemViewModel(Of IHasID)
-    '    Get
-    '        Return _SelectedParent
-    '    End Get
-    '    Set(value As IItemViewModel(Of IHasID))
-    '        _SelectedParent = value
-    '        _Parameters = _ParentIDColumn + "=" + SelectedParent.ID
-    '        GetData()
-    '    End Set
-    'End Property
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
         Get
@@ -67,9 +55,11 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #End Region
 
 #Region "METHODS"
-    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
+    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing, Optional ByRef parentidcomlun As String = "", Optional ByRef parentitem As IHasID = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
+        _ParentIDColumn = parentidcomlun
+        _ParentItem = parentitem
     End Sub
     Protected Overridable Sub OpenNewForm()
         If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
@@ -77,6 +67,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub BindToListControl(ByRef control As IBindableListControl(Of dataitem, viewmodelitem))
         control.ControlDataBindings.Add("BindingSourceDataSource", Me, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
         control.ControlDataBindings.Add("SelectedItem", Me, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
+    End Sub
+    Public Sub SetParent(ByRef parentitemviewmodel As IHasID, ByVal parentidcolumn As String)
+        _ParentItem = parentitemviewmodel
+        _ParentIDColumn = parentidcolumn
     End Sub
 #End Region
 
@@ -103,10 +97,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Dim vmitem As viewmodelitem = sender
         _DataController.UpdateItem(vmitem.Data)
     End Sub
-    Public Overridable Sub GetData()
+    Public Sub GetData()
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
         Dim list = New ObservableListSource(Of viewmodelitem)
-        For Each dataitem In _DataController.GetAllItems(Parameters)
+        For Each dataitem In _DataController.GetAllItems()
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
             AddHandler newvmitem.Deleted, AddressOf DeleteItem
@@ -118,11 +112,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
         End If
         If ItemList.Count > 0 Then SelectedItem = ItemList(0)
-    End Sub
-    Public Sub GetData(ByVal parameters As String)
-        _Parameters = parameters
-        GetData()
-        _Parameters = ""
     End Sub
 #End Region
 End Class
