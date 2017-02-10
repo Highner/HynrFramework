@@ -114,8 +114,8 @@ Public Class HynrUISettings
             If TypeOf (control) Is IHasHynrSettings Then
                 Dim hynrcontrol As IHasHynrSettings = control
                 hynrcontrol.HynrSettings = Me
-                If TypeOf (hynrcontrol) Is ContainerControl Then ApplyToControlContainer(hynrcontrol)
             End If
+            If TypeOf (control) Is ContainerControl Then ApplyToControlContainer(control)
         Next
     End Sub
 #End Region

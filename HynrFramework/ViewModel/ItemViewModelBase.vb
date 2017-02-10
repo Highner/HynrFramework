@@ -1,8 +1,9 @@
 ﻿Imports System.ComponentModel
+Imports System.Data.Entity
 Imports System.Windows.Input
 Imports HynrFramework
 
-Public Class ItemViewModelBase(Of dataclass As IHasID)
+Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbContext)
     Inherits ViewModelBase
     Implements IItemViewModel(Of dataclass)
 
@@ -25,6 +26,8 @@ Public Class ItemViewModelBase(Of dataclass As IHasID)
             Data.ID = value
         End Set
     End Property
+    <Browsable(False)>
+    Public Property DataContext As dbcontextclass
 
     <Browsable(False)>
     Public Property GetDataOnSelected As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnSelected

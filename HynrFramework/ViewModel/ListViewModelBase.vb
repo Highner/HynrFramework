@@ -1,8 +1,9 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.Data.Entity
+Imports System.Windows.Forms
 Imports System.Windows.Input
 
 'only contructor and CreateNewItem and possibly _Parameters need to be specified in inherited class
-Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As ItemViewModelBase(Of dataitem))
+Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
     Inherits ViewModelBase
     Implements IListViewModel
 
@@ -64,7 +65,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Protected Overridable Sub OpenNewForm()
         If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
     End Sub
-    Public Sub BindToListControl(ByRef control As IBindableListControl(Of dataitem, viewmodelitem))
+    Public Sub BindToListControl(ByRef control As IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass))
         control.ControlDataBindings.Add("BindingSourceDataSource", Me, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
         control.ControlDataBindings.Add("SelectedItem", Me, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
@@ -103,6 +104,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         For Each dataitem In _DataController.GetAllItems()
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
+            newvmitem.DataContext = _DataController.DBContext
             AddHandler newvmitem.Deleted, AddressOf DeleteItem
             AddHandler newvmitem.Updated, AddressOf UpdateItem
             list.Add(newvmitem)

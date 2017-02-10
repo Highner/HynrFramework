@@ -1,16 +1,17 @@
 ﻿Imports System.ComponentModel
+Imports System.Data.Entity
 Imports System.Windows.Forms
 Imports HynrFramework
 
-Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(Of dataitem))
+Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
     Inherits DataGridView
-    Implements IBindableListControl(Of dataitem, viewmodelidem)
+    Implements IBindableListControl(Of dataitem, viewmodelidem, dbcontextclass)
     Implements INotifyPropertyChanged
     Implements IHasHynrSettings
 
 #Region "PROPERTIES"
     Private Property _BindingSource As New BindingSource
-    Public Property BindingSourceDataSource As Object Implements IBindableListControl(Of dataitem, viewmodelidem).BindingSourceDataSource
+    Public Property BindingSourceDataSource As Object Implements IBindableListControl(Of dataitem, viewmodelidem, dbcontextclass).BindingSourceDataSource
         Get
             If IsNothing(_BindingSource) Then
                 Return _BindingSource.DataSource
@@ -25,7 +26,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
         End Set
     End Property
     Private Property _SelectedItem As viewmodelidem
-    Public Property SelectedItem As viewmodelidem Implements IBindableListControl(Of dataitem, viewmodelidem).SelectedItem
+    Public Property SelectedItem As viewmodelidem Implements IBindableListControl(Of dataitem, viewmodelidem, dbcontextclass).SelectedItem
         Get
             Return _SelectedItem
         End Get
@@ -47,7 +48,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
         End Set
     End Property
 
-    Public ReadOnly Property ControlDataBindings As ControlBindingsCollection Implements IBindableListControl(Of dataitem, viewmodelidem).ControlDataBindings
+    Public ReadOnly Property ControlDataBindings As ControlBindingsCollection Implements IBindableListControl(Of dataitem, viewmodelidem, dbcontextclass).ControlDataBindings
         Get
             Return DataBindings
         End Get

@@ -1,9 +1,15 @@
 ﻿Imports System.Data.Entity
+Imports HynrFramework
 
-Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
-    Implements IDataController(Of entityclass, dataclass)
+Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass, dbcontextclass), dbcontextclass As DbContext)
+    Implements IDataController(Of entityclass, dataclass, dbcontextclass)
 #Region "PROPERTIES"
-    Protected DataContext As datacontextclass
+    Public Property DataContext As IDataContext(Of entityclass, dbcontextclass)
+    Public ReadOnly Property DBContext As dbcontextclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).DBContext
+        Get
+            Return DataContext.DBContext
+        End Get
+    End Property
 #End Region
 
 #Region "METHODS"
@@ -12,7 +18,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     End Sub
 
 #Region "CRUD"
-    Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).CreateNewItem
+    Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).CreateNewItem
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
         ToEntity(dataitem, newentityitem)
         If DataContext.AddObject(newentityitem) = True Then
@@ -23,7 +29,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         End If
         Return GetItem(dataitem.ID)
     End Function
-    Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetAllItems
+    Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
         Dim list As New List(Of dataclass)
         For Each entityitem In DataContext.GetAllObjects()
             Dim newdataitem As dataclass = ToData(entityitem)
@@ -31,17 +37,17 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Next
         Return list
     End Function
-    Public Function GetItem(id As Integer) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
+    Public Function GetItem(id As Integer) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItem
         Dim newdataitem As dataclass = ToData(DataContext.GetObject(id))
         Return newdataitem
     End Function
-    Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).UpdateItem
+    Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).UpdateItem
         Dim entityitem = DataContext.GetObject(dataitem.ID)
         Dim newdataitem = ToEntity(dataitem, entityitem)
         DataContext.Save()
         Return newdataitem
     End Function
-    Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItem
+    Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass, dbcontextclass).DeleteItem
         If DataContext.DeleteObject(dataitem.ID) = True Then
             DataContext.Save()
             Return True
@@ -52,14 +58,14 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
 
 #Region "DATA MAPPING"
     'override this to fill custom properties etc., but include call to mybase.ToData to map the base properties.
-    Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToData
+    Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).ToData
         Dim newdataitem As Object
         newdataitem = GetInstance(GetType(dataclass))
         MapProperties(entityitem, newdataitem)
         Return newdataitem
     End Function
     'override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties.
-    Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToEntity
+    Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).ToEntity
         MapProperties(dataitem, entityitem)
         Return dataitem
     End Function
