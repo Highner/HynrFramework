@@ -1,3 +1,3 @@
-﻿Public Interface IListViewModel
-    Property SelectedItem As Object
+﻿Public Interface IListViewModel(Of viewmodelitem)
+    Property SelectedItem As viewmodelitem
 End Interface

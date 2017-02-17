@@ -5,7 +5,7 @@ Imports System.Windows.Input
 'only contructor and CreateNewItem and possibly _Parameters need to be specified in inherited class
 Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
     Inherits ViewModelBase
-    Implements IListViewModel
+    Implements IListViewModel(Of viewmodelitem)
 
 #Region "COMMANDS"
     Public Property CreateCommand As ICommand = New Command(AddressOf CreateNewItem)
@@ -41,11 +41,11 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End Set
     End Property
     Private _SelectedItem As viewmodelitem
-    Public Property SelectedItem() As Object Implements IListViewModel.SelectedItem
+    Public Property SelectedItem() As viewmodelitem Implements IListViewModel(Of viewmodelitem).SelectedItem
         Get
             Return _SelectedItem
         End Get
-        Set(ByVal value As Object)
+        Set(ByVal value As viewmodelitem)
             If Not IsNothing(value) Then
                 _SelectedItem = value
                 If _SelectedItem.GetDataOnSelected Then _SelectedItem.GetData()
