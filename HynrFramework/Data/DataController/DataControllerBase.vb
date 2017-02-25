@@ -1,5 +1,4 @@
 ﻿Imports System.Data.Entity
-Imports HynrFramework
 
 Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass, dbcontextclass), dbcontextclass As DbContext)
     Implements IDataController(Of entityclass, dataclass, dbcontextclass)
@@ -32,6 +31,14 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
         Dim list As New List(Of dataclass)
         For Each entityitem In DataContext.GetAllObjects()
+            Dim newdataitem As dataclass = ToData(entityitem)
+            list.Add(newdataitem)
+        Next
+        Return list
+    End Function
+    Public Overridable Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItems
+        Dim list As New List(Of dataclass)
+        For Each entityitem In DataContext.GetObjects(parameters)
             Dim newdataitem As dataclass = ToData(entityitem)
             list.Add(newdataitem)
         Next

@@ -28,8 +28,11 @@ Partial Class Form1
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -76,6 +79,22 @@ Partial Class Form1
         Me.Button4.Text = "Button4"
         Me.Button4.UseVisualStyleBackColor = True
         '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(548, 164)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(96, 34)
+        Me.Button5.TabIndex = 8
+        Me.Button5.Text = "Button5"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(420, 68)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(422, 20)
+        Me.TextBox2.TabIndex = 9
+        '
         'HynrLabelStrip1
         '
         Me.HynrLabelStrip1.HynrSettings = Nothing
@@ -95,7 +114,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PersonsGrid.AutoGenerateColumns = False
-
+        Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.PersonsGrid.HynrSettings = Nothing
@@ -107,11 +126,21 @@ Partial Class Form1
         Me.PersonsGrid.Size = New System.Drawing.Size(402, 228)
         Me.PersonsGrid.TabIndex = 3
         '
+        'TextBox3
+        '
+        Me.TextBox3.Location = New System.Drawing.Point(420, 94)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.Size = New System.Drawing.Size(422, 20)
+        Me.TextBox3.TabIndex = 10
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(894, 517)
+        Me.Controls.Add(Me.TextBox3)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.HynrLabelStrip1)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
@@ -135,4 +164,7 @@ Partial Class Form1
     Friend WithEvents Button3 As Button
     Friend WithEvents Button4 As Button
     Friend WithEvents HynrLabelStrip1 As HynrFramework.HynrLabelStrip
+    Friend WithEvents Button5 As Button
+    Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents TextBox3 As TextBox
 End Class

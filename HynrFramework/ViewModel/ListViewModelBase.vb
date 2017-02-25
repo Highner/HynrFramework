@@ -1,6 +1,8 @@
 ﻿Imports System.Data.Entity
+Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.Windows.Input
+Imports System.Linq.Dynamic
 
 'only contructor and CreateNewItem and possibly _Parameters need to be specified in inherited class
 Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
@@ -12,6 +14,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Property UpdateAllCommand As ICommand = New Command(AddressOf UpdateAll)
     Public Property DeleteSelectedItemCommand As ICommand = New Command(AddressOf DeleteSelectedItem)
     Public Property OpenNewFormCommand As ICommand = New Command(AddressOf OpenNewForm)
+    Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
 #End Region
 
 #Region "PROPERTIES"
@@ -30,6 +33,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             Return _Parameters
         End Get
     End Property
+    Private _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
         Get
@@ -71,12 +75,29 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     End Sub
 #End Region
 
+#Region "FILTER"
+    'add bound properties for every filter parameter with ListViewModelFilterAttribute
+    Protected Overridable Sub ApplyFilter()
+        Dim filterparameters As String = GenerateFilterParameters(Me)
+        If Not filterparameters = "" Then
+            Dim filteredlist As List(Of viewmodelitem) = _OriginalItemList.ToList.Where(filterparameters).ToList
+            Dim newlist As New ObservableListSource(Of viewmodelitem)
+            For Each item In filteredlist
+                newlist.Add(item)
+            Next
+            ItemList = newlist
+        Else
+            ItemList = _OriginalItemList
+        End If
+    End Sub
+#End Region
+
 #Region "CRUD"
     'override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass)
     Public Overridable Sub CreateNewItem()
     End Sub
     Private Sub UpdateAll()
-        For Each item As viewmodelitem In ItemList
+        For Each item As viewmodelitem In _OriginalItemList
             UpdateItem(item, Nothing)
         Next
     End Sub
@@ -95,9 +116,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         _DataController.UpdateItem(vmitem.Data)
     End Sub
     Public Sub GetData()
+        DataToList(_DataController.GetAllItems())
+    End Sub
+    Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
         Dim list = New ObservableListSource(Of viewmodelitem)
-        For Each dataitem In _DataController.GetAllItems()
+        For Each dataitem In dataitemlist
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
             newvmitem.DataContext = _DataController.DBContext
@@ -105,11 +129,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             AddHandler newvmitem.Updated, AddressOf UpdateItem
             list.Add(newvmitem)
         Next
-        ItemList = list
+        _OriginalItemList = list
+        ApplyFilter()
         If selectedindex >= 0 Then
             If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
         End If
-        If ItemList.Count > 0 Then SelectedItem = ItemList(0)
+        If ItemList.Any Then SelectedItem = ItemList(0)
     End Sub
 #End Region
 End Class

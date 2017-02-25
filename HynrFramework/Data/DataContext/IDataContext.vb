@@ -6,6 +6,7 @@ Public Interface IDataContext(Of T1, dbcontextclass As DbContext)
     Function DeleteObject(ByVal id As Integer) As Boolean
     Function GetObject(ByVal id As Integer) As T1
     Function GetAllObjects() As IEnumerable(Of T1)
+    Function GetObjects(parameters As String) As IEnumerable(Of T1)
 
     Property DBContext As dbcontextclass
 End Interface

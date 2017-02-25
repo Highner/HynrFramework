@@ -122,7 +122,9 @@
     <Compile Include="UIElements\UIBase\IWindowFactory.vb" />
     <Compile Include="UIElements\UISettings\HynrUISettings.vb" />
     <Compile Include="Utility\DynamicExtension.vb" />
+    <Compile Include="Utility\FilteredListParameterGenerator.vb" />
     <Compile Include="Utility\GenericObjectInstantiator.vb" />
+    <Compile Include="Utility\ListViewModelFilterAttribute.vb" />
     <Compile Include="Utility\ObjectMapper.vb" />
     <Compile Include="Utility\ObservableListSource.vb" />
     <Compile Include="Utility\Command.vb" />

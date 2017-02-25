@@ -6,7 +6,9 @@
         ViewModel.GetData()
         PersonsGrid.AutoGenerateColumns = True
         PersonsGrid.BindToListListViewModel(ViewModel)
-        TextBox1.DataBindings.Add("Text", ViewModel, "SelectedItem.Name", True, DataSourceUpdateMode.OnPropertyChanged)
+        TextBox1.DataBindings.Add("Text", ViewModel, "NameFilter", True, DataSourceUpdateMode.OnPropertyChanged)
+        TextBox2.DataBindings.Add("Text", ViewModel, "RemarksFilter", True, DataSourceUpdateMode.OnPropertyChanged)
+        TextBox3.DataBindings.Add("Text", ViewModel, "AgeFilter", True, DataSourceUpdateMode.OnPropertyChanged)
         HynrLabelStrip1.BindToListViewModel(ViewModel, "Header")
     End Sub
 
@@ -27,5 +29,9 @@
     End Sub
     Private Sub itemdoubleclicked(ByRef item As PersonItemViewModel) Handles PersonsGrid.ItemDoubleClick
         ViewModel.OpenNewFormCommand.Execute(Nothing)
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        ViewModel.ApplyFilterCommand.Execute(Nothing)
     End Sub
 End Class

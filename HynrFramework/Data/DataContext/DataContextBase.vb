@@ -46,5 +46,8 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
         Return DBContext.Set(GetType(entityclass)).Find(id)
     End Function
 
+    Public Function GetObjects(parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass, dbcontextclass).GetObjects
+        Return DBContext.Set(GetType(entityclass)).Where(parameters)
+    End Function
 
 End Class
