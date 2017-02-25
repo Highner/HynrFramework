@@ -6,7 +6,6 @@ Public Class HynrLabelStrip
     Implements IHasHynrSettings
 
 #Region "PROPERTIES"
-
     Private Property _Label As New ToolStripLabel
     Public Property LabelText As String
         Get
@@ -28,7 +27,6 @@ Public Class HynrLabelStrip
             End If
         End Set
     End Property
-
 #End Region
 
 #Region "METHODS"
@@ -41,6 +39,9 @@ Public Class HynrLabelStrip
         _Label.ForeColor = HynrSettings.LabelstripColor
         RenderMode = ToolStripRenderMode.System
         GripStyle = ToolStripGripStyle.Hidden
+    End Sub
+    Public Sub BindToListViewModel(ByRef viewmodel As Object, ByVal displayproperty As String)
+        DataBindings.Add("LabelText", viewmodel, "SelectedItem." + displayproperty, True, DataSourceUpdateMode.Never)
     End Sub
 #End Region
 
