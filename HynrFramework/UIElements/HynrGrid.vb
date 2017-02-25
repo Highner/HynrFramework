@@ -13,7 +13,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
     Private Property _BindingSource As New BindingSource
     Public Property BindingSourceDataSource As Object Implements IBindableListControl(Of dataitem, viewmodelidem, dbcontextclass).BindingSourceDataSource
         Get
-            If IsNothing(_BindingSource) Then
+            If Not IsNothing(_BindingSource) Then
                 Return _BindingSource.DataSource
             Else
                 Return Nothing
@@ -59,6 +59,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelidem As ItemViewModelBase(
     Public Sub New()
         DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
+    End Sub
+    Public Sub BindToListListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelidem))
+        ControlDataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
+        ControlDataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor

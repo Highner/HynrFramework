@@ -1,7 +1,7 @@
 ﻿Imports FrameworkTest
 
 Public Class PersonsListViewModel
-    Inherits HynrFramework.ListViewModelBase(Of Person, PersonData, PersonsDataController, PersonItemViewModel)
+    Inherits HynrFramework.ListViewModelBase(Of Person, PersonData, PersonsDataController, PersonItemViewModel, FrameworkTestDBEntities)
 
     Public Sub New(ByRef datacontroller As PersonsDataController, ByRef Optional bindingsource As BindingSource = Nothing)
         MyBase.New(datacontroller, New WindowFactory)
