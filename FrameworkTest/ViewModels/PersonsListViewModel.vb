@@ -13,7 +13,7 @@ Public Class PersonsListViewModel
     End Sub
 
     Private Property _NameFilter As String
-    <ListViewModelFilterAttribute("Name", "string", False)>
+    <ListViewModelFilterAttribute("Name", "string", True)>
     Property NameFilter As String
         Get
             Return _NameFilter
