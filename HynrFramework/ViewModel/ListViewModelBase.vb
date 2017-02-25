@@ -65,10 +65,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Protected Overridable Sub OpenNewForm()
         If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
     End Sub
-    Public Sub BindToListControl(ByRef control As IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass))
-        control.ControlDataBindings.Add("BindingSourceDataSource", Me, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
-        control.ControlDataBindings.Add("SelectedItem", Me, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
-    End Sub
     Public Sub SetParent(ByRef parentitemviewmodel As IHasID, ByVal parentidcolumn As String)
         _ParentItem = parentitemviewmodel
         _ParentIDColumn = parentidcolumn

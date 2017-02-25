@@ -11,9 +11,14 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context
     End Sub
-    Public Sub Save() Implements IDataContext(Of entityclass, dbcontextclass).Save
-        DBContext.SaveChanges()
-    End Sub
+    Public Function Save() As Boolean Implements IDataContext(Of entityclass, dbcontextclass).Save
+        Try
+            DBContext.SaveChanges()
+        Catch
+            Return False
+        End Try
+        Return True
+    End Function
 
     Public Overridable Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass, dbcontextclass).AddObject
         Try

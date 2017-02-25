@@ -95,7 +95,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PersonsGrid.AutoGenerateColumns = False
-        Me.PersonsGrid.BindingSourceDataSource = Nothing
+
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.PersonsGrid.HynrSettings = Nothing

@@ -22,12 +22,12 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
         ToEntity(dataitem, newentityitem)
         If DataContext.AddObject(newentityitem) = True Then
-            DataContext.Save()
-            dataitem.ID = newentityitem.ID
-        Else
-            Throw New Exception
+            If DataContext.Save() Then
+                dataitem.ID = newentityitem.ID
+                Return GetItem(dataitem.ID)
+            End If
         End If
-        Return GetItem(dataitem.ID)
+        Return Nothing
     End Function
     Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
         Dim list As New List(Of dataclass)
@@ -44,13 +44,15 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).UpdateItem
         Dim entityitem = DataContext.GetObject(dataitem.ID)
         Dim newdataitem = ToEntity(dataitem, entityitem)
-        DataContext.Save()
-        Return newdataitem
+        If DataContext.Save() Then
+            Return newdataitem
+        Else
+            Return Nothing
+        End If
     End Function
     Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass, dbcontextclass).DeleteItem
         If DataContext.DeleteObject(dataitem.ID) = True Then
-            DataContext.Save()
-            Return True
+            Return DataContext.Save()
         End If
         Return False
     End Function

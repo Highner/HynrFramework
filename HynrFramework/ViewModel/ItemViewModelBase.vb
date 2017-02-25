@@ -10,13 +10,10 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
 #Region "PROPERTIES"
     <Browsable(False)>
     Public Property Data As dataclass Implements IItemViewModel(Of dataclass).Data
-
     <Browsable(False)>
     Public Property DeleteCommand As ICommand = New Command(AddressOf RaiseDeletedEvent) Implements IItemViewModel(Of dataclass).DeleteCommand
-
     <Browsable(False)>
     Public Property UpdateCommand As ICommand = New Command(AddressOf RaiseUpdatedEvent) Implements IItemViewModel(Of dataclass).UpdateCommand
-
     <Browsable(False)>
     Public Property ID As Integer Implements IHasID.ID
         Get
@@ -28,7 +25,6 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     End Property
     <Browsable(False)>
     Public Property DataContext As dbcontextclass
-
     <Browsable(False)>
     Public Property GetDataOnSelected As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnSelected
 #End Region

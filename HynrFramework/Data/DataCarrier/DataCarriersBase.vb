@@ -1,5 +1,5 @@
 ﻿Imports HynrFramework
-
+'probably not necessary, as IHasID should suffice for the dataclasses
 Public Class DataCarriersBase
     Implements IHasID
 

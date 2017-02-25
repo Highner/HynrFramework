@@ -1,7 +1,7 @@
 ﻿Imports System.Data.Entity
 
 Public Interface IDataContext(Of T1, dbcontextclass As DbContext)
-    Sub Save()
+    Function Save() As Boolean
     Function AddObject(ByRef entityobject As T1) As Boolean
     Function DeleteObject(ByVal id As Integer) As Boolean
     Function GetObject(ByVal id As Integer) As T1
