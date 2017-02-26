@@ -36,13 +36,5 @@ Public Class PersonItemViewModel
             Return Data.Country
         End Get
     End Property
-    <Browsable(False)>
-    Public Property Header As String
-        Get
-            Return "Selected Person: " + Name
-        End Get
-        Set(value As String)
-            OnPropertyChanged("Header")
-        End Set
-    End Property
+
 End Class

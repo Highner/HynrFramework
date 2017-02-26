@@ -40,8 +40,11 @@ Public Class HynrLabelStrip
         RenderMode = ToolStripRenderMode.System
         GripStyle = ToolStripGripStyle.Hidden
     End Sub
+    ''' <summary>
+    ''' create string property in viewmodel as displayproperty
+    ''' </summary>
     Public Sub BindToListViewModel(ByRef viewmodel As Object, ByVal displayproperty As String)
-        DataBindings.Add("LabelText", viewmodel, "SelectedItem." + displayproperty, True, DataSourceUpdateMode.Never)
+        DataBindings.Add("LabelText", viewmodel, displayproperty, True, DataSourceUpdateMode.Never, String.Empty)
     End Sub
 #End Region
 

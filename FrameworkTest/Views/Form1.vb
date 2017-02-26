@@ -34,4 +34,8 @@
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         ViewModel.ApplyFilterCommand.Execute(Nothing)
     End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        ViewModel.DeleteSelectedItemsCommand.Execute(Nothing)
+    End Sub
 End Class

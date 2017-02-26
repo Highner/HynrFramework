@@ -30,10 +30,14 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
 #End Region
 
 #Region "METHODS"
-    'no parameter allowed!
+    ''' <summary>
+    ''' no parameter allowed!
+    ''' </summary>
     Public Sub New()
     End Sub
-    'in case child lists need to be updated. insert every child listviewmodels getdata() here.
+    ''' <summary>
+    ''' in case child lists need to be updated. insert every child listviewmodels getdata() here. will fire whe GetDataOnSelected = true
+    ''' </summary>
     Public Overridable Sub GetData()
     End Sub
     Private Sub RaiseDeletedEvent()

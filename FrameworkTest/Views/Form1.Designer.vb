@@ -30,9 +30,10 @@ Partial Class Form1
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Button6 = New System.Windows.Forms.Button()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -95,6 +96,13 @@ Partial Class Form1
         Me.TextBox2.Size = New System.Drawing.Size(422, 20)
         Me.TextBox2.TabIndex = 9
         '
+        'TextBox3
+        '
+        Me.TextBox3.Location = New System.Drawing.Point(420, 94)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.Size = New System.Drawing.Size(422, 20)
+        Me.TextBox3.TabIndex = 10
+        '
         'HynrLabelStrip1
         '
         Me.HynrLabelStrip1.HynrSettings = Nothing
@@ -122,22 +130,26 @@ Partial Class Form1
         Me.PersonsGrid.Name = "PersonsGrid"
         Me.PersonsGrid.RowHeadersVisible = False
         Me.PersonsGrid.SelectedItem = Nothing
+        Me.PersonsGrid.SelectedItems = Nothing
         Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.PersonsGrid.Size = New System.Drawing.Size(402, 228)
         Me.PersonsGrid.TabIndex = 3
         '
-        'TextBox3
+        'Button6
         '
-        Me.TextBox3.Location = New System.Drawing.Point(420, 94)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(422, 20)
-        Me.TextBox3.TabIndex = 10
+        Me.Button6.Location = New System.Drawing.Point(495, 262)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(96, 34)
+        Me.Button6.TabIndex = 11
+        Me.Button6.Text = "Delete Selected"
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(894, 517)
+        Me.Controls.Add(Me.Button6)
         Me.Controls.Add(Me.TextBox3)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.Button5)
@@ -167,4 +179,5 @@ Partial Class Form1
     Friend WithEvents Button5 As Button
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents TextBox3 As TextBox
+    Friend WithEvents Button6 As Button
 End Class

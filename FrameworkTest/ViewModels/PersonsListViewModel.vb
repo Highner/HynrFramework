@@ -49,4 +49,17 @@ Public Class PersonsListViewModel
     End Property
 
 
+    Public Property Header As String
+        Get
+            If Not IsNothing(SelectedItem) Then
+                Return "Selected Person: " + SelectedItem.Name
+            Else
+                Return "No person selected"
+            End If
+        End Get
+        Set(value As String)
+            ' OnPropertyChanged("Header")
+        End Set
+    End Property
+
 End Class

@@ -13,6 +13,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Property CreateCommand As ICommand = New Command(AddressOf CreateNewItem)
     Public Property UpdateAllCommand As ICommand = New Command(AddressOf UpdateAll)
     Public Property DeleteSelectedItemCommand As ICommand = New Command(AddressOf DeleteSelectedItem)
+    Public Property DeleteSelectedItemsCommand As ICommand = New Command(AddressOf DeleteSelectedItems)
     Public Property OpenNewFormCommand As ICommand = New Command(AddressOf OpenNewForm)
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
 #End Region
@@ -57,6 +58,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             End If
         End Set
     End Property
+    Public Property SelectedItems As New List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).SelectedItems
 #End Region
 
 #Region "METHODS"
@@ -76,7 +78,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #End Region
 
 #Region "FILTER"
-    'add bound properties for every filter parameter with ListViewModelFilterAttribute
+    ''' <summary>
+    ''' add bound properties for every filter parameter with ListViewModelFilterAttribute
+    ''' </summary>
     Protected Overridable Sub ApplyFilter()
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
@@ -93,7 +97,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #End Region
 
 #Region "CRUD"
-    'override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass)
+    ''' <summary>
+    ''' override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass)
+    ''' </summary>
     Public Overridable Sub CreateNewItem()
     End Sub
     Private Sub UpdateAll()
@@ -105,11 +111,19 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Dim vmitem As viewmodelitem = sender
         If _DataController.DeleteItem(vmitem.Data) = True Then
             ItemList.Remove(vmitem)
-            GetData()
         End If
     End Sub
     Protected Overridable Sub DeleteSelectedItem()
-        If Not IsNothing(_SelectedItem) Then DeleteItem(_SelectedItem, Nothing)
+        If Not IsNothing(_SelectedItem) Then
+            DeleteItem(_SelectedItem, Nothing)
+            GetData()
+        End If
+    End Sub
+    Protected Overridable Sub DeleteSelectedItems()
+        For Each item In SelectedItems
+            DeleteItem(item, Nothing)
+        Next
+        GetData()
     End Sub
     Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
         Dim vmitem As viewmodelitem = sender

@@ -10,6 +10,16 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Implements IHasHynrSettings
 
 #Region "PROPERTIES"
+    Private Property _SelectedItems As New List(Of viewmodelitem)
+    Property SelectedItems As List(Of viewmodelitem)
+        Get
+            Return _SelectedItems
+        End Get
+        Set(value As List(Of viewmodelitem))
+            _SelectedItems = value
+            OnPropertyChanged("SelectedItems")
+        End Set
+    End Property
     Private Property _BindingSource As New BindingSource
     Public Property BindingSourceDataSource As ObservableListSource(Of viewmodelitem)
         Get
@@ -31,8 +41,11 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             Return _SelectedItem
         End Get
         Set(value As viewmodelitem)
-            _SelectedItem = value
-            OnPropertyChanged("SelectedItem")
+            If _BindingSource.Count > 0 Then
+                _SelectedItem = value
+                _BindingSource.Position = _BindingSource.IndexOf(value)
+                OnPropertyChanged("SelectedItem")
+            End If
         End Set
     End Property
     Private _HynrSettings As HynrUISettings
@@ -57,6 +70,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Public Sub BindToListListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
         DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
         DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
+        DataBindings.Add("SelectedItems", listviewmodel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
@@ -76,6 +90,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     End Sub
     Private Sub ItemDoubleClicked() Handles Me.MouseDoubleClick
         RaiseEvent ItemDoubleClick(SelectedItem)
+    End Sub
+    Private Sub SelectedItemsChanged() Handles Me.SelectionChanged
+        Dim list As New List(Of viewmodelitem)
+        For Each row As DataGridViewRow In Me.SelectedRows
+            list.Add(row.DataBoundItem)
+        Next
+        SelectedItems = list
     End Sub
 #End Region
 
