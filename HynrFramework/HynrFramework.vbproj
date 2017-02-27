@@ -116,6 +116,9 @@
     <Compile Include="UIElements\HynrItemViewForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrTextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\UIBase\IBindableControl.vb" />
     <Compile Include="UIElements\UIBase\IBindableListControl.vb" />
     <Compile Include="UIElements\UIBase\IHasHynrSettings.vb" />

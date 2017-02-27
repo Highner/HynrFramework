@@ -42,6 +42,7 @@ Public Class PersonItemViewModel
         End Get
         Set(value As Integer)
             Data.CountryID = value
+            OnPropertyChanged("CountryID")
         End Set
     End Property
 End Class

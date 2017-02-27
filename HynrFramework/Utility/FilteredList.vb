@@ -21,14 +21,29 @@ Module FilteredList
                         End If
                     Case "number"
                         If Not (IsNothing(prop.GetValue(listviewmodel))) And Not (prop.GetValue(listviewmodel) = "") Then
-                            If prevparamexists Then parameters = parameters + " and "
-                            Dim value As Decimal = Convert.ToDecimal(prop.GetValue(listviewmodel))
-                            If att.ExactMatch Then
-                                parameters = parameters + att.FilteredField + " = " & value & ""
-                            Else
-                                parameters = parameters + att.FilteredField + ".ToString().Contains(" + Chr(34) + value.ToString + Chr(34) + ")"
+                            If IsNumeric(prop.GetValue(listviewmodel)) Then
+                                If prevparamexists Then parameters = parameters + " and "
+                                Dim value As Decimal = Convert.ToDecimal(prop.GetValue(listviewmodel))
+                                If att.ExactMatch Then
+                                    parameters = parameters + att.FilteredField + " = " & value & ""
+                                Else
+                                    parameters = parameters + att.FilteredField + ".ToString().Contains(" + Chr(34) + value.ToString + Chr(34) + ")"
+                                End If
+                                prevparamexists = True
                             End If
-                            prevparamexists = True
+                        End If
+                    Case "date"
+                        If Not (IsNothing(prop.GetValue(listviewmodel))) And Not (prop.GetValue(listviewmodel) = "") Then
+                            If IsDate(prop.GetValue(listviewmodel)) Then
+                                If prevparamexists Then parameters = parameters + " and "
+                                Dim value As Date = Convert.ToDateTime(prop.GetValue(listviewmodel))
+                                If att.ExactMatch Then
+                                    parameters = parameters + att.FilteredField + " = " + Chr(34) & value & Chr(34)
+                                Else
+                                    parameters = parameters + att.FilteredField + ".ToString().Contains(" + Chr(34) + value.ToString + Chr(34) + ")"
+                                End If
+                                prevparamexists = True
+                            End If
                         End If
                 End Select
             End If

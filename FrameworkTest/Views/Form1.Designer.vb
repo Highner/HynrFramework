@@ -25,15 +25,22 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Button6 = New System.Windows.Forms.Button()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
+        Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
+        Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
+        Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.AgeCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -56,13 +63,6 @@ Partial Class Form1
         Me.Button2.Text = "delete selected"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(420, 36)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(422, 20)
-        Me.TextBox1.TabIndex = 4
-        '
         'Button3
         '
         Me.Button3.Location = New System.Drawing.Point(216, 28)
@@ -78,7 +78,7 @@ Partial Class Form1
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(96, 34)
         Me.Button4.TabIndex = 6
-        Me.Button4.Text = "Button4"
+        Me.Button4.Text = "open"
         Me.Button4.UseVisualStyleBackColor = True
         '
         'Button5
@@ -90,20 +90,6 @@ Partial Class Form1
         Me.Button5.Text = "Apply filter"
         Me.Button5.UseVisualStyleBackColor = True
         '
-        'TextBox2
-        '
-        Me.TextBox2.Location = New System.Drawing.Point(420, 68)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(422, 20)
-        Me.TextBox2.TabIndex = 9
-        '
-        'TextBox3
-        '
-        Me.TextBox3.Location = New System.Drawing.Point(420, 94)
-        Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(422, 20)
-        Me.TextBox3.TabIndex = 10
-        '
         'Button6
         '
         Me.Button6.Location = New System.Drawing.Point(495, 262)
@@ -112,6 +98,51 @@ Partial Class Form1
         Me.Button6.TabIndex = 11
         Me.Button6.Text = "Delete Selected"
         Me.Button6.UseVisualStyleBackColor = True
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "Name"
+        Me.DataGridViewTextBoxColumn1.HeaderText = "Name"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.DataPropertyName = "Remarks"
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Remarks"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.DataPropertyName = "Age"
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Age"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        '
+        'DataGridViewComboBoxColumn1
+        '
+        Me.DataGridViewComboBoxColumn1.DataPropertyName = "CountryID"
+        Me.DataGridViewComboBoxColumn1.HeaderText = "Country"
+        Me.DataGridViewComboBoxColumn1.Name = "DataGridViewComboBoxColumn1"
+        '
+        'HynrTextBox3
+        '
+        Me.HynrTextBox3.Location = New System.Drawing.Point(463, 120)
+        Me.HynrTextBox3.Name = "HynrTextBox3"
+        Me.HynrTextBox3.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox3.TabIndex = 14
+        '
+        'HynrTextBox2
+        '
+        Me.HynrTextBox2.Location = New System.Drawing.Point(463, 94)
+        Me.HynrTextBox2.Name = "HynrTextBox2"
+        Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox2.TabIndex = 13
+        '
+        'HynrTextBox1
+        '
+        Me.HynrTextBox1.Location = New System.Drawing.Point(463, 68)
+        Me.HynrTextBox1.Name = "HynrTextBox1"
+        Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox1.TabIndex = 12
         '
         'HynrLabelStrip1
         '
@@ -135,7 +166,7 @@ Partial Class Form1
         Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.CountryCol})
+        Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.RemarksCol, Me.AgeCol, Me.CountryCol})
         Me.PersonsGrid.HynrSettings = Nothing
         Me.PersonsGrid.Location = New System.Drawing.Point(12, 68)
         Me.PersonsGrid.Name = "PersonsGrid"
@@ -145,6 +176,24 @@ Partial Class Form1
         Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.PersonsGrid.Size = New System.Drawing.Size(402, 228)
         Me.PersonsGrid.TabIndex = 3
+        '
+        'NameCol
+        '
+        Me.NameCol.DataPropertyName = "Name"
+        Me.NameCol.HeaderText = "Name"
+        Me.NameCol.Name = "NameCol"
+        '
+        'RemarksCol
+        '
+        Me.RemarksCol.DataPropertyName = "Remarks"
+        Me.RemarksCol.HeaderText = "Remarks"
+        Me.RemarksCol.Name = "RemarksCol"
+        '
+        'AgeCol
+        '
+        Me.AgeCol.DataPropertyName = "Age"
+        Me.AgeCol.HeaderText = "Age"
+        Me.AgeCol.Name = "AgeCol"
         '
         'CountryCol
         '
@@ -157,14 +206,14 @@ Partial Class Form1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(894, 517)
+        Me.Controls.Add(Me.HynrTextBox3)
+        Me.Controls.Add(Me.HynrTextBox2)
+        Me.Controls.Add(Me.HynrTextBox1)
         Me.Controls.Add(Me.Button6)
-        Me.Controls.Add(Me.TextBox3)
-        Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.HynrLabelStrip1)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.PersonsGrid)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -180,13 +229,20 @@ Partial Class Form1
     Friend WithEvents Button1 As Button
     Friend WithEvents Button2 As Button
     Friend WithEvents PersonsGrid As PersonsGrid
-    Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Button3 As Button
     Friend WithEvents Button4 As Button
     Friend WithEvents HynrLabelStrip1 As HynrFramework.HynrLabelStrip
     Friend WithEvents Button5 As Button
-    Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents TextBox3 As TextBox
     Friend WithEvents Button6 As Button
+    Friend WithEvents NameCol As DataGridViewTextBoxColumn
+    Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
+    Friend WithEvents AgeCol As DataGridViewTextBoxColumn
     Friend WithEvents CountryCol As DataGridViewComboBoxColumn
+    Friend WithEvents HynrTextBox1 As HynrFramework.HynrTextBox
+    Friend WithEvents HynrTextBox2 As HynrFramework.HynrTextBox
+    Friend WithEvents HynrTextBox3 As HynrFramework.HynrTextBox
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewComboBoxColumn1 As DataGridViewComboBoxColumn
 End Class

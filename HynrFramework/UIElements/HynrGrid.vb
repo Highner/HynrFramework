@@ -71,6 +71,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
         DataBindings.Add("SelectedItems", listviewmodel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
+    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
+        Dim col As DataGridViewComboBoxColumn = Columns(columnname)
+        col.DataPropertyName = datapropertyname
+        col.ValueMember = valuemember
+        col.DisplayMember = displaymember
+        col.DataSource = New BindingSource(datasource, "")
+    End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
         DefaultCellStyle.SelectionForeColor = HynrSettings.SelectedForecolor
