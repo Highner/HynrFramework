@@ -12,7 +12,7 @@ Public Class HynrItemViewForm
         End Get
         Set(value As Object)
             _DataContext = value
-            OnPropertyChanged("SelectedItem")
+            OnPropertyChanged("DataContext")
         End Set
     End Property
 

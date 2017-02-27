@@ -8,5 +8,4 @@ Public Class PersonsDataContext
     Public Sub New(ByRef context As FrameworkTestDBEntities)
         MyBase.New(context)
     End Sub
-
 End Class

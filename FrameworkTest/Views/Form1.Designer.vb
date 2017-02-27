@@ -33,6 +33,14 @@ Partial Class Form1
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewComboBoxColumn1 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewComboBoxColumn2 = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
@@ -123,6 +131,54 @@ Partial Class Form1
         Me.DataGridViewComboBoxColumn1.HeaderText = "Country"
         Me.DataGridViewComboBoxColumn1.Name = "DataGridViewComboBoxColumn1"
         '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.DataPropertyName = "Name"
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Name"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.DataPropertyName = "Remarks"
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Remarks"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        '
+        'DataGridViewTextBoxColumn6
+        '
+        Me.DataGridViewTextBoxColumn6.DataPropertyName = "Age"
+        Me.DataGridViewTextBoxColumn6.HeaderText = "Age"
+        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        '
+        'DataGridViewComboBoxColumn2
+        '
+        Me.DataGridViewComboBoxColumn2.DataPropertyName = "CountryID"
+        Me.DataGridViewComboBoxColumn2.HeaderText = "Country"
+        Me.DataGridViewComboBoxColumn2.Name = "DataGridViewComboBoxColumn2"
+        '
+        'DataGridViewTextBoxColumn7
+        '
+        Me.DataGridViewTextBoxColumn7.DataPropertyName = "Name"
+        Me.DataGridViewTextBoxColumn7.HeaderText = "Name"
+        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
+        '
+        'DataGridViewTextBoxColumn8
+        '
+        Me.DataGridViewTextBoxColumn8.DataPropertyName = "Remarks"
+        Me.DataGridViewTextBoxColumn8.HeaderText = "Remarks"
+        Me.DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
+        '
+        'DataGridViewTextBoxColumn9
+        '
+        Me.DataGridViewTextBoxColumn9.DataPropertyName = "Age"
+        Me.DataGridViewTextBoxColumn9.HeaderText = "Age"
+        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
+        '
+        'DataGridViewComboBoxColumn3
+        '
+        Me.DataGridViewComboBoxColumn3.DataPropertyName = "CountryID"
+        Me.DataGridViewComboBoxColumn3.HeaderText = "Country"
+        Me.DataGridViewComboBoxColumn3.Name = "DataGridViewComboBoxColumn3"
+        '
         'HynrTextBox3
         '
         Me.HynrTextBox3.Location = New System.Drawing.Point(463, 120)
@@ -168,6 +224,7 @@ Partial Class Form1
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.RemarksCol, Me.AgeCol, Me.CountryCol})
         Me.PersonsGrid.HynrSettings = Nothing
+        Me.PersonsGrid.IsBusy = False
         Me.PersonsGrid.Location = New System.Drawing.Point(12, 68)
         Me.PersonsGrid.Name = "PersonsGrid"
         Me.PersonsGrid.RowHeadersVisible = False
@@ -197,7 +254,6 @@ Partial Class Form1
         '
         'CountryCol
         '
-        Me.CountryCol.DataPropertyName = "CountryID"
         Me.CountryCol.HeaderText = "Country"
         Me.CountryCol.Name = "CountryCol"
         '
@@ -234,10 +290,6 @@ Partial Class Form1
     Friend WithEvents HynrLabelStrip1 As HynrFramework.HynrLabelStrip
     Friend WithEvents Button5 As Button
     Friend WithEvents Button6 As Button
-    Friend WithEvents NameCol As DataGridViewTextBoxColumn
-    Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
-    Friend WithEvents AgeCol As DataGridViewTextBoxColumn
-    Friend WithEvents CountryCol As DataGridViewComboBoxColumn
     Friend WithEvents HynrTextBox1 As HynrFramework.HynrTextBox
     Friend WithEvents HynrTextBox2 As HynrFramework.HynrTextBox
     Friend WithEvents HynrTextBox3 As HynrFramework.HynrTextBox
@@ -245,4 +297,16 @@ Partial Class Form1
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewComboBoxColumn1 As DataGridViewComboBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewComboBoxColumn2 As DataGridViewComboBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn8 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewComboBoxColumn3 As DataGridViewComboBoxColumn
+    Friend WithEvents NameCol As DataGridViewTextBoxColumn
+    Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
+    Friend WithEvents AgeCol As DataGridViewTextBoxColumn
+    Friend WithEvents CountryCol As DataGridViewComboBoxColumn
 End Class

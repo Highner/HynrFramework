@@ -5,9 +5,14 @@ Imports System.Linq.Dynamic
 Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = entity, T5 = DbContext
     Implements IDataContext(Of entityclass, dbcontextclass)
 
-    Private ErrorLog As New List(Of String)
+    Private _ErrorLog As New List(Of String)
     Public Property DBContext As dbcontextclass Implements IDataContext(Of entityclass, dbcontextclass).DBContext
 
+    Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass, dbcontextclass).ErrorLog
+        Get
+            Return _ErrorLog
+        End Get
+    End Property
 
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context

@@ -1,7 +1,7 @@
 ﻿Public Class Form1
-    Property Settings As HynrFramework.HynrUISettings = New HynrFramework.HynrUISettings
-    Property ViewModel As PersonsListViewModel
-    Property DataContext As New FrameworkTestDBEntities
+    Private Settings As HynrFramework.HynrUISettings = New HynrFramework.HynrUISettings
+    Private ViewModel As PersonsListViewModel
+    Private DataContext As New FrameworkTestDBEntities
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ViewModel = New PersonsListViewModel(New PersonsDataController(New PersonsDataContext(DataContext)))
         Settings.ApplyToControlContainer(Me)
@@ -11,7 +11,7 @@
         HynrTextBox2.BindToProperty(ViewModel, "RemarksFilter")
         HynrTextBox3.BindToProperty(ViewModel, "AgeFilter")
         HynrLabelStrip1.BindToListViewModel(ViewModel, "Header")
-        PersonsGrid.BindGridCombobox("CountryCol", DataContext.Countries.ToList, "CountryID", "ID", "Name")
+        PersonsGrid.BindGridCombobox("CountryCol", (New FrameworkTestDBEntities).Countries.ToList, "CountryID", "ID", "Name")
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

@@ -27,18 +27,31 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     Public Property DataContext As dbcontextclass
     <Browsable(False)>
     Public Property GetDataOnSelected As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnSelected
+    <Browsable(False)>
+    Public Property GetDataOnLoad As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnLoad
 #End Region
 
 #Region "METHODS"
     ''' <summary>
-    ''' no parameter allowed!
+    ''' no parameter allowed! set GetDataOnLoad in inheriting class
     ''' </summary>
     Public Sub New()
     End Sub
     ''' <summary>
     ''' in case child lists need to be updated. insert every child listviewmodels getdata() here. will fire whe GetDataOnSelected = true
     ''' </summary>
-    Public Overridable Sub GetData()
+    Protected Overridable Sub _GetData()
+    End Sub
+    Public Async Sub GetData()
+        Await Task.Run(Sub() _GetData())
+    End Sub
+    ''' <summary>
+    ''' will fire whe GetDataOnLoad = true; in case all data is required, insert call to GetData()
+    ''' </summary>
+    Protected Overridable Sub _GetDataSlim()
+    End Sub
+    Public Async Sub GetDataSlim()
+        Await Task.Run(Sub() _GetDataSlim())
     End Sub
     Private Sub RaiseDeletedEvent()
         RaiseEvent Deleted(Me, Nothing)

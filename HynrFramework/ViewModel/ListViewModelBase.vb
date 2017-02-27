@@ -4,7 +4,9 @@ Imports System.Windows.Forms
 Imports System.Windows.Input
 Imports System.Linq.Dynamic
 
-'only contructor and CreateNewItem and possibly _Parameters need to be specified in inherited class
+''' <summary>
+''' only contructor and CreateNewItem need to be specified in inherited class
+''' </summary>
 Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
     Inherits ViewModelBase
     Implements IListViewModel(Of viewmodelitem)
@@ -84,7 +86,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Protected Overridable Sub ApplyFilter()
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
-            Dim filteredlist As List(Of viewmodelitem) = _OriginalItemList.ToList.Where(filterparameters).ToList
+            Dim filteredlist = _OriginalItemList.ToList.Where(filterparameters)
             Dim newlist As New ObservableListSource(Of viewmodelitem)
             For Each item In filteredlist
                 newlist.Add(item)
@@ -129,8 +131,19 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Dim vmitem As viewmodelitem = sender
         _DataController.UpdateItem(vmitem.Data)
     End Sub
-    Public Sub GetData()
-        DataToList(_DataController.GetAllItems())
+    Public Async Sub GetData()
+        IsBusy = True
+        Dim dataitemlist As IEnumerable(Of dataitem)
+        CancellationSource = New Threading.CancellationTokenSource
+        Try
+            dataitemlist = Await Task.Run(Function() _DataController.GetAllItems(), CancellationSource.Token)
+        Catch ex As Exception
+            _DataController.DataContext.ErrorLog.Add(ex.InnerException.ToString)
+            dataitemlist = New List(Of dataitem)
+        End Try
+        CancellationSource.Dispose()
+        DataToList(dataitemlist)
+        IsBusy = False
     End Sub
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
@@ -139,8 +152,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
             newvmitem.DataContext = _DataController.DBContext
+            newvmitem.CancellationSource = CancellationSource
             AddHandler newvmitem.Deleted, AddressOf DeleteItem
             AddHandler newvmitem.Updated, AddressOf UpdateItem
+            If newvmitem.GetDataOnLoad Then newvmitem.GetDataSlim()
             list.Add(newvmitem)
         Next
         _OriginalItemList = list

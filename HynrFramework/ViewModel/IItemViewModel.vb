@@ -8,6 +8,7 @@ Public Interface IItemViewModel(Of dataitem As IHasID)
     Property DeleteCommand As ICommand
     Property UpdateCommand As ICommand
     Property GetDataOnSelected As Boolean
+    Property GetDataOnLoad As Boolean
 
     Event Deleted(sender As Object, e As EventArgs)
     Event Updated(sender As Object, e As EventArgs)

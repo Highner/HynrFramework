@@ -59,6 +59,18 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             End If
         End Set
     End Property
+    Private _IsBusy As Boolean
+    Public Property IsBusy() As Boolean Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).IsBusy
+        Get
+            Return _IsBusy
+        End Get
+        Set(ByVal value As Boolean)
+            _IsBusy = value
+            BusyIndicator(_IsBusy)
+            OnPropertyChanged("IsBusy")
+        End Set
+    End Property
+    Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).CancellationSource
 #End Region
 
 #Region "METHODS"
@@ -70,6 +82,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
         DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
         DataBindings.Add("SelectedItems", listviewmodel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged)
+        DataBindings.Add("IsBusy", listviewmodel, "IsBusy", True, DataSourceUpdateMode.OnPropertyChanged)
+        DataBindings.Add("CancellationSource", listviewmodel, "CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
     End Sub
     Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
         Dim col As DataGridViewComboBoxColumn = Columns(columnname)
@@ -103,6 +117,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             list.Add(row.DataBoundItem)
         Next
         SelectedItems = list
+    End Sub
+    Private Sub BusyIndicator(ByVal busy As Boolean)
+        Enabled = Not busy
+
     End Sub
 #End Region
 

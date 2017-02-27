@@ -45,4 +45,5 @@ Public Class PersonItemViewModel
             OnPropertyChanged("CountryID")
         End Set
     End Property
+
 End Class
