@@ -68,6 +68,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
 #Region "DATA MAPPING"
     ''' <summary>
     ''' override this to fill custom properties etc., but include call to mybase.ToData to map the base properties.
+    ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
     ''' </summary>
     Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).ToData
         Dim newdataitem As Object
@@ -77,6 +78,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     End Function
     ''' <summary>
     ''' override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties.
+    ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
     ''' </summary>
     Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).ToEntity
         MapProperties(dataitem, entityitem)

@@ -44,7 +44,9 @@ Public Class HynrLabelStrip
     ''' create string property in viewmodel as displayproperty
     ''' </summary>
     Public Sub BindToListViewModel(ByRef viewmodel As Object, ByVal displayproperty As String)
-        DataBindings.Add("LabelText", viewmodel, displayproperty, True, DataSourceUpdateMode.Never, String.Empty)
+        If viewmodel.[GetType]().GetProperties().Where(Function(prprt) prprt.Name = displayproperty).Any Then
+            DataBindings.Add("LabelText", viewmodel, displayproperty, True, DataSourceUpdateMode.Never, String.Empty)
+        End If
     End Sub
 #End Region
 

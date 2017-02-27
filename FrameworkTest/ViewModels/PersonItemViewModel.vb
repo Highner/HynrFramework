@@ -36,5 +36,12 @@ Public Class PersonItemViewModel
             Return Data.Country
         End Get
     End Property
-
+    Public Property CountryID As Integer
+        Get
+            Return Data.CountryID
+        End Get
+        Set(value As Integer)
+            Data.CountryID = value
+        End Set
+    End Property
 End Class

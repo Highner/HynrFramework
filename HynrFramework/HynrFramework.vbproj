@@ -124,6 +124,7 @@
     <Compile Include="Utility\DynamicExtension.vb" />
     <Compile Include="Utility\FilteredList.vb" />
     <Compile Include="Utility\GenericObjectInstantiator.vb" />
+    <Compile Include="Utility\HynrHelpers.vb" />
     <Compile Include="Utility\ListViewModelFilterAttribute.vb" />
     <Compile Include="Utility\ObjectMapper.vb" />
     <Compile Include="Utility\ObservableListSource.vb" />

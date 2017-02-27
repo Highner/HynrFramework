@@ -5,6 +5,7 @@ Imports System.Linq.Dynamic
 Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = entity, T5 = DbContext
     Implements IDataContext(Of entityclass, dbcontextclass)
 
+    Private ErrorLog As New List(Of String)
     Public Property DBContext As dbcontextclass Implements IDataContext(Of entityclass, dbcontextclass).DBContext
 
 
@@ -14,7 +15,8 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     Public Function Save() As Boolean Implements IDataContext(Of entityclass, dbcontextclass).Save
         Try
             DBContext.SaveChanges()
-        Catch
+        Catch ex As Exception
+            ErrorLog.Add("DB Save Error: " + ex.InnerException.ToString)
             Return False
         End Try
         Return True
@@ -23,7 +25,8 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     Public Overridable Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass, dbcontextclass).AddObject
         Try
             DBContext.Set(GetType(entityclass)).Add(entityobject)
-        Catch
+        Catch ex As Exception
+            ErrorLog.Add("DB AddObject Error: " + ex.InnerException.ToString)
             Return False
         End Try
         Return True
@@ -32,8 +35,8 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     Public Overridable Function DeleteObject(id As Integer) As Boolean Implements IDataContext(Of entityclass, dbcontextclass).DeleteObject
         Try
             DBContext.Set(GetType(entityclass)).Remove(GetObject(id))
-        Catch
-            Return False
+        Catch ex As Exception
+            ErrorLog.Add("DB DeleteObject Error: " + ex.InnerException.ToString)
         End Try
         Return True
     End Function

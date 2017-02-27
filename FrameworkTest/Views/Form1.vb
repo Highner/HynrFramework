@@ -1,7 +1,9 @@
 ﻿Public Class Form1
     Property Settings As HynrFramework.HynrUISettings = New HynrFramework.HynrUISettings
-    Property ViewModel As PersonsListViewModel = New PersonsListViewModel(New PersonsDataController(New PersonsDataContext(New FrameworkTestDBEntities)))
+    Property ViewModel As PersonsListViewModel
+    Property DataContext As New FrameworkTestDBEntities
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ViewModel = New PersonsListViewModel(New PersonsDataController(New PersonsDataContext(DataContext)))
         Settings.ApplyToControlContainer(Me)
         ViewModel.GetData()
         PersonsGrid.AutoGenerateColumns = True
@@ -10,6 +12,9 @@
         TextBox2.DataBindings.Add("Text", ViewModel, "RemarksFilter", True, DataSourceUpdateMode.OnPropertyChanged)
         TextBox3.DataBindings.Add("Text", ViewModel, "AgeFilter", True, DataSourceUpdateMode.OnPropertyChanged)
         HynrLabelStrip1.BindToListViewModel(ViewModel, "Header")
+        Dim countries As New BindingSource
+        countries.DataSource = DataContext.Countries.ToList
+        HynrFramework.HynrHelpers.BindGridCombobox(PersonsGrid.Columns("CountryCol"), countries, "CountryID", "ID", "Name")
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

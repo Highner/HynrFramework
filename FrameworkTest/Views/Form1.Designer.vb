@@ -31,9 +31,10 @@ Partial Class Form1
         Me.Button5 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Button6 = New System.Windows.Forms.Button()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
-        Me.Button6 = New System.Windows.Forms.Button()
+        Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -86,7 +87,7 @@ Partial Class Form1
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(96, 34)
         Me.Button5.TabIndex = 8
-        Me.Button5.Text = "Button5"
+        Me.Button5.Text = "Apply filter"
         Me.Button5.UseVisualStyleBackColor = True
         '
         'TextBox2
@@ -102,6 +103,15 @@ Partial Class Form1
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(422, 20)
         Me.TextBox3.TabIndex = 10
+        '
+        'Button6
+        '
+        Me.Button6.Location = New System.Drawing.Point(495, 262)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(96, 34)
+        Me.Button6.TabIndex = 11
+        Me.Button6.Text = "Delete Selected"
+        Me.Button6.UseVisualStyleBackColor = True
         '
         'HynrLabelStrip1
         '
@@ -125,6 +135,7 @@ Partial Class Form1
         Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.CountryCol})
         Me.PersonsGrid.HynrSettings = Nothing
         Me.PersonsGrid.Location = New System.Drawing.Point(12, 68)
         Me.PersonsGrid.Name = "PersonsGrid"
@@ -135,14 +146,11 @@ Partial Class Form1
         Me.PersonsGrid.Size = New System.Drawing.Size(402, 228)
         Me.PersonsGrid.TabIndex = 3
         '
-        'Button6
+        'CountryCol
         '
-        Me.Button6.Location = New System.Drawing.Point(495, 262)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(96, 34)
-        Me.Button6.TabIndex = 11
-        Me.Button6.Text = "Delete Selected"
-        Me.Button6.UseVisualStyleBackColor = True
+        Me.CountryCol.DataPropertyName = "CountryID"
+        Me.CountryCol.HeaderText = "Country"
+        Me.CountryCol.Name = "CountryCol"
         '
         'Form1
         '
@@ -180,4 +188,5 @@ Partial Class Form1
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents TextBox3 As TextBox
     Friend WithEvents Button6 As Button
+    Friend WithEvents CountryCol As DataGridViewComboBoxColumn
 End Class

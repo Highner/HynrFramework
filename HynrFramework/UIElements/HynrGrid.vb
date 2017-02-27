@@ -1,7 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Windows.Forms
-Imports HynrFramework
 
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
     Inherits DataGridView
@@ -82,7 +81,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
         If Me.PropertyChangedEvent IsNot Nothing Then
-            RaiseEvent PropertyChanged(Me, New System.ComponentModel.PropertyChangedEventArgs(strPropertyName))
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(strPropertyName))
         End If
     End Sub
     Private Sub SelectedItemChanged()
