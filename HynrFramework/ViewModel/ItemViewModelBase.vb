@@ -43,15 +43,19 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     Protected Overridable Sub _GetData()
     End Sub
     Public Async Sub GetData()
+        IsBusy = True
         Await Task.Run(Sub() _GetData())
+        IsBusy = False
     End Sub
     ''' <summary>
-    ''' will fire whe GetDataOnLoad = true; in case all data is required, insert call to GetData()
+    ''' will fire when GetDataOnLoad = true; in case all data is required, insert call to GetData()
     ''' </summary>
     Protected Overridable Sub _GetDataSlim()
     End Sub
     Public Async Sub GetDataSlim()
+        IsBusy = True
         Await Task.Run(Sub() _GetDataSlim())
+        IsBusy = False
     End Sub
     Private Sub RaiseDeletedEvent()
         RaiseEvent Deleted(Me, Nothing)

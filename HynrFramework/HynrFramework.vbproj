@@ -119,6 +119,12 @@
     <Compile Include="UIElements\HynrTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\MatrixCircularProgressControl.Designer.vb">
+      <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UIElements\MatrixCircularProgressControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UIElements\UIBase\IBindableControl.vb" />
     <Compile Include="UIElements\UIBase\IBindableListControl.vb" />
     <Compile Include="UIElements\UIBase\IHasHynrSettings.vb" />
@@ -145,6 +151,9 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\MatrixCircularProgressControl.resx">
+      <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -159,7 +168,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -6,4 +6,5 @@ Public Class PersonsDataController
     Public Sub New(ByRef context As PersonsDataContext)
         MyBase.New(context)
     End Sub
+
 End Class

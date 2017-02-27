@@ -9,7 +9,7 @@ Public Class HynrTextBox
 #Region "Methods"
     Public Sub BindToProperty(ByRef viewmodel As Object, ByVal propertyname As String, Optional ByVal updatemode As DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged)
         If viewmodel.[GetType]().GetProperties().Where(Function(prprt) prprt.Name = propertyname).Any Then
-            DataBindings.Add("Text", viewmodel, propertyname, True, updatemode)
+            DataBindings.Add("Text", viewmodel, propertyname, True, updatemode, String.Empty)
         End If
     End Sub
 #End Region

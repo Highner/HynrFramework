@@ -47,6 +47,7 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     End Function
 
     Public Overridable Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass, dbcontextclass).GetAllObjects
+        Threading.Thread.Sleep(5000)
         Return DBContext.Set(GetType(entityclass))
     End Function
 

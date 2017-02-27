@@ -66,17 +66,21 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End Get
         Set(ByVal value As Boolean)
             _IsBusy = value
-            BusyIndicator(_IsBusy)
+            ToggleBusyIndicator(_IsBusy)
             OnPropertyChanged("IsBusy")
         End Set
     End Property
     Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).CancellationSource
+    Public BusyIndicator As New MatrixCircularProgressControl
 #End Region
 
 #Region "METHODS"
     Public Sub New()
         DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
+        BusyIndicator.Height = 50
+        BusyIndicator.Width = 50
+        Controls.Add(BusyIndicator)
     End Sub
     Public Sub BindToListListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
         DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
@@ -118,9 +122,21 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         Next
         SelectedItems = list
     End Sub
-    Private Sub BusyIndicator(ByVal busy As Boolean)
+    Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
         Enabled = Not busy
-
+        If busy Then
+            BusyIndicator.StartAngle = 30
+            BusyIndicator.Show()
+            BusyIndicator.Start()
+        Else
+            BusyIndicator.Stop()
+            BusyIndicator.Hide()
+        End If
+    End Sub
+    Private Sub AdjustBusyIndicatorLocation() Handles Me.SizeChanged
+        Dim x As Integer = Me.Width / 2 - BusyIndicator.Width / 2
+        Dim y As Integer = Me.Height / 2 - BusyIndicator.Height / 2
+        BusyIndicator.Location = New Drawing.Point(x, y)
     End Sub
 #End Region
 

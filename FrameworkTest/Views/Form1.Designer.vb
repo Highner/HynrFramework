@@ -221,6 +221,7 @@ Partial Class Form1
         Me.PersonsGrid.AutoGenerateColumns = False
         Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.PersonsGrid.CancellationSource = Nothing
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.RemarksCol, Me.AgeCol, Me.CountryCol})
         Me.PersonsGrid.HynrSettings = Nothing
