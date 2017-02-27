@@ -19,7 +19,7 @@
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ViewModel.SelectedItem.DeleteCommand.Execute(Nothing)
+        ViewModel.DeleteSelectedItemCommand.Execute(Nothing)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
@@ -39,5 +39,13 @@
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         ViewModel.DeleteSelectedItemsCommand.Execute(Nothing)
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        If ViewModel.IsBusy Then
+            ViewModel.IsBusy = False
+        Else
+            ViewModel.IsBusy = True
+        End If
     End Sub
 End Class

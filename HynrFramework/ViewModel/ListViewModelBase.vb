@@ -81,17 +81,20 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 
 #Region "FILTER"
     ''' <summary>
-    ''' add bound properties for every filter parameter with ListViewModelFilterAttribute
+    ''' add bound properties to inherited listviewmodelclass for every filter parameter with ListViewModelFilterAttribute
     ''' </summary>
     Protected Overridable Sub ApplyFilter()
+
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
+            IsBusy = True
             Dim filteredlist = _OriginalItemList.ToList.Where(filterparameters)
             Dim newlist As New ObservableListSource(Of viewmodelitem)
             For Each item In filteredlist
                 newlist.Add(item)
             Next
             ItemList = newlist
+            IsBusy = False
         Else
             ItemList = _OriginalItemList
         End If
@@ -105,31 +108,41 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Overridable Sub CreateNewItem()
     End Sub
     Private Sub UpdateAll()
-        For Each item As viewmodelitem In _OriginalItemList
-            UpdateItem(item, Nothing)
-        Next
+        If Not IsBusy Then
+            For Each item As viewmodelitem In _OriginalItemList
+                UpdateItem(item, Nothing)
+            Next
+        End If
     End Sub
     Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
-        Dim vmitem As viewmodelitem = sender
-        If _DataController.DeleteItem(vmitem.Data) = True Then
-            ItemList.Remove(vmitem)
+        If Not IsBusy Then
+            Dim vmitem As viewmodelitem = sender
+            If _DataController.DeleteItem(vmitem.Data) = True Then
+                ItemList.Remove(vmitem)
+            End If
         End If
     End Sub
     Protected Overridable Sub DeleteSelectedItem()
-        If Not IsNothing(_SelectedItem) Then
-            DeleteItem(_SelectedItem, Nothing)
-            GetData()
+        If Not IsBusy Then
+            If Not IsNothing(_SelectedItem) Then
+                DeleteItem(_SelectedItem, Nothing)
+                GetData()
+            End If
         End If
     End Sub
     Protected Overridable Sub DeleteSelectedItems()
-        For Each item In SelectedItems
-            DeleteItem(item, Nothing)
-        Next
-        GetData()
+        If Not IsBusy Then
+            For Each item In SelectedItems
+                DeleteItem(item, Nothing)
+            Next
+            GetData()
+        End If
     End Sub
     Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
-        Dim vmitem As viewmodelitem = sender
-        _DataController.UpdateItem(vmitem.Data)
+        If Not IsBusy Then
+            Dim vmitem As viewmodelitem = sender
+            _DataController.UpdateItem(vmitem.Data)
+        End If
     End Sub
     Public Async Sub GetData()
         IsBusy = True
@@ -142,8 +155,8 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             dataitemlist = New List(Of dataitem)
         End Try
         CancellationSource.Dispose()
-        DataToList(dataitemlist)
         IsBusy = False
+        DataToList(dataitemlist)
     End Sub
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)

@@ -45,17 +45,23 @@ Partial Class Form1
         Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
+        Me.Button7 = New System.Windows.Forms.Button()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
         Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.AgeCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(12, 28)
+        Me.Button1.Location = New System.Drawing.Point(3, 3)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(96, 34)
         Me.Button1.TabIndex = 1
@@ -64,7 +70,7 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(114, 28)
+        Me.Button2.Location = New System.Drawing.Point(105, 3)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(96, 34)
         Me.Button2.TabIndex = 2
@@ -73,7 +79,7 @@ Partial Class Form1
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(216, 28)
+        Me.Button3.Location = New System.Drawing.Point(207, 3)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(96, 34)
         Me.Button3.TabIndex = 5
@@ -82,7 +88,7 @@ Partial Class Form1
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(318, 28)
+        Me.Button4.Location = New System.Drawing.Point(309, 3)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(96, 34)
         Me.Button4.TabIndex = 6
@@ -91,7 +97,7 @@ Partial Class Form1
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(548, 164)
+        Me.Button5.Location = New System.Drawing.Point(59, 130)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(96, 34)
         Me.Button5.TabIndex = 8
@@ -100,7 +106,7 @@ Partial Class Form1
         '
         'Button6
         '
-        Me.Button6.Location = New System.Drawing.Point(495, 262)
+        Me.Button6.Location = New System.Drawing.Point(59, 170)
         Me.Button6.Name = "Button6"
         Me.Button6.Size = New System.Drawing.Size(96, 34)
         Me.Button6.TabIndex = 11
@@ -181,21 +187,21 @@ Partial Class Form1
         '
         'HynrTextBox3
         '
-        Me.HynrTextBox3.Location = New System.Drawing.Point(463, 120)
+        Me.HynrTextBox3.Location = New System.Drawing.Point(3, 104)
         Me.HynrTextBox3.Name = "HynrTextBox3"
         Me.HynrTextBox3.Size = New System.Drawing.Size(229, 20)
         Me.HynrTextBox3.TabIndex = 14
         '
         'HynrTextBox2
         '
-        Me.HynrTextBox2.Location = New System.Drawing.Point(463, 94)
+        Me.HynrTextBox2.Location = New System.Drawing.Point(3, 78)
         Me.HynrTextBox2.Name = "HynrTextBox2"
         Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
         Me.HynrTextBox2.TabIndex = 13
         '
         'HynrTextBox1
         '
-        Me.HynrTextBox1.Location = New System.Drawing.Point(463, 68)
+        Me.HynrTextBox1.Location = New System.Drawing.Point(3, 52)
         Me.HynrTextBox1.Name = "HynrTextBox1"
         Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
         Me.HynrTextBox1.TabIndex = 12
@@ -211,28 +217,35 @@ Partial Class Form1
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
+        'Button7
+        '
+        Me.Button7.Location = New System.Drawing.Point(162, 322)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(75, 27)
+        Me.Button7.TabIndex = 15
+        Me.Button7.Text = "Button7"
+        Me.Button7.UseVisualStyleBackColor = True
+        '
         'PersonsGrid
         '
         Me.PersonsGrid.AllowUserToAddRows = False
         Me.PersonsGrid.AllowUserToDeleteRows = False
-        Me.PersonsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PersonsGrid.AutoGenerateColumns = False
         Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.PersonsGrid.CancellationSource = Nothing
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.RemarksCol, Me.AgeCol, Me.CountryCol})
+        Me.PersonsGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PersonsGrid.HynrSettings = Nothing
         Me.PersonsGrid.IsBusy = False
-        Me.PersonsGrid.Location = New System.Drawing.Point(12, 68)
+        Me.PersonsGrid.Location = New System.Drawing.Point(0, 0)
         Me.PersonsGrid.Name = "PersonsGrid"
         Me.PersonsGrid.RowHeadersVisible = False
         Me.PersonsGrid.SelectedItem = Nothing
         Me.PersonsGrid.SelectedItems = Nothing
         Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.PersonsGrid.Size = New System.Drawing.Size(402, 228)
+        Me.PersonsGrid.Size = New System.Drawing.Size(423, 492)
         Me.PersonsGrid.TabIndex = 3
         '
         'NameCol
@@ -258,25 +271,47 @@ Partial Class Form1
         Me.CountryCol.HeaderText = "Country"
         Me.CountryCol.Name = "CountryCol"
         '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 25)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.PersonsGrid)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button7)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button4)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox2)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button3)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button6)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button2)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox3)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button5)
+        Me.SplitContainer1.Size = New System.Drawing.Size(894, 492)
+        Me.SplitContainer1.SplitterDistance = 423
+        Me.SplitContainer1.TabIndex = 16
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(894, 517)
-        Me.Controls.Add(Me.HynrTextBox3)
-        Me.Controls.Add(Me.HynrTextBox2)
-        Me.Controls.Add(Me.HynrTextBox1)
-        Me.Controls.Add(Me.Button6)
-        Me.Controls.Add(Me.Button5)
+        Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.HynrLabelStrip1)
-        Me.Controls.Add(Me.Button4)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.PersonsGrid)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
         Me.Name = "Form1"
         Me.Text = "Form1"
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.PerformLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -310,4 +345,6 @@ Partial Class Form1
     Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
     Friend WithEvents AgeCol As DataGridViewTextBoxColumn
     Friend WithEvents CountryCol As DataGridViewComboBoxColumn
+    Friend WithEvents Button7 As Button
+    Friend WithEvents SplitContainer1 As SplitContainer
 End Class
