@@ -3,7 +3,7 @@
     Private ViewModel As PersonsListViewModel
     Private DataContext As New FrameworkTestDBEntities
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ViewModel = New PersonsListViewModel(New PersonsDataController(New PersonsDataContext(DataContext)))
+        ViewModel = New PersonsListViewModel(New PersonsDataController())
         Settings.ApplyToControlContainer(Me)
         ViewModel.GetData()
         PersonsGrid.BindToListListViewModel(ViewModel)
@@ -12,6 +12,7 @@
         HynrTextBox3.BindToProperty(ViewModel, "AgeFilter")
         HynrLabelStrip1.BindToListViewModel(ViewModel, "Header")
         PersonsGrid.BindGridCombobox("CountryCol", (New FrameworkTestDBEntities).Countries.ToList, "CountryID", "ID", "Name")
+        CheckBox1.DataBindings.Add("Checked", ViewModel, "CanSave")
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

@@ -46,5 +46,8 @@ Public Class PersonItemViewModel
         End Set
     End Property
 
+    Public Sub New()
+        GetDataOnLoad = True
+    End Sub
 
 End Class

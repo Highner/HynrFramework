@@ -41,22 +41,23 @@ Partial Class Form1
         Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewComboBoxColumn3 = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
-        Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
-        Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
-        Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         Me.Button7 = New System.Windows.Forms.Button()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
         Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.AgeCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
+        Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
+        Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
+        Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Button1
@@ -185,38 +186,6 @@ Partial Class Form1
         Me.DataGridViewComboBoxColumn3.HeaderText = "Country"
         Me.DataGridViewComboBoxColumn3.Name = "DataGridViewComboBoxColumn3"
         '
-        'HynrTextBox3
-        '
-        Me.HynrTextBox3.Location = New System.Drawing.Point(3, 104)
-        Me.HynrTextBox3.Name = "HynrTextBox3"
-        Me.HynrTextBox3.Size = New System.Drawing.Size(229, 20)
-        Me.HynrTextBox3.TabIndex = 14
-        '
-        'HynrTextBox2
-        '
-        Me.HynrTextBox2.Location = New System.Drawing.Point(3, 78)
-        Me.HynrTextBox2.Name = "HynrTextBox2"
-        Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
-        Me.HynrTextBox2.TabIndex = 13
-        '
-        'HynrTextBox1
-        '
-        Me.HynrTextBox1.Location = New System.Drawing.Point(3, 52)
-        Me.HynrTextBox1.Name = "HynrTextBox1"
-        Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
-        Me.HynrTextBox1.TabIndex = 12
-        '
-        'HynrLabelStrip1
-        '
-        Me.HynrLabelStrip1.HynrSettings = Nothing
-        Me.HynrLabelStrip1.LabelText = Nothing
-        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
-        Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.HynrLabelStrip1.Size = New System.Drawing.Size(894, 25)
-        Me.HynrLabelStrip1.TabIndex = 7
-        Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
-        '
         'Button7
         '
         Me.Button7.Location = New System.Drawing.Point(162, 322)
@@ -225,6 +194,33 @@ Partial Class Form1
         Me.Button7.TabIndex = 15
         Me.Button7.Text = "Button7"
         Me.Button7.UseVisualStyleBackColor = True
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 25)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.PersonsGrid)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.CheckBox1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button7)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button4)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox2)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button3)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button6)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button2)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox3)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Button5)
+        Me.SplitContainer1.Size = New System.Drawing.Size(894, 492)
+        Me.SplitContainer1.SplitterDistance = 422
+        Me.SplitContainer1.TabIndex = 16
         '
         'PersonsGrid
         '
@@ -245,7 +241,7 @@ Partial Class Form1
         Me.PersonsGrid.SelectedItem = Nothing
         Me.PersonsGrid.SelectedItems = Nothing
         Me.PersonsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.PersonsGrid.Size = New System.Drawing.Size(423, 492)
+        Me.PersonsGrid.Size = New System.Drawing.Size(422, 492)
         Me.PersonsGrid.TabIndex = 3
         '
         'NameCol
@@ -271,31 +267,47 @@ Partial Class Form1
         Me.CountryCol.HeaderText = "Country"
         Me.CountryCol.Name = "CountryCol"
         '
-        'SplitContainer1
+        'HynrTextBox1
         '
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 25)
-        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.HynrTextBox1.Location = New System.Drawing.Point(3, 52)
+        Me.HynrTextBox1.Name = "HynrTextBox1"
+        Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox1.TabIndex = 12
         '
-        'SplitContainer1.Panel1
+        'HynrTextBox2
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.PersonsGrid)
+        Me.HynrTextBox2.Location = New System.Drawing.Point(3, 78)
+        Me.HynrTextBox2.Name = "HynrTextBox2"
+        Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox2.TabIndex = 13
         '
-        'SplitContainer1.Panel2
+        'HynrTextBox3
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox1)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button7)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button4)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox2)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button3)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button6)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button2)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox3)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button1)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Button5)
-        Me.SplitContainer1.Size = New System.Drawing.Size(894, 492)
-        Me.SplitContainer1.SplitterDistance = 423
-        Me.SplitContainer1.TabIndex = 16
+        Me.HynrTextBox3.Location = New System.Drawing.Point(3, 104)
+        Me.HynrTextBox3.Name = "HynrTextBox3"
+        Me.HynrTextBox3.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox3.TabIndex = 14
+        '
+        'HynrLabelStrip1
+        '
+        Me.HynrLabelStrip1.HynrSettings = Nothing
+        Me.HynrLabelStrip1.LabelText = Nothing
+        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
+        Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.HynrLabelStrip1.Size = New System.Drawing.Size(894, 25)
+        Me.HynrLabelStrip1.TabIndex = 7
+        Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(105, 235)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(81, 17)
+        Me.CheckBox1.TabIndex = 16
+        Me.CheckBox1.Text = "CheckBox1"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -306,12 +318,12 @@ Partial Class Form1
         Me.Controls.Add(Me.HynrLabelStrip1)
         Me.Name = "Form1"
         Me.Text = "Form1"
-        CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -347,4 +359,5 @@ Partial Class Form1
     Friend WithEvents CountryCol As DataGridViewComboBoxColumn
     Friend WithEvents Button7 As Button
     Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents CheckBox1 As CheckBox
 End Class

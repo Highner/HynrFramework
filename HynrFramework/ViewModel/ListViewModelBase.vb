@@ -61,6 +61,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End Set
     End Property
     Public Property SelectedItems As New List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).SelectedItems
+    Public Property CanSave As Boolean Implements IListViewModel(Of viewmodelitem).CanSave
 #End Region
 
 #Region "METHODS"
@@ -77,6 +78,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         _ParentItem = parentitemviewmodel
         _ParentIDColumn = parentidcolumn
     End Sub
+    Private Sub ToggleCanSave()
+        CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
+    End Sub
 #End Region
 
 #Region "FILTER"
@@ -84,7 +88,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     ''' add bound properties to inherited listviewmodelclass for every filter parameter with ListViewModelFilterAttribute
     ''' </summary>
     Protected Overridable Sub ApplyFilter()
-
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
             IsBusy = True
@@ -112,6 +115,13 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             For Each item As viewmodelitem In _OriginalItemList
                 UpdateItem(item, Nothing)
             Next
+            ToggleCanSave()
+        End If
+    End Sub
+    Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
+        If Not IsBusy Then
+            Dim vmitem As viewmodelitem = sender
+            vmitem.Data = _DataController.UpdateItem(vmitem.Data)
         End If
     End Sub
     Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
@@ -138,12 +148,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             GetData()
         End If
     End Sub
-    Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
-        If Not IsBusy Then
-            Dim vmitem As viewmodelitem = sender
-            _DataController.UpdateItem(vmitem.Data)
-        End If
-    End Sub
     Public Async Sub GetData()
         IsBusy = True
         Dim dataitemlist As IEnumerable(Of dataitem)
@@ -157,6 +161,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         CancellationSource.Dispose()
         IsBusy = False
         DataToList(dataitemlist)
+        ToggleCanSave()
     End Sub
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
@@ -164,10 +169,11 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         For Each dataitem In dataitemlist
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
-            newvmitem.DataContext = _DataController.DBContext
+            ' newvmitem.DataContext = _DataController.DBContext
             newvmitem.CancellationSource = CancellationSource
             AddHandler newvmitem.Deleted, AddressOf DeleteItem
             AddHandler newvmitem.Updated, AddressOf UpdateItem
+            AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
             If newvmitem.GetDataOnLoad Then newvmitem.GetDataSlim()
             list.Add(newvmitem)
         Next

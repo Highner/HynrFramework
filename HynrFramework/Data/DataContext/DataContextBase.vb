@@ -6,7 +6,7 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     Implements IDataContext(Of entityclass, dbcontextclass)
 
     Private _ErrorLog As New List(Of String)
-    Public Property DBContext As dbcontextclass Implements IDataContext(Of entityclass, dbcontextclass).DBContext
+    Public Property DBContext As dbcontextclass 'Implements IDataContext(Of entityclass, dbcontextclass).DBContext
 
     Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass, dbcontextclass).ErrorLog
         Get
@@ -14,11 +14,15 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
         End Get
     End Property
 
+    Public Sub New()
+        DBContext = GetInstance(GetType(dbcontextclass))
+    End Sub
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context
     End Sub
     Public Function Save() As Boolean Implements IDataContext(Of entityclass, dbcontextclass).Save
         Try
+
             DBContext.SaveChanges()
         Catch ex As Exception
             ErrorLog.Add("DB Save Error: " + ex.InnerException.ToString)

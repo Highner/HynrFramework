@@ -8,6 +8,6 @@ Public Interface IDataContext(Of T1, dbcontextclass As DbContext)
     Function GetAllObjects() As IEnumerable(Of T1)
     Function GetObjects(parameters As String) As IEnumerable(Of T1)
 
-    Property DBContext As dbcontextclass
+    'Property DBContext As dbcontextclass
     ReadOnly Property ErrorLog As List(Of String)
 End Interface

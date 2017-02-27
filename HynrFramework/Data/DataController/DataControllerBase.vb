@@ -4,18 +4,20 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Implements IDataController(Of entityclass, dataclass, dbcontextclass)
 #Region "PROPERTIES"
     Public Property DataContext As IDataContext(Of entityclass, dbcontextclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).DataContext
-    Public ReadOnly Property DBContext As dbcontextclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).DBContext
-        Get
-            Return DataContext.DBContext
-        End Get
-    End Property
+    'Public ReadOnly Property DBContext As dbcontextclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).DBContext
+    '    Get
+    '        Return DataContext.DBContext
+    '    End Get
+    'End Property
 #End Region
 
 #Region "METHODS"
+    Public Sub New()
+        DataContext = GetInstance(GetType(datacontextclass))
+    End Sub
     Public Sub New(ByRef context As datacontextclass)
         DataContext = context
     End Sub
-
 #Region "CRUD"
     Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).CreateNewItem
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
@@ -28,6 +30,10 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         End If
         Return Nothing
     End Function
+    ''' <summary>
+    ''' override this with a call to GetItems(parameters as string) if not ALL items are to be loaded
+    ''' </summary>
+    ''' <returns></returns>
     Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
         Dim list As New List(Of dataclass)
         For Each entityitem In DataContext.GetAllObjects()
@@ -36,7 +42,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Next
         Return list
     End Function
-    Public Overridable Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItems
+    Public Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItems
         Dim list As New List(Of dataclass)
         For Each entityitem In DataContext.GetObjects(parameters)
             Dim newdataitem As dataclass = ToData(entityitem)

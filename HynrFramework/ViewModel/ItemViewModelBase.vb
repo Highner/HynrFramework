@@ -8,8 +8,20 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     Implements IItemViewModel(Of dataclass)
 
 #Region "PROPERTIES"
+    Private Property _Data As dataclass
     <Browsable(False)>
     Public Property Data As dataclass Implements IItemViewModel(Of dataclass).Data
+        Get
+            Return _Data
+        End Get
+        Set(value As dataclass)
+            _Data = value
+            _OriginalData = GetInstance(GetType(dataclass))
+            MapProperties(_Data, _OriginalData)
+            CanSave = False
+        End Set
+    End Property
+    Private Property _OriginalData As dataclass
     <Browsable(False)>
     Public Property DeleteCommand As ICommand = New Command(AddressOf RaiseDeletedEvent) Implements IItemViewModel(Of dataclass).DeleteCommand
     <Browsable(False)>
@@ -24,11 +36,13 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
         End Set
     End Property
     <Browsable(False)>
-    Public Property DataContext As dbcontextclass
+    Private Property DataContext As dbcontextclass
     <Browsable(False)>
     Public Property GetDataOnSelected As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnSelected
     <Browsable(False)>
     Public Property GetDataOnLoad As Boolean = False Implements IItemViewModel(Of dataclass).GetDataOnLoad
+    <Browsable(False)>
+    Public Property CanSave As Boolean = False Implements IItemViewModel(Of dataclass).CanSave
 #End Region
 
 #Region "METHODS"
@@ -37,25 +51,25 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     ''' </summary>
     Public Sub New()
     End Sub
-    ''' <summary>
-    ''' in case child lists need to be updated. insert every child listviewmodels getdata() here. will fire whe GetDataOnSelected = true
-    ''' </summary>
-    Protected Overridable Sub _GetData()
-    End Sub
     Public Async Sub GetData()
         IsBusy = True
         Await Task.Run(Sub() _GetData())
         IsBusy = False
     End Sub
-    ''' <summary>
-    ''' will fire when GetDataOnLoad = true; in case all data is required, insert call to GetData()
-    ''' </summary>
-    Protected Overridable Sub _GetDataSlim()
-    End Sub
     Public Async Sub GetDataSlim()
         IsBusy = True
         Await Task.Run(Sub() _GetDataSlim())
         IsBusy = False
+    End Sub
+    ''' <summary>
+    ''' in case child lists need to be updated. insert every child listviewmodels getdata() here. will fire whe GetDataOnSelected = true
+    ''' </summary>
+    Protected Overridable Sub _GetData()
+    End Sub
+    ''' <summary>
+    ''' will fire when GetDataOnLoad = true; in case all data is required, insert call to GetData()
+    ''' </summary>
+    Protected Overridable Sub _GetDataSlim()
     End Sub
     Private Sub RaiseDeletedEvent()
         RaiseEvent Deleted(Me, Nothing)
@@ -63,10 +77,16 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     Private Sub RaiseUpdatedEvent()
         RaiseEvent Updated(Me, Nothing)
     End Sub
+    Private Sub ValueChanged() Handles Me.PropertyChanged
+        Dim can As Boolean = CanSave
+        CanSave = Not EqualValues(_OriginalData, Data)
+        If Not can = CanSave Then RaiseEvent CanSaveChanged(Me, Nothing)
+    End Sub
 #End Region
 
 #Region "EVENTS"
     Public Event Deleted As IItemViewModel(Of dataclass).DeletedEventHandler Implements IItemViewModel(Of dataclass).Deleted
     Public Event Updated As IItemViewModel(Of dataclass).UpdatedEventHandler Implements IItemViewModel(Of dataclass).Updated
+    Public Event CanSaveChanged As IItemViewModel(Of dataclass).CanSaveChangedEventHandler Implements IItemViewModel(Of dataclass).CanSaveChanged
 #End Region
 End Class
