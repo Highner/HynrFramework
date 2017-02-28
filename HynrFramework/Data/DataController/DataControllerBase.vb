@@ -1,19 +1,22 @@
 ﻿Imports System.Data.Entity
 
-Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass, dbcontextclass), dbcontextclass As DbContext)
+Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass, dbcontextclass), dbcontextclass As DbContext)
     Implements IDataController(Of entityclass, dataclass, dbcontextclass)
-#Region "PROPERTIES"
+
+#Region "Properties"
     Public Property DataContext As IDataContext(Of entityclass, dbcontextclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).DataContext
 #End Region
 
-#Region "METHODS"
+#Region "Constructor"
     Public Sub New()
         DataContext = GetInstance(GetType(datacontextclass))
     End Sub
     Public Sub New(ByRef context As datacontextclass)
         DataContext = context
     End Sub
-#Region "CRUD"
+#End Region
+
+#Region "Crud"
     Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).CreateNewItem
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
         ToEntity(dataitem, newentityitem)
@@ -66,7 +69,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     End Function
 #End Region
 
-#Region "DATA MAPPING"
+#Region "Data Mapping"
     ''' <summary>
     ''' override this to fill custom properties etc., but include call to mybase.ToData to map the base properties.
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
@@ -85,6 +88,5 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         MapProperties(dataitem, entityitem)
         Return dataitem
     End Function
-#End Region
 #End Region
 End Class

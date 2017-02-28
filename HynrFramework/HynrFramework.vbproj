@@ -83,8 +83,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\DataCarrier\DataCarriersBase.vb" />
-    <Compile Include="Data\DataCarrier\IHasID.vb" />
+    <Compile Include="Data\Common\IHasID.vb" />
     <Compile Include="Data\DataContext\DataContextBase.vb" />
     <Compile Include="Data\DataContext\IDataContext.vb" />
     <Compile Include="Data\DataController\DataControllerBase.vb" />

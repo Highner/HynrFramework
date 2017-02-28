@@ -4,7 +4,7 @@ Imports System.Windows.Input
 Imports HynrFramework
 
 <Serializable>
-Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbContext)
+Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbContext)
     Inherits ViewModelBase
     Implements IItemViewModel(Of dataclass)
 
@@ -47,12 +47,15 @@ Public Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbConte
     Public Property CanSave As Boolean = False Implements IItemViewModel(Of dataclass).CanSave
 #End Region
 
-#Region "Methods"
+#Region "Constructor"
     ''' <summary>
     ''' no parameter allowed! set GetDataOnLoad in inheriting class
     ''' </summary>
     Public Sub New()
     End Sub
+#End Region
+
+#Region "Methods"
     ''' <summary>
     ''' in case child lists need to be updated. insert every child listviewmodels getdata() here.
     ''' </summary>

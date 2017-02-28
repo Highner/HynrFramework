@@ -2,7 +2,7 @@
 Imports System.Threading
 
 <Serializable>
-Public Class ViewModelBase
+Public MustInherit Class ViewModelBase
     Implements INotifyPropertyChanged
     Implements IViewModelBase
 

@@ -8,7 +8,7 @@ Imports System.ComponentModel
 ''' <summary>
 ''' only contructor and CreateNewItem need to be specified in inherited class
 ''' </summary>
-Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
+Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
     Inherits ViewModelBase
     Implements IListViewModel(Of viewmodelitem)
 
@@ -78,7 +78,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     End Property
 #End Region
 
-#Region "Methods"
+#Region "Constructor"
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
     End Sub
@@ -86,6 +86,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         _WindowFactory = windowfactory
         _DataController = datacontroller
     End Sub
+#End Region
+
+#Region "Methods"
     Protected Overridable Sub OpenNewForm()
         If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
     End Sub
