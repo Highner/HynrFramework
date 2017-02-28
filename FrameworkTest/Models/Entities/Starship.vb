@@ -10,14 +10,12 @@
 Imports System
 Imports System.Collections.Generic
 
-Partial Public Class Person
+Partial Public Class Starship
     Public Property ID As Integer
+    Public Property PersonID As Integer
     Public Property Name As String
-    Public Property Remarks As String
-    Public Property Birthday As Nullable(Of Date)
-    Public Property CountryID As Nullable(Of Integer)
+    Public Property Type As String
 
-    Public Overridable Property Country As Country
-    Public Overridable Property Starships As ICollection(Of Starship) = New HashSet(Of Starship)
+    Public Overridable Property Person As Person
 
 End Class

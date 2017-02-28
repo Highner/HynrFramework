@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="FrameworkTestDBModel.Country" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="FrameworkTestDBModel.Person" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="FrameworkTestDBModel.FK_Person_Country" />
+        <EntityTypeShape EntityType="FrameworkTestDBModel.Starship" Width="1.5" PointX="5" PointY="1" />
+        <AssociationConnector Association="FrameworkTestDBModel.FK_Starships_Person" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

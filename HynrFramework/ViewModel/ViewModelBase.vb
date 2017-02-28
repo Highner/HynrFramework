@@ -1,10 +1,13 @@
 ﻿Imports System.ComponentModel
 Imports System.Threading
 
+<Serializable>
 Public Class ViewModelBase
     Implements INotifyPropertyChanged
+    Implements IViewModelBase
 
     Private _Cts As CancellationTokenSource
+    <Browsable(False)>
     Public Property CancellationSource As CancellationTokenSource
         Get
             Return _Cts
@@ -14,17 +17,23 @@ Public Class ViewModelBase
             OnPropertyChanged("CancellationSource")
         End Set
     End Property
-    Private Property _IsBusy As Boolean
+    Private Property _IsBusy As Boolean = False
+    <Browsable(False)>
     Public Property IsBusy As Boolean
         Get
             Return _IsBusy
         End Get
         Set(value As Boolean)
-            _IsBusy = value
-            OnPropertyChanged("IsBusy")
+            If Not (_IsBusy = value) Then
+                _IsBusy = value
+                OnPropertyChanged("IsBusy")
+            End If
         End Set
     End Property
 
+    Protected Sub RaiseLoadingCompleted()
+        RaiseEvent LoadingCompleted()
+    End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
         If Me.PropertyChangedEvent IsNot Nothing Then
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(strPropertyName))
@@ -32,4 +41,5 @@ Public Class ViewModelBase
     End Sub
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+    Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
 End Class

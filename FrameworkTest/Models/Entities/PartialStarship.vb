@@ -1,6 +1,6 @@
 ﻿Imports HynrFramework
 
-Partial Class Country
+Partial Class Starship
     Implements IHasID
 
     Private Property IHasID_ID As Integer Implements IHasID.ID

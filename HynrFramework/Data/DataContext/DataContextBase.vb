@@ -22,7 +22,6 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext) 'T1 = 
     End Sub
     Public Function Save() As Boolean Implements IDataContext(Of entityclass, dbcontextclass).Save
         Try
-
             DBContext.SaveChanges()
         Catch ex As Exception
             ErrorLog.Add("DB Save Error: " + ex.InnerException.ToString)

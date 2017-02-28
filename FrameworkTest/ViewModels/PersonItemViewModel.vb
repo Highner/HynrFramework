@@ -1,5 +1,5 @@
 ﻿Imports System.ComponentModel
-
+<Serializable>
 Public Class PersonItemViewModel
     Inherits HynrFramework.ItemViewModelBase(Of PersonData, FrameworkTestDBEntities)
 
@@ -45,9 +45,5 @@ Public Class PersonItemViewModel
             OnPropertyChanged("CountryID")
         End Set
     End Property
-
-    Public Sub New()
-        GetDataOnLoad = True
-    End Sub
 
 End Class

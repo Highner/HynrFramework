@@ -8,7 +8,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Implements INotifyPropertyChanged
     Implements IHasHynrSettings
 
-#Region "PROPERTIES"
+#Region "Properties"
     Private Property _SelectedItems As New List(Of viewmodelitem)
     Property SelectedItems As List(Of viewmodelitem)
         Get
@@ -22,11 +22,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Private Property _BindingSource As New BindingSource
     Public Property BindingSourceDataSource As ObservableListSource(Of viewmodelitem)
         Get
-            If Not IsNothing(_BindingSource) Then
-                Return _BindingSource.DataSource
-            Else
-                Return Nothing
-            End If
+            Return _BindingSource.DataSource
         End Get
         Set(value As ObservableListSource(Of viewmodelitem))
             If Not IsNothing(value) Then
@@ -71,30 +67,18 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End Set
     End Property
     Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).CancellationSource
-    Public BusyIndicator As New MatrixCircularProgressControl
+    Private BusyIndicator As New MatrixCircularProgressControl
+    Private LazyBindingViewModel As IViewModelBase
+    Private LazyBindingDataMember As String
 #End Region
 
-#Region "METHODS"
+#Region "Methods"
     Public Sub New()
         DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
         Controls.Add(BusyIndicator)
-    End Sub
-    Public Sub BindToListListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
-        DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged)
-        DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged)
-        DataBindings.Add("SelectedItems", listviewmodel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged)
-        DataBindings.Add("IsBusy", listviewmodel, "IsBusy", True, DataSourceUpdateMode.OnPropertyChanged)
-        DataBindings.Add("CancellationSource", listviewmodel, "CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-    End Sub
-    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
-        Dim col As DataGridViewComboBoxColumn = Columns(columnname)
-        col.DataPropertyName = datapropertyname
-        col.ValueMember = valuemember
-        col.DisplayMember = displaymember
-        col.DataSource = New BindingSource(datasource, "")
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
@@ -140,7 +124,38 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     End Sub
 #End Region
 
-#Region "EVENTS"
+#Region "Binding"
+    Public Sub BindToListListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
+        DataBindings.Clear()
+        DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("SelectedItems", listviewmodel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("IsBusy", listviewmodel, "IsBusy", True, DataSourceUpdateMode.Never, True)
+        DataBindings.Add("CancellationSource", listviewmodel, "CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+    End Sub
+    Public Sub BindToListListViewModel(ByRef obj As IViewModelBase, ByVal datamember As String)
+        LazyBindingDataMember = datamember
+        LazyBindingViewModel = obj
+        AddHandler obj.LoadingCompleted, AddressOf CompleteBinding
+    End Sub
+    Private Sub CompleteBinding()
+        DataBindings.Clear()
+        DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, LazyBindingDataMember & ".ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("SelectedItem", LazyBindingViewModel, LazyBindingDataMember & ".SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("SelectedItems", LazyBindingViewModel, LazyBindingDataMember & ".SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("IsBusy", LazyBindingViewModel, LazyBindingDataMember & ".IsBusy", True, DataSourceUpdateMode.Never, True)
+        DataBindings.Add("CancellationSource", LazyBindingViewModel, LazyBindingDataMember & ".CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+    End Sub
+    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
+        Dim col As DataGridViewComboBoxColumn = Columns(columnname)
+        col.DataPropertyName = datapropertyname
+        col.ValueMember = valuemember
+        col.DisplayMember = displaymember
+        col.DataSource = New BindingSource(datasource, "")
+    End Sub
+#End Region
+
+#Region "Events"
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Public Event ItemDoubleClick(ByRef item As viewmodelitem)
 #End Region

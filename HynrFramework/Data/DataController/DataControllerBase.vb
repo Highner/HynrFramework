@@ -4,11 +4,6 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Implements IDataController(Of entityclass, dataclass, dbcontextclass)
 #Region "PROPERTIES"
     Public Property DataContext As IDataContext(Of entityclass, dbcontextclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).DataContext
-    'Public ReadOnly Property DBContext As dbcontextclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).DBContext
-    '    Get
-    '        Return DataContext.DBContext
-    '    End Get
-    'End Property
 #End Region
 
 #Region "METHODS"

@@ -3,6 +3,7 @@ Imports System.Reflection
 Imports System.Windows.Forms
 Imports System.Windows.Input
 Imports System.Linq.Dynamic
+Imports System.ComponentModel
 
 ''' <summary>
 ''' only contructor and CreateNewItem need to be specified in inherited class
@@ -11,33 +12,27 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Inherits ViewModelBase
     Implements IListViewModel(Of viewmodelitem)
 
-#Region "COMMANDS"
+#Region "Commands"
+    <Browsable(False)>
     Public Property CreateCommand As ICommand = New Command(AddressOf CreateNewItem)
+    <Browsable(False)>
     Public Property UpdateAllCommand As ICommand = New Command(AddressOf UpdateAll)
+    <Browsable(False)>
     Public Property DeleteSelectedItemCommand As ICommand = New Command(AddressOf DeleteSelectedItem)
+    <Browsable(False)>
     Public Property DeleteSelectedItemsCommand As ICommand = New Command(AddressOf DeleteSelectedItems)
+    <Browsable(False)>
     Public Property OpenNewFormCommand As ICommand = New Command(AddressOf OpenNewForm)
+    <Browsable(False)>
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
 #End Region
 
-#Region "PROPERTIES"
+#Region "Properties"
     Protected Property _DataController As datacontrollerclass
     Protected ReadOnly Property _WindowFactory As IWindowFactory
-    Protected _ParentIDColumn As String
-    Protected _ParentItem As IHasID
-    Protected _Parameters As String ' e.g.: "Name = " & Chr(34) & "Donald" & Chr(34) or use _SelectedParent.ID for child objects of _Parentobject --- set when initializing after calling mybase.new
-    Protected ReadOnly Property Parameters As String
-        Get
-            If _Parameters = "" Then
-                If _ParentIDColumn <> "" And Not IsNothing(_ParentItem) Then
-                    Return _ParentIDColumn + " = " + _ParentItem.ID
-                End If
-            End If
-            Return _Parameters
-        End Get
-    End Property
     Private _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
         Get
             Return _ItemList
@@ -55,44 +50,50 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Set(ByVal value As viewmodelitem)
             If Not IsNothing(value) Then
                 _SelectedItem = value
-                If _SelectedItem.GetDataOnSelected Then _SelectedItem.GetData()
+                RaiseEvent SelectedItemChanged()
                 OnPropertyChanged("SelectedItem")
             End If
         End Set
     End Property
     Public Property SelectedItems As New List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).SelectedItems
+    Private _CanSave As Boolean
     Public Property CanSave As Boolean Implements IListViewModel(Of viewmodelitem).CanSave
+        Get
+            Return _CanSave
+        End Get
+        Set(value As Boolean)
+            _CanSave = value
+            OnPropertyChanged("CanSave")
+        End Set
+    End Property
 #End Region
 
-#Region "METHODS"
-    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing, Optional ByRef parentidcomlun As String = "", Optional ByRef parentitem As IHasID = Nothing)
+#Region "Methods"
+    Public Sub New()
+        _DataController = GetInstance(GetType(datacontrollerclass))
+    End Sub
+    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
-        _ParentIDColumn = parentidcomlun
-        _ParentItem = parentitem
     End Sub
     Protected Overridable Sub OpenNewForm()
         If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
-    End Sub
-    Public Sub SetParent(ByRef parentitemviewmodel As IHasID, ByVal parentidcolumn As String)
-        _ParentItem = parentitemviewmodel
-        _ParentIDColumn = parentidcolumn
     End Sub
     Private Sub ToggleCanSave()
         CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
     End Sub
 #End Region
 
-#Region "FILTER"
+#Region "Filter"
     ''' <summary>
     ''' add bound properties to inherited listviewmodelclass for every filter parameter with ListViewModelFilterAttribute
     ''' </summary>
-    Protected Overridable Sub ApplyFilter()
+    Protected Async Sub ApplyFilter()
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
-            IsBusy = True
-            Dim filteredlist = _OriginalItemList.ToList.Where(filterparameters)
             Dim newlist As New ObservableListSource(Of viewmodelitem)
+            IsBusy = True
+            Dim filteredlist = Await Task.Run(Function() _OriginalItemList.ToList.Where(filterparameters).ToList)
             For Each item In filteredlist
                 newlist.Add(item)
             Next
@@ -104,7 +105,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     End Sub
 #End Region
 
-#Region "CRUD"
+#Region "Crud"
     ''' <summary>
     ''' override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass)
     ''' </summary>
@@ -136,7 +137,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         If Not IsBusy Then
             If Not IsNothing(_SelectedItem) Then
                 DeleteItem(_SelectedItem, Nothing)
-                GetData()
             End If
         End If
     End Sub
@@ -145,7 +145,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             For Each item In SelectedItems
                 DeleteItem(item, Nothing)
             Next
-            GetData()
         End If
     End Sub
     Public Async Sub GetData()
@@ -155,12 +154,17 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Try
             dataitemlist = Await Task.Run(Function() _DataController.GetAllItems(), CancellationSource.Token)
         Catch ex As Exception
-            _DataController.DataContext.ErrorLog.Add(ex.InnerException.ToString)
+            If Not IsNothing(ex.InnerException) Then
+                _DataController.DataContext.ErrorLog.Add(ex.InnerException.ToString)
+            Else
+                _DataController.DataContext.ErrorLog.Add(ex.ToString)
+            End If
             dataitemlist = New List(Of dataitem)
         End Try
         CancellationSource.Dispose()
-        IsBusy = False
         DataToList(dataitemlist)
+        IsBusy = False
+        RaiseEvent LoadingCompleted()
         ToggleCanSave()
     End Sub
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
@@ -169,12 +173,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         For Each dataitem In dataitemlist
             Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
             newvmitem.Data = dataitem
-            ' newvmitem.DataContext = _DataController.DBContext
             newvmitem.CancellationSource = CancellationSource
             AddHandler newvmitem.Deleted, AddressOf DeleteItem
             AddHandler newvmitem.Updated, AddressOf UpdateItem
             AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
-            If newvmitem.GetDataOnLoad Then newvmitem.GetDataSlim()
             list.Add(newvmitem)
         Next
         _OriginalItemList = list
@@ -184,5 +186,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End If
         If ItemList.Any Then SelectedItem = ItemList(0)
     End Sub
+#End Region
+
+#Region "Events"
+    Public Event SelectedItemChanged() Implements IListViewModel(Of viewmodelitem).SelectedItemChanged
+    Public Shadows Event LoadingCompleted() Implements IListViewModel(Of viewmodelitem).LoadingCompleted
 #End Region
 End Class

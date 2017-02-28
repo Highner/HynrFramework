@@ -141,6 +141,7 @@
     <Compile Include="ViewModel\IListViewModel.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IItemViewModel.vb" />
+    <Compile Include="ViewModel\IViewModelBase.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />
     <Compile Include="ViewModel\ViewModelBase.vb" />
   </ItemGroup>

@@ -23,6 +23,15 @@
           <Property Name="Birthday" Type="date" />
           <Property Name="CountryID" Type="int" />
         </EntityType>
+        <EntityType Name="Starships">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <Association Name="FK_Person_Country">
           <End Role="Country" Type="Self.Country" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -37,12 +46,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Starships_Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Starships" Type="Self.Starships" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Starships">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="FrameworkTestDBModelStoreContainer">
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Starships" EntityType="Self.Starships" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Person_Country" Association="Self.FK_Person_Country">
             <End Role="Country" EntitySet="Country" />
             <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Starships_Person" Association="Self.FK_Starships_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Starships" EntitySet="Starships" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -68,6 +96,7 @@
           <Property Name="Birthday" Type="DateTime" Precision="0" />
           <Property Name="CountryID" Type="Int32" />
           <NavigationProperty Name="Country" Relationship="FrameworkTestDBModel.FK_Person_Country" FromRole="Person" ToRole="Country" />
+          <NavigationProperty Name="Starships" Relationship="FrameworkTestDBModel.FK_Starships_Person" FromRole="Person" ToRole="Starship" />
           </EntityType>
         <EntityContainer Name="FrameworkTestDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Countries" EntityType="Self.Country" />
@@ -75,6 +104,11 @@
           <AssociationSet Name="FK_Person_Country" Association="FrameworkTestDBModel.FK_Person_Country">
             <End Role="Country" EntitySet="Countries" />
             <End Role="Person" EntitySet="People" />
+          </AssociationSet>
+          <EntitySet Name="Starships" EntityType="FrameworkTestDBModel.Starship" />
+          <AssociationSet Name="FK_Starships_Person" Association="FrameworkTestDBModel.FK_Starships_Person">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Starship" EntitySet="Starships" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="FK_Person_Country">
@@ -88,6 +122,30 @@
             </Principal>
             <Dependent Role="Person">
               <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Starship">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Person" Relationship="FrameworkTestDBModel.FK_Starships_Person" FromRole="Starship" ToRole="Person" />
+        </EntityType>
+        <Association Name="FK_Starships_Person">
+          <End Type="FrameworkTestDBModel.Person" Role="Person" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="FrameworkTestDBModel.Starship" Role="Starship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Starship">
+              <PropertyRef Name="PersonID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -114,6 +172,16 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Starships">
+            <EntityTypeMapping TypeName="FrameworkTestDBModel.Starship">
+              <MappingFragment StoreEntitySet="Starships">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

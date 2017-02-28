@@ -1,5 +1,5 @@
 ﻿Imports HynrFramework
-
+<Serializable>
 Public Class PersonData
     Implements IHasID
 

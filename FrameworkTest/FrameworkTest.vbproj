@@ -90,11 +90,14 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Models\DataCarriers\CountryData.vb" />
     <Compile Include="Models\DataCarriers\PersonData.vb" />
+    <Compile Include="Models\DataCarriers\StarshipData.vb" />
     <Compile Include="Models\DataContexts\CountriesDataContext.vb" />
     <Compile Include="Models\DataContexts\PersonsDataContext.vb" />
+    <Compile Include="Models\DataContexts\StarshipDataContext.vb" />
     <Compile Include="Models\DataControllers\CountriesDataController.vb" />
     <Compile Include="Models\DataControllers\DataFactory.vb" />
     <Compile Include="Models\DataControllers\PersonsDataController.vb" />
+    <Compile Include="Models\DataControllers\StarshipDataController.vb" />
     <Compile Include="Models\Entities\Country.vb">
       <DependentUpon>FrameworkTestModel.tt</DependentUpon>
     </Compile>
@@ -115,11 +118,20 @@
     </Compile>
     <Compile Include="Models\Entities\PartialCountry.vb" />
     <Compile Include="Models\Entities\PartialPerson.vb" />
+    <Compile Include="Models\Entities\PartialStarship.vb" />
     <Compile Include="Models\Entities\Person.vb">
       <DependentUpon>FrameworkTestModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Starship.vb">
+      <DependentUpon>FrameworkTestModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\CountryItemViewModel.vb" />
+    <Compile Include="ViewModels\CountryListViewModel.vb" />
+    <Compile Include="ViewModels\CountryViewModel.vb" />
     <Compile Include="ViewModels\PersonItemViewModel.vb" />
     <Compile Include="ViewModels\PersonsListViewModel.vb" />
+    <Compile Include="ViewModels\StarshipItemViewModel.vb" />
+    <Compile Include="ViewModels\StarshipListViewModel.vb" />
     <Compile Include="Views\Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +157,12 @@
     <Compile Include="Views\PersonView.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\UIElements\CountriesGrid.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\UIElements\StarshipsGrid.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Views\UIElements\PersonsGrid.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -159,6 +177,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\PersonView.resx">
       <DependentUpon>PersonView.vb</DependentUpon>

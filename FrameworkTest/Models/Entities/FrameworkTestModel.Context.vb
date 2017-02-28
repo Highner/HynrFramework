@@ -24,5 +24,6 @@ Partial Public Class FrameworkTestDBEntities
 
     Public Overridable Property Countries() As DbSet(Of Country)
     Public Overridable Property People() As DbSet(Of Person)
+    Public Overridable Property Starships() As DbSet(Of Starship)
 
 End Class

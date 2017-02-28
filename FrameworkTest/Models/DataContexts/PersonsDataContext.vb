@@ -1,12 +1,3 @@
-﻿Imports System.Data.Entity
-Imports FrameworkTest
-Imports HynrFramework
-
-Public Class PersonsDataContext
-    Inherits DataContextBase(Of Person, FrameworkTestDBEntities)
-
-    'Public Sub New(ByRef context As FrameworkTestDBEntities)
-    '    MyBase.New()
-    'End Sub
-
+﻿Public Class PersonsDataContext
+    Inherits HynrFramework.DataContextBase(Of Person, FrameworkTestDBEntities)
 End Class

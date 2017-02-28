@@ -27,6 +27,9 @@ Public Class HynrLabelStrip
             End If
         End Set
     End Property
+    Private LazyBindingViewModel As IViewModelBase
+    Private LazyBindingDataMember As String
+    Private LazyBindingDisplayProperty As String
 #End Region
 
 #Region "METHODS"
@@ -43,9 +46,21 @@ Public Class HynrLabelStrip
     ''' <summary>
     ''' create string property in viewmodel as displayproperty
     ''' </summary>
-    Public Sub BindToListViewModel(ByRef viewmodel As Object, ByVal displayproperty As String)
+    Public Sub BindToListViewModel(ByRef viewmodel As IViewModelBase, ByVal displayproperty As String)
         If viewmodel.[GetType]().GetProperties().Where(Function(prprt) prprt.Name = displayproperty).Any Then
             DataBindings.Add("LabelText", viewmodel, displayproperty, True, DataSourceUpdateMode.Never, String.Empty)
+        End If
+    End Sub
+    Public Sub BindToListViewModel(ByRef viewmodel As IViewModelBase, ByVal datamember As String, ByVal displayproperty As String)
+        LazyBindingDisplayProperty = displayproperty
+        LazyBindingDataMember = datamember
+        LazyBindingViewModel = viewmodel
+        AddHandler viewmodel.LoadingCompleted, AddressOf CompleteBinding
+    End Sub
+    Private Sub CompleteBinding()
+        DataBindings.Clear()
+        If LazyBindingViewModel.[GetType]().GetProperties().Where(Function(prprt) prprt.Name = LazyBindingDataMember).Any Then
+            DataBindings.Add("LabelText", LazyBindingViewModel, LazyBindingDataMember & "." & LazyBindingDisplayProperty, True, DataSourceUpdateMode.Never, String.Empty)
         End If
     End Sub
 #End Region
