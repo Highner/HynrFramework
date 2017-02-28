@@ -125,7 +125,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #End Region
 
 #Region "Binding"
-    Public Sub BindToListListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
+    Public Sub BindToListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
         DataBindings.Clear()
         DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
@@ -133,10 +133,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Add("IsBusy", listviewmodel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         DataBindings.Add("CancellationSource", listviewmodel, "CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
     End Sub
-    Public Sub BindToListListViewModel(ByRef obj As IViewModelBase, ByVal datamember As String)
-        LazyBindingDataMember = datamember
-        LazyBindingViewModel = obj
-        AddHandler obj.LoadingCompleted, AddressOf CompleteBinding
+    Public Sub BindToListViewModel(ByRef viewmodel As IViewModelBase, ByVal datamemberlistviewmodel As String)
+        LazyBindingDataMember = datamemberlistviewmodel
+        LazyBindingViewModel = viewmodel
+        AddHandler viewmodel.LoadingCompleted, AddressOf CompleteBinding
     End Sub
     Private Sub CompleteBinding()
         DataBindings.Clear()

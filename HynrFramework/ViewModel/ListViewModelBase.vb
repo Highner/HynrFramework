@@ -39,6 +39,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End Get
         Set(ByVal value As ObservableListSource(Of viewmodelitem))
             _ItemList = value
+            If _ItemList.Count = 0 Then
+                RaiseEvent SelectedItemChanged()
+            End If
             OnPropertyChanged("ItemList")
         End Set
     End Property
@@ -48,12 +51,19 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             Return _SelectedItem
         End Get
         Set(ByVal value As viewmodelitem)
-            If Not IsNothing(value) Then
-                _SelectedItem = value
-                RaiseEvent SelectedItemChanged()
-                OnPropertyChanged("SelectedItem")
-            End If
+            _SelectedItem = value
+            RaiseEvent SelectedItemChanged()
+            OnPropertyChanged("SelectedItem")
         End Set
+    End Property
+    Public ReadOnly Property SelectedItemID As Integer Implements IListViewModel(Of viewmodelitem).SelectedItemID
+        Get
+            If Not IsNothing(SelectedItem) Then
+                Return SelectedItem.ID
+            Else
+                Return 0
+            End If
+        End Get
     End Property
     Public Property SelectedItems As New List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).SelectedItems
     Private _CanSave As Boolean
@@ -163,9 +173,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End Try
         CancellationSource.Dispose()
         DataToList(dataitemlist)
+        ToggleCanSave()
         IsBusy = False
         RaiseEvent LoadingCompleted()
-        ToggleCanSave()
     End Sub
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)

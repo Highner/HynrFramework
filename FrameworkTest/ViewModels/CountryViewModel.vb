@@ -12,13 +12,13 @@ Public Class CountryViewModel
     End Sub
 
     Private Sub LoadPersons() Handles CountriesVM.SelectedItemChanged
-        PersonsVM = New PersonsListViewModel(CountriesVM.SelectedItem.ID)
+        PersonsVM = New PersonsListViewModel(CountriesVM.SelectedItemID)
         PersonsVM.GetData()
         RaiseLoadingCompleted()
     End Sub
 
     Private Sub LoadStarships() Handles PersonsVM.SelectedItemChanged
-        StarshipsVM = New StarshipListViewModel(PersonsVM.SelectedItem.ID)
+        StarshipsVM = New StarshipListViewModel(PersonsVM.SelectedItemID)
         StarshipsVM.GetData()
         RaiseLoadingCompleted()
     End Sub

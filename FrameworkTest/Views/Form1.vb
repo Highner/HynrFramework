@@ -12,17 +12,16 @@
         StarshipsGrid.AutoGenerateColumns = True
         HynrLabelStrip1.BindToListViewModel(CountryVM, "StarshipsVM", "Header")
 
-        CountriesGrid.BindToListListViewModel(CountryVM.CountriesVM)
+        CountriesGrid.BindToListViewModel(CountryVM.CountriesVM)
 
-        PersonsGrid.BindToListListViewModel(CountryVM, "PersonsVM")
+        PersonsGrid.BindToListViewModel(CountryVM, "PersonsVM")
 
-        StarshipsGrid.BindToListListViewModel(CountryVM, "StarshipsVM")
+        StarshipsGrid.BindToListViewModel(CountryVM, "StarshipsVM")
 
 
 
         HynrTextBox1.BindToProperty(CountryVM.CountriesVM, "NameFilter")
-        'HynrTextBox2.BindToProperty(CountryVM, "PersonsVM", "NameFilter")
-        HynrTextBox2.BindToProperty(CountryVM, "PersonsVM", "NameFilter", DataSourceUpdateMode.OnPropertyChanged)
+        HynrTextBox2.BindToProperty(CountryVM, "PersonsVM", "NameFilter")
 
         PersonsGrid.BindGridCombobox("CountryCol", (New FrameworkTestDBEntities).Countries.ToList, "CountryID", "ID", "Name")
 
