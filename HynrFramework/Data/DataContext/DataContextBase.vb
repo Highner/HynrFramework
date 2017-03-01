@@ -1,25 +1,52 @@
-﻿Imports System.Data.Entity
+﻿Imports System.ComponentModel
+Imports System.Data.Entity
 Imports System.Linq.Dynamic
 
 Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     Implements IDataContext(Of entityclass, dbcontextclass)
 
 #Region "Properties"
-    Private _ErrorLog As New List(Of String)
+    Private WithEvents _ErrorLog As New BindingList(Of String)
+    Protected ShowError As Boolean = True
+    Private _DBContext As dbcontextclass
+    Private _DBContextLazy As New Lazy(Of dbcontextclass)
     Public Property DBContext As dbcontextclass
+        Get
+            If Not IsNothing(_DBContext) Then
+                Return _DBContext
+            Else
+                Return _DBContextLazy.Value
+            End If
+        End Get
+        Set(value As dbcontextclass)
+            _DBContext = value
+        End Set
+    End Property
     Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass, dbcontextclass).ErrorLog
         Get
-            Return _ErrorLog
+            Return _ErrorLog.ToList
         End Get
     End Property
 #End Region
 
 #Region "Constructor"
     Public Sub New()
-        DBContext = GetInstance(GetType(dbcontextclass))
     End Sub
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context
+    End Sub
+#End Region
+
+#Region "Error"
+    Private Sub ShowNewError() Handles _ErrorLog.ListChanged
+    End Sub
+    Private Sub AddError(ByVal ex As Exception, ByVal errortype As String)
+        Dim errortext As String = errortype & " Error: "
+        If Not IsNothing(ex.InnerException) Then
+            _ErrorLog.Add(errortext + ex.InnerException.ToString)
+        Else
+            _ErrorLog.Add(errortext + ex.Message)
+        End If
     End Sub
 #End Region
 
@@ -28,7 +55,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         Try
             DBContext.SaveChanges()
         Catch ex As Exception
-            ErrorLog.Add("DB Save Error: " + ex.InnerException.ToString)
+            AddError(ex, "DB SaveChanges")
             Return False
         End Try
         Return True
@@ -37,7 +64,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         Try
             DBContext.Set(GetType(entityclass)).Add(entityobject)
         Catch ex As Exception
-            ErrorLog.Add("DB AddObject Error: " + ex.InnerException.ToString)
+            AddError(ex, "DB AddObject")
             Return False
         End Try
         Return True
@@ -46,7 +73,8 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         Try
             DBContext.Set(GetType(entityclass)).Remove(GetObject(id))
         Catch ex As Exception
-            ErrorLog.Add("DB DeleteObject Error: " + ex.InnerException.ToString)
+            AddError(ex, "DB DeleteObject")
+            Return False
         End Try
         Return True
     End Function

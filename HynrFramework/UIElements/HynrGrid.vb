@@ -127,24 +127,24 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #Region "Binding"
     Public Sub BindToListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
         DataBindings.Clear()
-        DataBindings.Add("BindingSourceDataSource", listviewmodel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItem", listviewmodel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItems", listviewmodel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("IsBusy", listviewmodel, "IsBusy", True, DataSourceUpdateMode.Never, True)
-        DataBindings.Add("CancellationSource", listviewmodel, "CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        LazyBindingViewModel = listviewmodel
+        CompleteBinding(String.Empty)
     End Sub
     Public Sub BindToListViewModel(ByRef viewmodel As IViewModelBase, ByVal datamemberlistviewmodel As String)
         LazyBindingDataMember = datamemberlistviewmodel
         LazyBindingViewModel = viewmodel
-        AddHandler viewmodel.LoadingCompleted, AddressOf CompleteBinding
+        AddHandler viewmodel.LoadingCompleted, AddressOf OnCompleteBinding
     End Sub
-    Private Sub CompleteBinding()
+    Private Sub OnCompleteBinding()
+        CompleteBinding(LazyBindingDataMember & ".")
+    End Sub
+    Private Sub CompleteBinding(ByVal datamember As String)
         DataBindings.Clear()
-        DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, LazyBindingDataMember & ".ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItem", LazyBindingViewModel, LazyBindingDataMember & ".SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItems", LazyBindingViewModel, LazyBindingDataMember & ".SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("IsBusy", LazyBindingViewModel, LazyBindingDataMember & ".IsBusy", True, DataSourceUpdateMode.Never, True)
-        DataBindings.Add("CancellationSource", LazyBindingViewModel, LazyBindingDataMember & ".CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, datamember & "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("SelectedItem", LazyBindingViewModel, datamember & "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("SelectedItems", LazyBindingViewModel, datamember & "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        DataBindings.Add("IsBusy", LazyBindingViewModel, datamember & "IsBusy", True, DataSourceUpdateMode.Never, True)
+        DataBindings.Add("CancellationSource", LazyBindingViewModel, datamember & "CancellationSource", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
     End Sub
     Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
         Dim col As DataGridViewComboBoxColumn = Columns(columnname)
