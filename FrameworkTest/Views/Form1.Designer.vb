@@ -28,17 +28,18 @@ Partial Class Form1
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.CountriesGrid = New FrameworkTest.CountriesGrid()
+        Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
+        Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
+        Me.StarshipsGrid = New FrameworkTest.StarshipsGrid()
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button8 = New System.Windows.Forms.Button()
-        Me.CountriesGrid = New FrameworkTest.CountriesGrid()
-        Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
-        Me.StarshipsGrid = New FrameworkTest.StarshipsGrid()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
-        Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
-        Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
+        Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -112,6 +113,56 @@ Partial Class Form1
         Me.SplitContainer1.SplitterDistance = 376
         Me.SplitContainer1.TabIndex = 16
         '
+        'CountriesGrid
+        '
+        Me.CountriesGrid.AllowUserToAddRows = False
+        Me.CountriesGrid.AllowUserToDeleteRows = False
+        Me.CountriesGrid.AutoGenerateColumns = False
+        Me.CountriesGrid.BindingSourceDataSource = Nothing
+        Me.CountriesGrid.CancellationSource = Nothing
+        Me.CountriesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.CountriesGrid.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.CountriesGrid.HynrSettings = Nothing
+        Me.CountriesGrid.IsBusy = False
+        Me.CountriesGrid.Location = New System.Drawing.Point(0, 66)
+        Me.CountriesGrid.Name = "CountriesGrid"
+        Me.CountriesGrid.SelectedItem = Nothing
+        Me.CountriesGrid.SelectedItems = Nothing
+        Me.CountriesGrid.Size = New System.Drawing.Size(376, 426)
+        Me.CountriesGrid.TabIndex = 0
+        '
+        'HynrTextBox1
+        '
+        Me.HynrTextBox1.Location = New System.Drawing.Point(6, 40)
+        Me.HynrTextBox1.Name = "HynrTextBox1"
+        Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox1.TabIndex = 12
+        '
+        'HynrTextBox2
+        '
+        Me.HynrTextBox2.Location = New System.Drawing.Point(0, 40)
+        Me.HynrTextBox2.Name = "HynrTextBox2"
+        Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
+        Me.HynrTextBox2.TabIndex = 22
+        '
+        'StarshipsGrid
+        '
+        Me.StarshipsGrid.AllowUserToAddRows = False
+        Me.StarshipsGrid.AllowUserToDeleteRows = False
+        Me.StarshipsGrid.AutoGenerateColumns = False
+        Me.StarshipsGrid.BindingSourceDataSource = Nothing
+        Me.StarshipsGrid.CancellationSource = Nothing
+        Me.StarshipsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.StarshipsGrid.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.StarshipsGrid.HynrSettings = Nothing
+        Me.StarshipsGrid.IsBusy = False
+        Me.StarshipsGrid.Location = New System.Drawing.Point(0, 233)
+        Me.StarshipsGrid.Name = "StarshipsGrid"
+        Me.StarshipsGrid.SelectedItem = Nothing
+        Me.StarshipsGrid.SelectedItems = Nothing
+        Me.StarshipsGrid.Size = New System.Drawing.Size(329, 259)
+        Me.StarshipsGrid.TabIndex = 21
+        '
         'Button10
         '
         Me.Button10.Location = New System.Drawing.Point(165, 3)
@@ -139,49 +190,6 @@ Partial Class Form1
         Me.Button8.Text = "add person"
         Me.Button8.UseVisualStyleBackColor = True
         '
-        'CountriesGrid
-        '
-        Me.CountriesGrid.AllowUserToAddRows = False
-        Me.CountriesGrid.AllowUserToDeleteRows = False
-        Me.CountriesGrid.AutoGenerateColumns = False
-        Me.CountriesGrid.BindingSourceDataSource = Nothing
-        Me.CountriesGrid.CancellationSource = Nothing
-        Me.CountriesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.CountriesGrid.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.CountriesGrid.HynrSettings = Nothing
-        Me.CountriesGrid.IsBusy = False
-        Me.CountriesGrid.Location = New System.Drawing.Point(0, 66)
-        Me.CountriesGrid.Name = "CountriesGrid"
-        Me.CountriesGrid.SelectedItem = Nothing
-        Me.CountriesGrid.SelectedItems = Nothing
-        Me.CountriesGrid.Size = New System.Drawing.Size(376, 426)
-        Me.CountriesGrid.TabIndex = 0
-        '
-        'HynrTextBox1
-        '
-        Me.HynrTextBox1.Location = New System.Drawing.Point(6, 40)
-        Me.HynrTextBox1.Name = "HynrTextBox1"
-        Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
-        Me.HynrTextBox1.TabIndex = 12
-        '
-        'StarshipsGrid
-        '
-        Me.StarshipsGrid.AllowUserToAddRows = False
-        Me.StarshipsGrid.AllowUserToDeleteRows = False
-        Me.StarshipsGrid.AutoGenerateColumns = False
-        Me.StarshipsGrid.BindingSourceDataSource = Nothing
-        Me.StarshipsGrid.CancellationSource = Nothing
-        Me.StarshipsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.StarshipsGrid.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.StarshipsGrid.HynrSettings = Nothing
-        Me.StarshipsGrid.IsBusy = False
-        Me.StarshipsGrid.Location = New System.Drawing.Point(0, 233)
-        Me.StarshipsGrid.Name = "StarshipsGrid"
-        Me.StarshipsGrid.SelectedItem = Nothing
-        Me.StarshipsGrid.SelectedItems = Nothing
-        Me.StarshipsGrid.Size = New System.Drawing.Size(329, 259)
-        Me.StarshipsGrid.TabIndex = 21
-        '
         'PersonsGrid
         '
         Me.PersonsGrid.AllowUserToAddRows = False
@@ -190,7 +198,7 @@ Partial Class Form1
         Me.PersonsGrid.BindingSourceDataSource = Nothing
         Me.PersonsGrid.CancellationSource = Nothing
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.CountryCol})
+        Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.RemarksCol, Me.CountryCol})
         Me.PersonsGrid.HynrSettings = Nothing
         Me.PersonsGrid.IsBusy = False
         Me.PersonsGrid.Location = New System.Drawing.Point(0, 66)
@@ -199,17 +207,6 @@ Partial Class Form1
         Me.PersonsGrid.SelectedItems = Nothing
         Me.PersonsGrid.Size = New System.Drawing.Size(329, 166)
         Me.PersonsGrid.TabIndex = 17
-        '
-        'NameCol
-        '
-        Me.NameCol.DataPropertyName = "Name"
-        Me.NameCol.HeaderText = "Name"
-        Me.NameCol.Name = "NameCol"
-        '
-        'CountryCol
-        '
-        Me.CountryCol.HeaderText = "Country"
-        Me.CountryCol.Name = "CountryCol"
         '
         'HynrLabelStrip1
         '
@@ -222,12 +219,22 @@ Partial Class Form1
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
-        'HynrTextBox2
+        'NameCol
         '
-        Me.HynrTextBox2.Location = New System.Drawing.Point(0, 40)
-        Me.HynrTextBox2.Name = "HynrTextBox2"
-        Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
-        Me.HynrTextBox2.TabIndex = 22
+        Me.NameCol.DataPropertyName = "Name"
+        Me.NameCol.HeaderText = "Name"
+        Me.NameCol.Name = "NameCol"
+        '
+        'RemarksCol
+        '
+        Me.RemarksCol.DataPropertyName = "Remarks"
+        Me.RemarksCol.HeaderText = "Remarks"
+        Me.RemarksCol.Name = "RemarksCol"
+        '
+        'CountryCol
+        '
+        Me.CountryCol.HeaderText = "Country"
+        Me.CountryCol.Name = "CountryCol"
         '
         'Form1
         '
@@ -266,7 +273,8 @@ Partial Class Form1
     Friend WithEvents Button9 As Button
     Friend WithEvents Button8 As Button
     Friend WithEvents StarshipsGrid As StarshipsGrid
-    Friend WithEvents NameCol As DataGridViewTextBoxColumn
-    Friend WithEvents CountryCol As DataGridViewComboBoxColumn
     Friend WithEvents HynrTextBox2 As HynrFramework.HynrTextBox
+    Friend WithEvents NameCol As DataGridViewTextBoxColumn
+    Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
+    Friend WithEvents CountryCol As DataGridViewComboBoxColumn
 End Class

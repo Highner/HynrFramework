@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 <Serializable>
 Public Class PersonItemViewModel
-    Inherits HynrFramework.ItemViewModelBase(Of PersonData, FrameworkTestDBEntities)
+    Inherits HynrFramework.ItemViewModelBase(Of PersonData)
 
     Public Property Name As String
         Get

@@ -2,7 +2,7 @@
 
 <Serializable>
 Public Class CountryItemViewModel
-    Inherits HynrFramework.ItemViewModelBase(Of CountryData, FrameworkTestDBEntities)
+    Inherits HynrFramework.ItemViewModelBase(Of CountryData)
 
     Public Property Name As String
         Get

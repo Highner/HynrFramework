@@ -2,9 +2,9 @@
 Imports System.Data.Entity
 Imports System.Windows.Forms
 
-Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem, dbcontextclass), dbcontextclass As DbContext)
+Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits DataGridView
-    Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass)
+    Implements IBindableListControl(Of dataitem, viewmodelitem)
     Implements INotifyPropertyChanged
     Implements IHasHynrSettings
 
@@ -31,7 +31,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End Set
     End Property
     Private Property _SelectedItem As viewmodelitem
-    Public Property SelectedItem As viewmodelitem Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).SelectedItem
+    Public Property SelectedItem As viewmodelitem Implements IBindableListControl(Of dataitem, viewmodelitem).SelectedItem
         Get
             Return _SelectedItem
         End Get
@@ -56,7 +56,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End Set
     End Property
     Private _IsBusy As Boolean
-    Public Property IsBusy() As Boolean Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).IsBusy
+    Public Property IsBusy() As Boolean Implements IBindableListControl(Of dataitem, viewmodelitem).IsBusy
         Get
             Return _IsBusy
         End Get
@@ -66,7 +66,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             OnPropertyChanged("IsBusy")
         End Set
     End Property
-    Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem, dbcontextclass).CancellationSource
+    Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
     Private BusyIndicator As New MatrixCircularProgressControl
     Private LazyBindingViewModel As IViewModelBase
     Private LazyBindingDataMember As String
@@ -152,6 +152,9 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         col.ValueMember = valuemember
         col.DisplayMember = displaymember
         col.DataSource = New BindingSource(datasource, "")
+    End Sub
+    Private Sub OnBindingComplete() Handles Me.DataBindingComplete
+        If Me.ColumnCount = 0 Then Me.AutoGenerateColumns = True
     End Sub
 #End Region
 

@@ -1,4 +1,4 @@
 ﻿Public Class PersonsGrid
-    Inherits HynrFramework.HynrGrid(Of PersonData, PersonItemViewModel, FrameworkTestDBEntities)
+    Inherits HynrFramework.HynrGrid(Of PersonData, PersonItemViewModel)
 
 End Class

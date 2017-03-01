@@ -1,6 +1,6 @@
 ﻿<Serializable>
 Public Class StarshipItemViewModel
-    Inherits HynrFramework.ItemViewModelBase(Of StarshipData, FrameworkTestDBEntities)
+    Inherits HynrFramework.ItemViewModelBase(Of StarshipData)
 
     Public Property Name As String
         Get

@@ -4,7 +4,7 @@ Imports System.Windows.Input
 Imports HynrFramework
 
 <Serializable>
-Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclass As DbContext)
+Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextclass As DbContext
     Inherits ViewModelBase
     Implements IItemViewModel(Of dataclass)
 
@@ -42,7 +42,7 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID, dbcontextclas
             Data.ID = value
         End Set
     End Property
-    Private Property DataContext As dbcontextclass
+    'Private Property DataContext As dbcontextclass
     <Browsable(False)>
     Public Property CanSave As Boolean = False Implements IItemViewModel(Of dataclass).CanSave
 #End Region
