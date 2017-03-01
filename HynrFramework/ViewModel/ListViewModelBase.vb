@@ -25,6 +25,8 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Property OpenNewFormCommand As ICommand = New Command(AddressOf OpenNewForm)
     <Browsable(False)>
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
+    <Browsable(False)>
+    Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
 #End Region
 
 #Region "Properties"
@@ -167,14 +169,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         Try
             dataitemlist = Await Task.Run(Function() _DataController.GetAllItems(), CancellationSource.Token)
         Catch ex As Exception
-            If Not IsNothing(ex.InnerException) Then
-                _DataController.DataContext.ErrorLog.Add(ex.InnerException.ToString)
-            Else
-                _DataController.DataContext.ErrorLog.Add(ex.ToString)
-            End If
-            dataitemlist = New List(Of dataitem)
+            _DataController.DataContext.AddError(ex, "ListViewModel GetData")
         End Try
-        CancellationSource.Dispose()
+        If IsNothing(dataitemlist) Then dataitemlist = New List(Of dataitem)
         DataToList(dataitemlist)
         ToggleCanSave()
         IsBusy = False
@@ -198,6 +195,11 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
         End If
         If ItemList.Any Then SelectedItem = ItemList(0)
+    End Sub
+    Private Sub CancelLoading() 'not working
+        If Not IsNothing(CancellationSource) Then
+            CancellationSource.Cancel()
+        End If
     End Sub
 #End Region
 

@@ -29,20 +29,18 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Return Nothing
     End Function
     ''' <summary>
-    ''' override this with a call to GetItems(parameters as string) if not ALL items are to be loaded
+    ''' override this with a call to GetItems(parameters as string) or create custom call to datacontext and insert here if not ALL items are to be loaded
     ''' </summary>
     ''' <returns></returns>
     Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
-        Dim list As New List(Of dataclass)
-        For Each entityitem In DataContext.GetAllObjects()
-            Dim newdataitem As dataclass = ToData(entityitem)
-            list.Add(newdataitem)
-        Next
-        Return list
+        Return EntitiesToItems(DataContext.GetAllObjects)
     End Function
     Public Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItems
+        Return EntitiesToItems(DataContext.GetObjects(parameters))
+    End Function
+    Protected Function EntitiesToItems(ByRef entities As IEnumerable(Of entityclass)) As IEnumerable(Of dataclass)
         Dim list As New List(Of dataclass)
-        For Each entityitem In DataContext.GetObjects(parameters)
+        For Each entityitem In entities
             Dim newdataitem As dataclass = ToData(entityitem)
             list.Add(newdataitem)
         Next

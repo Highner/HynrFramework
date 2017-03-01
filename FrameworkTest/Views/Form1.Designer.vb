@@ -28,18 +28,18 @@ Partial Class Form1
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.CountriesGrid = New FrameworkTest.CountriesGrid()
         Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
         Me.StarshipsGrid = New FrameworkTest.StarshipsGrid()
-        Me.Button10 = New System.Windows.Forms.Button()
-        Me.Button9 = New System.Windows.Forms.Button()
-        Me.Button8 = New System.Windows.Forms.Button()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
-        Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -113,11 +113,37 @@ Partial Class Form1
         Me.SplitContainer1.SplitterDistance = 376
         Me.SplitContainer1.TabIndex = 16
         '
+        'Button10
+        '
+        Me.Button10.Location = New System.Drawing.Point(165, 3)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(75, 23)
+        Me.Button10.TabIndex = 20
+        Me.Button10.Text = "save person"
+        Me.Button10.UseVisualStyleBackColor = True
+        '
+        'Button9
+        '
+        Me.Button9.Location = New System.Drawing.Point(84, 3)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(75, 23)
+        Me.Button9.TabIndex = 19
+        Me.Button9.Text = "delete person"
+        Me.Button9.UseVisualStyleBackColor = True
+        '
+        'Button8
+        '
+        Me.Button8.Location = New System.Drawing.Point(3, 3)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(75, 23)
+        Me.Button8.TabIndex = 18
+        Me.Button8.Text = "add person"
+        Me.Button8.UseVisualStyleBackColor = True
+        '
         'CountriesGrid
         '
         Me.CountriesGrid.AllowUserToAddRows = False
         Me.CountriesGrid.AllowUserToDeleteRows = False
-        Me.CountriesGrid.AutoGenerateColumns = False
         Me.CountriesGrid.BindingSourceDataSource = Nothing
         Me.CountriesGrid.CancellationSource = Nothing
         Me.CountriesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
@@ -149,7 +175,6 @@ Partial Class Form1
         '
         Me.StarshipsGrid.AllowUserToAddRows = False
         Me.StarshipsGrid.AllowUserToDeleteRows = False
-        Me.StarshipsGrid.AutoGenerateColumns = False
         Me.StarshipsGrid.BindingSourceDataSource = Nothing
         Me.StarshipsGrid.CancellationSource = Nothing
         Me.StarshipsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
@@ -162,33 +187,6 @@ Partial Class Form1
         Me.StarshipsGrid.SelectedItems = Nothing
         Me.StarshipsGrid.Size = New System.Drawing.Size(329, 259)
         Me.StarshipsGrid.TabIndex = 21
-        '
-        'Button10
-        '
-        Me.Button10.Location = New System.Drawing.Point(165, 3)
-        Me.Button10.Name = "Button10"
-        Me.Button10.Size = New System.Drawing.Size(75, 23)
-        Me.Button10.TabIndex = 20
-        Me.Button10.Text = "save person"
-        Me.Button10.UseVisualStyleBackColor = True
-        '
-        'Button9
-        '
-        Me.Button9.Location = New System.Drawing.Point(84, 3)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(75, 23)
-        Me.Button9.TabIndex = 19
-        Me.Button9.Text = "delete person"
-        Me.Button9.UseVisualStyleBackColor = True
-        '
-        'Button8
-        '
-        Me.Button8.Location = New System.Drawing.Point(3, 3)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(75, 23)
-        Me.Button8.TabIndex = 18
-        Me.Button8.Text = "add person"
-        Me.Button8.UseVisualStyleBackColor = True
         '
         'PersonsGrid
         '
@@ -208,17 +206,6 @@ Partial Class Form1
         Me.PersonsGrid.Size = New System.Drawing.Size(329, 166)
         Me.PersonsGrid.TabIndex = 17
         '
-        'HynrLabelStrip1
-        '
-        Me.HynrLabelStrip1.HynrSettings = Nothing
-        Me.HynrLabelStrip1.LabelText = Nothing
-        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
-        Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.HynrLabelStrip1.Size = New System.Drawing.Size(709, 25)
-        Me.HynrLabelStrip1.TabIndex = 7
-        Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
-        '
         'NameCol
         '
         Me.NameCol.DataPropertyName = "Name"
@@ -235,6 +222,17 @@ Partial Class Form1
         '
         Me.CountryCol.HeaderText = "Country"
         Me.CountryCol.Name = "CountryCol"
+        '
+        'HynrLabelStrip1
+        '
+        Me.HynrLabelStrip1.HynrSettings = Nothing
+        Me.HynrLabelStrip1.LabelText = Nothing
+        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
+        Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.HynrLabelStrip1.Size = New System.Drawing.Size(709, 25)
+        Me.HynrLabelStrip1.TabIndex = 7
+        Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
         'Form1
         '

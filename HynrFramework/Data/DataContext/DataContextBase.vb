@@ -40,7 +40,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
 #Region "Error"
     Private Sub ShowNewError() Handles _ErrorLog.ListChanged
     End Sub
-    Private Sub AddError(ByVal ex As Exception, ByVal errortype As String)
+    Public Sub AddError(ByVal ex As Exception, ByVal errortype As String) Implements IDataContext(Of entityclass, dbcontextclass).AddError
         Dim errortext As String = errortype & " Error: "
         If Not IsNothing(ex.InnerException) Then
             _ErrorLog.Add(errortext + ex.InnerException.ToString)

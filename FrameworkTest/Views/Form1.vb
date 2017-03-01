@@ -32,7 +32,7 @@
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        CountryVM.CountriesVM.OpenNewFormCommand.Execute(Nothing)
+        CountryVM.CountriesVM.CancelLoadCommand.Execute(Nothing)
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
@@ -45,5 +45,9 @@
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
         CountryVM.PersonsVM.UpdateAllCommand.Execute(Nothing)
+    End Sub
+
+    Private Sub HynrTextBox3_TextChanged(sender As Object, e As EventArgs)
+
     End Sub
 End Class

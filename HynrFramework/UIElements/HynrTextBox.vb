@@ -22,8 +22,15 @@ Public Class HynrTextBox
     End Sub
     Private Sub CompleteBinding()
         DataBindings.Clear()
-        If LazyBindingViewModel.[GetType]().GetProperties().Where(Function(prprt) prprt.Name = LazyBindingDataMember).Any Then
-            DataBindings.Add("Text", LazyBindingViewModel, LazyBindingDataMember & "." & LazyBindingDisplayProperty, True, DataSourceUpdateMode.OnPropertyChanged, String.Empty)
+        Dim propinfo = LazyBindingViewModel.[GetType]().GetProperties().Where(Function(prprt) prprt.Name = LazyBindingDataMember)
+        If propinfo.Any Then
+            Dim updatemode As DataSourceUpdateMode
+            If propinfo.FirstOrDefault.CanWrite Then
+                updatemode = DataSourceUpdateMode.OnPropertyChanged
+            Else
+                updatemode = DataSourceUpdateMode.Never
+            End If
+            DataBindings.Add("Text", LazyBindingViewModel, LazyBindingDataMember & "." & LazyBindingDisplayProperty, True, updatemode, String.Empty)
         End If
     End Sub
 #End Region
