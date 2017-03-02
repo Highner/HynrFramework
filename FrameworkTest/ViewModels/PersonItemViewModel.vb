@@ -3,6 +3,7 @@
 Public Class PersonItemViewModel
     Inherits HynrFramework.ItemViewModelBase(Of PersonData)
 
+    <DisplayName("lksdhfsdj")>
     Public Property Name As String
         Get
             Return Data.Name

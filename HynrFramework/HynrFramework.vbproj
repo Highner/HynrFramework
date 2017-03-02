@@ -118,6 +118,9 @@
     <Compile Include="UIElements\HynrTextBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrToolStripButton.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\MatrixCircularProgressControl.Designer.vb">
       <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>
     </Compile>

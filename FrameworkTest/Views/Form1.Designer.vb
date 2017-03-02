@@ -23,6 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -31,8 +32,10 @@ Partial Class Form1
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button8 = New System.Windows.Forms.Button()
+        Me.HynrTextBox4 = New HynrFramework.HynrTextBox()
         Me.CountriesGrid = New FrameworkTest.CountriesGrid()
         Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
+        Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
         Me.StarshipsGrid = New FrameworkTest.StarshipsGrid()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
@@ -40,7 +43,8 @@ Partial Class Form1
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
-        Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.HynrToolStripButton1 = New HynrFramework.HynrToolStripButton()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -48,6 +52,7 @@ Partial Class Form1
         CType(Me.CountriesGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.StarshipsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
@@ -90,11 +95,12 @@ Partial Class Form1
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 25)
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 50)
         Me.SplitContainer1.Name = "SplitContainer1"
         '
         'SplitContainer1.Panel1
         '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.HynrTextBox4)
         Me.SplitContainer1.Panel1.Controls.Add(Me.CountriesGrid)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Button1)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Button2)
@@ -111,7 +117,7 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.Controls.Add(Me.Button9)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Button8)
         Me.SplitContainer1.Panel2.Controls.Add(Me.PersonsGrid)
-        Me.SplitContainer1.Size = New System.Drawing.Size(709, 492)
+        Me.SplitContainer1.Size = New System.Drawing.Size(709, 467)
         Me.SplitContainer1.SplitterDistance = 376
         Me.SplitContainer1.TabIndex = 16
         '
@@ -142,6 +148,15 @@ Partial Class Form1
         Me.Button8.Text = "add person"
         Me.Button8.UseVisualStyleBackColor = True
         '
+        'HynrTextBox4
+        '
+        Me.HynrTextBox4.IncludeLabel = True
+        Me.HynrTextBox4.IsBusy = False
+        Me.HynrTextBox4.Location = New System.Drawing.Point(295, 40)
+        Me.HynrTextBox4.Name = "HynrTextBox4"
+        Me.HynrTextBox4.Size = New System.Drawing.Size(61, 20)
+        Me.HynrTextBox4.TabIndex = 14
+        '
         'CountriesGrid
         '
         Me.CountriesGrid.AllowUserToAddRows = False
@@ -152,7 +167,7 @@ Partial Class Form1
         Me.CountriesGrid.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.CountriesGrid.HynrSettings = Nothing
         Me.CountriesGrid.IsBusy = False
-        Me.CountriesGrid.Location = New System.Drawing.Point(0, 66)
+        Me.CountriesGrid.Location = New System.Drawing.Point(0, 41)
         Me.CountriesGrid.Name = "CountriesGrid"
         Me.CountriesGrid.SelectedItem = Nothing
         Me.CountriesGrid.SelectedItems = Nothing
@@ -161,14 +176,25 @@ Partial Class Form1
         '
         'HynrTextBox1
         '
+        Me.HynrTextBox1.IncludeLabel = False
         Me.HynrTextBox1.IsBusy = False
         Me.HynrTextBox1.Location = New System.Drawing.Point(6, 40)
         Me.HynrTextBox1.Name = "HynrTextBox1"
         Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
         Me.HynrTextBox1.TabIndex = 12
         '
+        'HynrTextBox3
+        '
+        Me.HynrTextBox3.IncludeLabel = False
+        Me.HynrTextBox3.IsBusy = False
+        Me.HynrTextBox3.Location = New System.Drawing.Point(235, 40)
+        Me.HynrTextBox3.Name = "HynrTextBox3"
+        Me.HynrTextBox3.Size = New System.Drawing.Size(82, 20)
+        Me.HynrTextBox3.TabIndex = 23
+        '
         'HynrTextBox2
         '
+        Me.HynrTextBox2.IncludeLabel = False
         Me.HynrTextBox2.IsBusy = False
         Me.HynrTextBox2.Location = New System.Drawing.Point(0, 40)
         Me.HynrTextBox2.Name = "HynrTextBox2"
@@ -185,7 +211,7 @@ Partial Class Form1
         Me.StarshipsGrid.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.StarshipsGrid.HynrSettings = Nothing
         Me.StarshipsGrid.IsBusy = False
-        Me.StarshipsGrid.Location = New System.Drawing.Point(0, 233)
+        Me.StarshipsGrid.Location = New System.Drawing.Point(0, 208)
         Me.StarshipsGrid.Name = "StarshipsGrid"
         Me.StarshipsGrid.SelectedItem = Nothing
         Me.StarshipsGrid.SelectedItems = Nothing
@@ -231,20 +257,31 @@ Partial Class Form1
         '
         Me.HynrLabelStrip1.HynrSettings = Nothing
         Me.HynrLabelStrip1.LabelText = Nothing
-        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.HynrLabelStrip1.Location = New System.Drawing.Point(0, 25)
         Me.HynrLabelStrip1.Name = "HynrLabelStrip1"
         Me.HynrLabelStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.HynrLabelStrip1.Size = New System.Drawing.Size(709, 25)
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
-        'HynrTextBox3
+        'ToolStrip1
         '
-        Me.HynrTextBox3.IsBusy = False
-        Me.HynrTextBox3.Location = New System.Drawing.Point(235, 40)
-        Me.HynrTextBox3.Name = "HynrTextBox3"
-        Me.HynrTextBox3.Size = New System.Drawing.Size(82, 20)
-        Me.HynrTextBox3.TabIndex = 23
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HynrToolStripButton1})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(709, 25)
+        Me.ToolStrip1.TabIndex = 17
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'HynrToolStripButton1
+        '
+        Me.HynrToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.HynrToolStripButton1.Image = CType(resources.GetObject("HynrToolStripButton1.Image"), System.Drawing.Image)
+        Me.HynrToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.HynrToolStripButton1.IsBusy = False
+        Me.HynrToolStripButton1.Name = "HynrToolStripButton1"
+        Me.HynrToolStripButton1.Size = New System.Drawing.Size(23, 22)
+        Me.HynrToolStripButton1.Text = "HynrToolStripButton1"
         '
         'Form1
         '
@@ -253,6 +290,7 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(709, 517)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.HynrLabelStrip1)
+        Me.Controls.Add(Me.ToolStrip1)
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.SplitContainer1.Panel1.ResumeLayout(False)
@@ -264,6 +302,8 @@ Partial Class Form1
         CType(Me.CountriesGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.StarshipsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -288,4 +328,7 @@ Partial Class Form1
     Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
     Friend WithEvents CountryCol As DataGridViewComboBoxColumn
     Friend WithEvents HynrTextBox3 As HynrFramework.HynrTextBox
+    Friend WithEvents HynrTextBox4 As HynrFramework.HynrTextBox
+    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents HynrToolStripButton1 As HynrFramework.HynrToolStripButton
 End Class
