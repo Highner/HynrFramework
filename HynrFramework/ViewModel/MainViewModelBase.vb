@@ -1,7 +1,6 @@
 ﻿Public Class MainViewModelBase
     Inherits ViewModelBase
 
-
     Public Sub GetData()
         _GetData()
     End Sub

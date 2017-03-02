@@ -40,6 +40,7 @@ Partial Class Form1
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
+        Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -103,6 +104,7 @@ Partial Class Form1
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox3)
         Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.StarshipsGrid)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Button10)
@@ -159,6 +161,7 @@ Partial Class Form1
         '
         'HynrTextBox1
         '
+        Me.HynrTextBox1.IsBusy = False
         Me.HynrTextBox1.Location = New System.Drawing.Point(6, 40)
         Me.HynrTextBox1.Name = "HynrTextBox1"
         Me.HynrTextBox1.Size = New System.Drawing.Size(229, 20)
@@ -166,6 +169,7 @@ Partial Class Form1
         '
         'HynrTextBox2
         '
+        Me.HynrTextBox2.IsBusy = False
         Me.HynrTextBox2.Location = New System.Drawing.Point(0, 40)
         Me.HynrTextBox2.Name = "HynrTextBox2"
         Me.HynrTextBox2.Size = New System.Drawing.Size(229, 20)
@@ -234,6 +238,14 @@ Partial Class Form1
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
+        'HynrTextBox3
+        '
+        Me.HynrTextBox3.IsBusy = False
+        Me.HynrTextBox3.Location = New System.Drawing.Point(235, 40)
+        Me.HynrTextBox3.Name = "HynrTextBox3"
+        Me.HynrTextBox3.Size = New System.Drawing.Size(82, 20)
+        Me.HynrTextBox3.TabIndex = 23
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -275,4 +287,5 @@ Partial Class Form1
     Friend WithEvents NameCol As DataGridViewTextBoxColumn
     Friend WithEvents RemarksCol As DataGridViewTextBoxColumn
     Friend WithEvents CountryCol As DataGridViewComboBoxColumn
+    Friend WithEvents HynrTextBox3 As HynrFramework.HynrTextBox
 End Class

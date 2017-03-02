@@ -19,7 +19,7 @@ Public MustInherit Class ViewModelBase
     End Property
     Private Property _IsBusy As Boolean = False
     <Browsable(False)>
-    Public Property IsBusy As Boolean
+    Public Property IsBusy As Boolean Implements IViewModelBase.IsBusy
         Get
             Return _IsBusy
         End Get

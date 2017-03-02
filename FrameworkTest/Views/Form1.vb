@@ -5,16 +5,13 @@
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Settings.ApplyToControlContainer(Me)
         CountryVM = New CountryViewModel
-
-        'CountriesGrid.AutoGenerateColumns = True
-        StarshipsGrid.AutoGenerateColumns = True
-
         HynrLabelStrip1.BindToListViewModel(CountryVM, "StarshipsVM", "Header")
         CountriesGrid.BindToListViewModel(CountryVM.CountriesVM)
-        PersonsGrid.BindToListViewModel(CountryVM.PersonsVM) ', "PersonsVM")
-        StarshipsGrid.BindToListViewModel(CountryVM.StarshipsVM) ', "StarshipsVM")
-        ' HynrTextBox1.BindToProperty(CountryVM.CountriesVM, "NameFilter")
-        'HynrTextBox2.BindToProperty(CountryVM, "PersonsVM", "NameFilter")
+        PersonsGrid.BindToListViewModel(CountryVM.PersonsVM)
+        StarshipsGrid.BindToListViewModel(CountryVM.StarshipsVM)
+        HynrTextBox3.BindToListViewModel(CountryVM.PersonsVM, "Name")
+        'HynrTextBox1.BindToViewModel(CountryVM.CountriesVM, "NameFilter")
+        HynrTextBox2.BindToViewModel(CountryVM.PersonsVM, "NameFilter")
         PersonsGrid.BindGridCombobox("CountryCol", (New FrameworkTestDBEntities).Countries.ToList, "CountryID", "ID", "Name")
         CountryVM.GetData()
     End Sub

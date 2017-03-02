@@ -5,5 +5,5 @@
     Property CanSave As Boolean
 
     Event SelectedItemChanged()
-    Event LoadingCompleted()
+    'Event LoadingCompleted()
 End Interface

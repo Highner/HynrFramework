@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Windows.Forms
+Imports HynrFramework
 
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits DataGridView
@@ -126,7 +127,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #End Region
 
 #Region "Binding"
-    Public Sub BindToListViewModel(ByRef listviewmodel As IListViewModel(Of viewmodelitem))
+    Public Sub BindToListViewModel(ByRef listviewmodel As IViewModelBase) ' IListViewModel(Of viewmodelitem))
         LazyBindingViewModel = listviewmodel
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         AddHandler listviewmodel.LoadingCompleted, AddressOf CompleteBinding
@@ -143,7 +144,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         col.DataPropertyName = datapropertyname
         col.ValueMember = valuemember
         col.DisplayMember = displaymember
-        col.DataSource = New BindingSource(datasource, "")
+        col.DataSource = New BindingSource(datasource, String.Empty)
     End Sub
     Private Sub OnBindingComplete() Handles Me.DataBindingComplete
         If Me.ColumnCount = 0 Then Me.AutoGenerateColumns = True
@@ -153,5 +154,6 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #Region "Events"
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Public Event ItemDoubleClick(ByRef item As viewmodelitem)
+    Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
 #End Region
 End Class

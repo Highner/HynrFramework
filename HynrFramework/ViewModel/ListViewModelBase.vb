@@ -50,7 +50,11 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private _SelectedItem As viewmodelitem
     Public Property SelectedItem() As viewmodelitem Implements IListViewModel(Of viewmodelitem).SelectedItem
         Get
-            Return _SelectedItem
+            If ItemList.Any Then
+                Return _SelectedItem
+            Else
+                Return Nothing
+            End If
         End Get
         Set(ByVal value As viewmodelitem)
             _SelectedItem = value
@@ -60,7 +64,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Property
     Public ReadOnly Property SelectedItemID As Integer Implements IListViewModel(Of viewmodelitem).SelectedItemID
         Get
-            If Not IsNothing(SelectedItem) Then
+            If ItemList.Any Then
                 Return SelectedItem.ID
             Else
                 Return 0
@@ -175,7 +179,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         DataToList(dataitemlist)
         ToggleCanSave()
         IsBusy = False
-        RaiseEvent LoadingCompleted()
+        RaiseLoadingCompleted()
     End Sub
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
@@ -206,6 +210,5 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 
 #Region "Events"
     Public Event SelectedItemChanged() Implements IListViewModel(Of viewmodelitem).SelectedItemChanged
-    Public Shadows Event LoadingCompleted() Implements IListViewModel(Of viewmodelitem).LoadingCompleted
 #End Region
 End Class

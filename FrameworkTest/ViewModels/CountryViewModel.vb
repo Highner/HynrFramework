@@ -12,16 +12,22 @@ Public Class CountryViewModel
     End Sub
 
     Private Sub LoadPersons() Handles CountriesVM.SelectedItemChanged
-        ' PersonsVM = New PersonsListViewModel(CountriesVM.SelectedItemID)
         PersonsVM.ParentID = CountriesVM.SelectedItemID
         PersonsVM.GetData()
-        ' RaiseLoadingCompleted()
+
     End Sub
 
     Private Sub LoadStarships() Handles PersonsVM.SelectedItemChanged
-        'StarshipsVM = New StarshipListViewModel(PersonsVM.SelectedItemID)
         StarshipsVM.ParentID = PersonsVM.SelectedItemID
         StarshipsVM.GetData()
-        'RaiseLoadingCompleted()
+        'Name = PersonsVM.SelectedItem.Name
+        ' RaiseLoadingCompleted()
+    End Sub
+
+
+
+    Private Sub test() Handles PersonsVM.LoadingCompleted
+        ' MsgBox("completed")
+
     End Sub
 End Class
