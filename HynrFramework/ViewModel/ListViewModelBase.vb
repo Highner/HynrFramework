@@ -191,9 +191,10 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         Next
         _OriginalItemList = list
         ApplyFilter()
-        If selectedindex >= 0 Then
-            If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
-        End If
+        'TODO: select correct item after loading
+        'If selectedindex >= 0 Then
+        '    If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
+        'End If
         If ItemList.Any Then SelectedItem = ItemList(0)
     End Sub
     Private Sub CancelLoading() 'not working

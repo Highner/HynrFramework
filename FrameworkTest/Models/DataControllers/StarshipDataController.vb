@@ -10,5 +10,5 @@
         Return items
     End Function
 
-    Private Property ParentID As Integer
+    Public Property ParentID As Integer
 End Class

@@ -11,10 +11,10 @@
 
         HynrLabelStrip1.BindToListViewModel(CountryVM, "StarshipsVM", "Header")
         CountriesGrid.BindToListViewModel(CountryVM.CountriesVM)
-        PersonsGrid.BindToListViewModel(CountryVM, "PersonsVM")
-        StarshipsGrid.BindToListViewModel(CountryVM, "StarshipsVM")
-        HynrTextBox1.BindToProperty(CountryVM.CountriesVM, "NameFilter")
-        HynrTextBox2.BindToProperty(CountryVM, "PersonsVM", "NameFilter")
+        PersonsGrid.BindToListViewModel(CountryVM.PersonsVM) ', "PersonsVM")
+        StarshipsGrid.BindToListViewModel(CountryVM.StarshipsVM) ', "StarshipsVM")
+        ' HynrTextBox1.BindToProperty(CountryVM.CountriesVM, "NameFilter")
+        'HynrTextBox2.BindToProperty(CountryVM, "PersonsVM", "NameFilter")
         PersonsGrid.BindGridCombobox("CountryCol", (New FrameworkTestDBEntities).Countries.ToList, "CountryID", "ID", "Name")
         CountryVM.GetData()
     End Sub

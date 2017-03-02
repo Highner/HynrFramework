@@ -8,15 +8,10 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
 #Region "Properties"
     Private WithEvents _ErrorLog As New BindingList(Of String)
     Protected ShowError As Boolean = True
-    Private _DBContext As dbcontextclass
-    Private _DBContextLazy As New Lazy(Of dbcontextclass)
+    Private _DBContext As dbcontextclass = GetInstance(GetType(dbcontextclass))
     Public Property DBContext As dbcontextclass
         Get
-            If Not IsNothing(_DBContext) Then
-                Return _DBContext
-            Else
-                Return _DBContextLazy.Value
-            End If
+            Return _DBContext
         End Get
         Set(value As dbcontextclass)
             _DBContext = value
@@ -37,6 +32,8 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
     End Sub
 #End Region
 
+#Region "Methods"
+#End Region
 #Region "Error"
     Private Sub ShowNewError() Handles _ErrorLog.ListChanged
     End Sub

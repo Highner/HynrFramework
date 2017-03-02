@@ -18,6 +18,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
 
 #Region "Crud"
     Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).CreateNewItem
+        DataContext = GetInstance(GetType(datacontextclass))
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
         ToEntity(dataitem, newentityitem)
         If DataContext.AddObject(newentityitem) = True Then
@@ -33,9 +34,11 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     ''' </summary>
     ''' <returns></returns>
     Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
+        DataContext = GetInstance(GetType(datacontextclass))
         Return EntitiesToItems(DataContext.GetAllObjects)
     End Function
     Public Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItems
+        DataContext = GetInstance(GetType(datacontextclass))
         Return EntitiesToItems(DataContext.GetObjects(parameters))
     End Function
     Protected Function EntitiesToItems(ByRef entities As IEnumerable(Of entityclass)) As IEnumerable(Of dataclass)
@@ -47,10 +50,12 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Return list
     End Function
     Public Function GetItem(id As Integer) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItem
+        DataContext = GetInstance(GetType(datacontextclass))
         Dim newdataitem As dataclass = ToData(DataContext.GetObject(id))
         Return newdataitem
     End Function
     Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).UpdateItem
+        DataContext = GetInstance(GetType(datacontextclass))
         Dim entityitem = DataContext.GetObject(dataitem.ID)
         Dim newdataitem = ToEntity(dataitem, entityitem)
         If DataContext.Save() Then
@@ -60,6 +65,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         End If
     End Function
     Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass, dbcontextclass).DeleteItem
+        DataContext = GetInstance(GetType(datacontextclass))
         If DataContext.DeleteObject(dataitem.ID) = True Then
             Return DataContext.Save()
         End If

@@ -14,7 +14,18 @@ Public Class PersonsListViewModel
         GetData()
     End Sub
 
-    Private ParentID As Integer
+    Private _ParentID As Integer
+    Public Property ParentID As Integer
+        Get
+            Return _ParentID
+        End Get
+        Set(value As Integer)
+            _ParentID = value
+            _DataController.ParentID = value
+        End Set
+    End Property
+
+
     Private Property _NameFilter As String
     <ListViewModelFilterAttribute("Name", "string", False)>
     Property NameFilter As String
