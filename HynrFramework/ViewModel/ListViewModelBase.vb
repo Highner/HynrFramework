@@ -198,7 +198,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         'If selectedindex >= 0 Then
         '    If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
         'End If
-        ' If ItemList.Any Then SelectedItem = ItemList(0)
+        If ItemList.Any Then SelectedItem = ItemList(0)
     End Sub
     Public Function DataToItem(ByRef dataitem As dataitem) As viewmodelitem
         Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
