@@ -34,6 +34,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
 
 #Region "Methods"
 #End Region
+
 #Region "Error"
     Private Sub ShowNewError() Handles _ErrorLog.ListChanged
     End Sub

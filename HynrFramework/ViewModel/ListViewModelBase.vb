@@ -185,13 +185,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
         Dim list = New ObservableListSource(Of viewmodelitem)
         For Each dataitem In dataitemlist
-            Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
-            newvmitem.Data = dataitem
-            newvmitem.CancellationSource = CancellationSource
-            AddHandler newvmitem.Deleted, AddressOf DeleteItem
-            AddHandler newvmitem.Updated, AddressOf UpdateItem
-            AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
-            list.Add(newvmitem)
+            list.Add(DataToItem(dataitem))
         Next
         _OriginalItemList = list
         ApplyFilter()
@@ -201,6 +195,15 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         'End If
         If ItemList.Any Then SelectedItem = ItemList(0)
     End Sub
+    Public Function DataToItem(ByRef dataitem As dataitem) As viewmodelitem
+        Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
+        newvmitem.Data = dataitem
+        newvmitem.CancellationSource = CancellationSource
+        AddHandler newvmitem.Deleted, AddressOf DeleteItem
+        AddHandler newvmitem.Updated, AddressOf UpdateItem
+        AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
+        Return newvmitem
+    End Function
     Private Sub CancelLoading() 'not working
         If Not IsNothing(CancellationSource) Then
             CancellationSource.Cancel()
