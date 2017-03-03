@@ -90,6 +90,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
     End Sub
+    Public Sub New(ByRef windowfactory As IWindowFactory)
+        _WindowFactory = windowfactory
+    End Sub
     Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
