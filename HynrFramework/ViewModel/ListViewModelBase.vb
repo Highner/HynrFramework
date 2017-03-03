@@ -206,6 +206,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         newvmitem.CancellationSource = CancellationSource
         AddHandler newvmitem.Deleted, AddressOf DeleteItem
         AddHandler newvmitem.Updated, AddressOf UpdateItem
+        AddHandler newvmitem.DoubleClicked, AddressOf OpenNewForm
         AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
         Return newvmitem
     End Function

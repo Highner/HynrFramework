@@ -69,6 +69,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             OnPropertyChanged("IsBusy")
         End Set
     End Property
+    Property FireItemDoubleClick As Boolean = False
     Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
     Private BusyIndicator As New MatrixCircularProgressControl
     Private LazyBindingViewModel As IViewModelBase
@@ -99,6 +100,9 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         SelectedItem = _BindingSource.Current
     End Sub
     Private Sub ItemDoubleClicked() Handles Me.MouseDoubleClick
+        If Not IsNothing(SelectedItem) Then
+            SelectedItem.DoubleClickCommand.Execute(Nothing)
+        End If
         RaiseEvent ItemDoubleClick(SelectedItem)
     End Sub
     Private Sub SelectedItemsChanged() Handles Me.SelectionChanged

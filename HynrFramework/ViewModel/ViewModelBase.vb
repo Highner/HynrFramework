@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Threading
+Imports HynrFramework
 
 <Serializable>
 Public MustInherit Class ViewModelBase
