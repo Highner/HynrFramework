@@ -27,6 +27,8 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
     <Browsable(False)>
     Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
+    <Browsable(False)>
+    Public Property RefreshAllCommand As ICommand = New Command(AddressOf GetData)
 #End Region
 
 #Region "Properties"
