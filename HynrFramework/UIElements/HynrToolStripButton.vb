@@ -39,15 +39,15 @@ Public Class HynrToolStripButton
         End Set
     End Property
     Private Command As Command
-    Private ListViewModel As IViewModelBase
+    Private ViewModel As IViewModelBase
 #End Region
 
 #Region "Methods"
-    Public Sub BindToListViewModel(ByRef listviewmodel As IViewModelBase, ByRef command As Command, Optional ByVal text As String = "")
+    Public Sub BindToViewModel(ByRef viewmodel As IViewModelBase, ByRef command As Command, Optional ByVal text As String = "")
         Me.Command = command
-        Me.ListViewModel = listviewmodel
+        Me.ViewModel = viewmodel
         Me.ToolTipText = text
-        DataBindings.Add("IsBusy", Me.ListViewModel, "IsBusy", True, DataSourceUpdateMode.Never)
+        DataBindings.Add("IsBusy", Me.ViewModel, "IsBusy", True, DataSourceUpdateMode.Never)
     End Sub
     Private Sub ExecuteCommand() Handles Me.Click
         If Not IsNothing(Command) Then Command.Execute(Nothing)
