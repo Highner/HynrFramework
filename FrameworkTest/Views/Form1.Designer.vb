@@ -32,6 +32,7 @@ Partial Class Form1
         Me.Button10 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
         Me.Button8 = New System.Windows.Forms.Button()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.HynrTextBox4 = New HynrFramework.HynrTextBox()
         Me.CountriesGrid = New FrameworkTest.CountriesGrid()
         Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
@@ -43,16 +44,15 @@ Partial Class Form1
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
         Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.HynrToolStripButton1 = New HynrFramework.HynrToolStripButton()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         CType(Me.CountriesGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.StarshipsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
@@ -148,6 +148,15 @@ Partial Class Form1
         Me.Button8.Text = "add person"
         Me.Button8.UseVisualStyleBackColor = True
         '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HynrToolStripButton1})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(709, 25)
+        Me.ToolStrip1.TabIndex = 17
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
         'HynrTextBox4
         '
         Me.HynrTextBox4.IncludeLabel = True
@@ -165,13 +174,14 @@ Partial Class Form1
         Me.CountriesGrid.CancellationSource = Nothing
         Me.CountriesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.CountriesGrid.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.CountriesGrid.FireItemDoubleClick = False
         Me.CountriesGrid.HynrSettings = Nothing
         Me.CountriesGrid.IsBusy = False
-        Me.CountriesGrid.Location = New System.Drawing.Point(0, 41)
+        Me.CountriesGrid.Location = New System.Drawing.Point(0, 83)
         Me.CountriesGrid.Name = "CountriesGrid"
         Me.CountriesGrid.SelectedItem = Nothing
         Me.CountriesGrid.SelectedItems = Nothing
-        Me.CountriesGrid.Size = New System.Drawing.Size(376, 426)
+        Me.CountriesGrid.Size = New System.Drawing.Size(376, 384)
         Me.CountriesGrid.TabIndex = 0
         '
         'HynrTextBox1
@@ -209,6 +219,7 @@ Partial Class Form1
         Me.StarshipsGrid.CancellationSource = Nothing
         Me.StarshipsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.StarshipsGrid.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.StarshipsGrid.FireItemDoubleClick = False
         Me.StarshipsGrid.HynrSettings = Nothing
         Me.StarshipsGrid.IsBusy = False
         Me.StarshipsGrid.Location = New System.Drawing.Point(0, 208)
@@ -227,6 +238,7 @@ Partial Class Form1
         Me.PersonsGrid.CancellationSource = Nothing
         Me.PersonsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.PersonsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.NameCol, Me.RemarksCol, Me.CountryCol})
+        Me.PersonsGrid.FireItemDoubleClick = False
         Me.PersonsGrid.HynrSettings = Nothing
         Me.PersonsGrid.IsBusy = False
         Me.PersonsGrid.Location = New System.Drawing.Point(0, 66)
@@ -264,15 +276,6 @@ Partial Class Form1
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HynrToolStripButton1})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(709, 25)
-        Me.ToolStrip1.TabIndex = 17
-        Me.ToolStrip1.Text = "ToolStrip1"
-        '
         'HynrToolStripButton1
         '
         Me.HynrToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -299,11 +302,11 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         CType(Me.CountriesGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.StarshipsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

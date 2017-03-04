@@ -50,7 +50,7 @@ Public Class HynrToolStripButton
         DataBindings.Add("IsBusy", Me.ListViewModel, "IsBusy", True, DataSourceUpdateMode.Never)
     End Sub
     Private Sub ExecuteCommand() Handles Me.Click
-        If Not isnothing(Command) Then Command.Execute(Nothing)
+        If Not IsNothing(Command) Then Command.Execute(Nothing)
     End Sub
     Private Sub ToggleIsBusy(ByVal busy As Boolean)
         If busy Then
