@@ -14,6 +14,7 @@
         HynrTextBox2.BindToViewModel(CountryVM.PersonsVM, "NameFilter")
         PersonsGrid.BindGridCombobox("CountryCol", (New FrameworkTestDBEntities).Countries.ToList, "CountryID", "ID", "Name")
         HynrToolStripButton1.BindToViewModel(CountryVM.CountriesVM, CountryVM.CountriesVM.CreateCommand)
+        HynrCheckboxWarp.BindToListViewModel(CountryVM.StarshipsVM, "WarpCapable")
         CountryVM.GetData()
     End Sub
 

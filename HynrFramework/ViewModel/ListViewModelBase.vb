@@ -174,7 +174,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Sub
     Public Async Sub GetData()
         IsBusy = True
-        Dim dataitemlist As IEnumerable(Of dataitem)
+        Dim dataitemlist As IEnumerable(Of dataitem) = Nothing
         CancellationSource = New Threading.CancellationTokenSource
         Try
             dataitemlist = Await Task.Run(Function() _DataController.GetAllItems(), CancellationSource.Token)

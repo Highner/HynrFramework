@@ -7,4 +7,5 @@ Public Class StarshipData
     Public Property Name As String
     Public Property PersonID As Integer
     Public Property Type As String
+    Public Property WarpCapable As Boolean?
 End Class

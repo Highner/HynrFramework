@@ -29,30 +29,31 @@ Partial Class Form1
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.Button10 = New System.Windows.Forms.Button()
-        Me.Button9 = New System.Windows.Forms.Button()
-        Me.Button8 = New System.Windows.Forms.Button()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.HynrTextBox4 = New HynrFramework.HynrTextBox()
         Me.CountriesGrid = New FrameworkTest.CountriesGrid()
         Me.HynrTextBox1 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox3 = New HynrFramework.HynrTextBox()
         Me.HynrTextBox2 = New HynrFramework.HynrTextBox()
         Me.StarshipsGrid = New FrameworkTest.StarshipsGrid()
+        Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
         Me.PersonsGrid = New FrameworkTest.PersonsGrid()
         Me.NameCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.RemarksCol = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CountryCol = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.HynrToolStripButton1 = New HynrFramework.HynrToolStripButton()
+        Me.HynrLabelStrip1 = New HynrFramework.HynrLabelStrip()
+        Me.HynrCheckboxWarp = New HynrFramework.HynrCheckbox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
         CType(Me.CountriesGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.StarshipsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Button1
@@ -110,6 +111,7 @@ Partial Class Form1
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.HynrCheckboxWarp)
         Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox3)
         Me.SplitContainer1.Panel2.Controls.Add(Me.HynrTextBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.StarshipsGrid)
@@ -120,42 +122,6 @@ Partial Class Form1
         Me.SplitContainer1.Size = New System.Drawing.Size(709, 467)
         Me.SplitContainer1.SplitterDistance = 376
         Me.SplitContainer1.TabIndex = 16
-        '
-        'Button10
-        '
-        Me.Button10.Location = New System.Drawing.Point(165, 3)
-        Me.Button10.Name = "Button10"
-        Me.Button10.Size = New System.Drawing.Size(75, 23)
-        Me.Button10.TabIndex = 20
-        Me.Button10.Text = "save person"
-        Me.Button10.UseVisualStyleBackColor = True
-        '
-        'Button9
-        '
-        Me.Button9.Location = New System.Drawing.Point(84, 3)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(75, 23)
-        Me.Button9.TabIndex = 19
-        Me.Button9.Text = "delete person"
-        Me.Button9.UseVisualStyleBackColor = True
-        '
-        'Button8
-        '
-        Me.Button8.Location = New System.Drawing.Point(3, 3)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(75, 23)
-        Me.Button8.TabIndex = 18
-        Me.Button8.Text = "add person"
-        Me.Button8.UseVisualStyleBackColor = True
-        '
-        'ToolStrip1
-        '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HynrToolStripButton1})
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(709, 25)
-        Me.ToolStrip1.TabIndex = 17
-        Me.ToolStrip1.Text = "ToolStrip1"
         '
         'HynrTextBox4
         '
@@ -229,6 +195,33 @@ Partial Class Form1
         Me.StarshipsGrid.Size = New System.Drawing.Size(329, 259)
         Me.StarshipsGrid.TabIndex = 21
         '
+        'Button10
+        '
+        Me.Button10.Location = New System.Drawing.Point(165, 3)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(75, 23)
+        Me.Button10.TabIndex = 20
+        Me.Button10.Text = "save person"
+        Me.Button10.UseVisualStyleBackColor = True
+        '
+        'Button9
+        '
+        Me.Button9.Location = New System.Drawing.Point(84, 3)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(75, 23)
+        Me.Button9.TabIndex = 19
+        Me.Button9.Text = "delete person"
+        Me.Button9.UseVisualStyleBackColor = True
+        '
+        'Button8
+        '
+        Me.Button8.Location = New System.Drawing.Point(3, 3)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(75, 23)
+        Me.Button8.TabIndex = 18
+        Me.Button8.Text = "add person"
+        Me.Button8.UseVisualStyleBackColor = True
+        '
         'PersonsGrid
         '
         Me.PersonsGrid.AllowUserToAddRows = False
@@ -265,6 +258,25 @@ Partial Class Form1
         Me.CountryCol.HeaderText = "Country"
         Me.CountryCol.Name = "CountryCol"
         '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HynrToolStripButton1})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(709, 25)
+        Me.ToolStrip1.TabIndex = 17
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'HynrToolStripButton1
+        '
+        Me.HynrToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.HynrToolStripButton1.Image = CType(resources.GetObject("HynrToolStripButton1.Image"), System.Drawing.Image)
+        Me.HynrToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.HynrToolStripButton1.IsBusy = False
+        Me.HynrToolStripButton1.Name = "HynrToolStripButton1"
+        Me.HynrToolStripButton1.Size = New System.Drawing.Size(23, 22)
+        Me.HynrToolStripButton1.Text = "HynrToolStripButton1"
+        '
         'HynrLabelStrip1
         '
         Me.HynrLabelStrip1.HynrSettings = Nothing
@@ -276,15 +288,16 @@ Partial Class Form1
         Me.HynrLabelStrip1.TabIndex = 7
         Me.HynrLabelStrip1.Text = "HynrLabelStrip1"
         '
-        'HynrToolStripButton1
+        'HynrCheckboxWarp
         '
-        Me.HynrToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.HynrToolStripButton1.Image = CType(resources.GetObject("HynrToolStripButton1.Image"), System.Drawing.Image)
-        Me.HynrToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.HynrToolStripButton1.IsBusy = False
-        Me.HynrToolStripButton1.Name = "HynrToolStripButton1"
-        Me.HynrToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.HynrToolStripButton1.Text = "HynrToolStripButton1"
+        Me.HynrCheckboxWarp.AutoSize = True
+        Me.HynrCheckboxWarp.IsBusy = False
+        Me.HynrCheckboxWarp.Location = New System.Drawing.Point(247, 8)
+        Me.HynrCheckboxWarp.Name = "HynrCheckboxWarp"
+        Me.HynrCheckboxWarp.Size = New System.Drawing.Size(49, 17)
+        Me.HynrCheckboxWarp.TabIndex = 26
+        Me.HynrCheckboxWarp.Text = "warp"
+        Me.HynrCheckboxWarp.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -302,11 +315,11 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
         CType(Me.CountriesGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.StarshipsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PersonsGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -334,4 +347,5 @@ Partial Class Form1
     Friend WithEvents HynrTextBox4 As HynrFramework.HynrTextBox
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents HynrToolStripButton1 As HynrFramework.HynrToolStripButton
+    Friend WithEvents HynrCheckboxWarp As HynrFramework.HynrCheckbox
 End Class

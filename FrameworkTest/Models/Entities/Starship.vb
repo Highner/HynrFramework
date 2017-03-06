@@ -15,6 +15,7 @@ Partial Public Class Starship
     Public Property PersonID As Integer
     Public Property Name As String
     Public Property Type As String
+    Public Property WarpCapable As Nullable(Of Boolean)
 
     Public Overridable Property Person As Person
 

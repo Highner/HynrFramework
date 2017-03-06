@@ -31,6 +31,7 @@
           <Property Name="PersonID" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Type" Type="nvarchar" MaxLength="50" />
+          <Property Name="WarpCapable" Type="bit" />
         </EntityType>
         <Association Name="FK_Person_Country">
           <End Role="Country" Type="Self.Country" Multiplicity="0..1">
@@ -134,6 +135,7 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Person" Relationship="FrameworkTestDBModel.FK_Starships_Person" FromRole="Starship" ToRole="Person" />
+          <Property Name="WarpCapable" Type="Boolean" />
         </EntityType>
         <Association Name="FK_Starships_Person">
           <End Type="FrameworkTestDBModel.Person" Role="Person" Multiplicity="1">
@@ -178,6 +180,7 @@
           <EntitySetMapping Name="Starships">
             <EntityTypeMapping TypeName="FrameworkTestDBModel.Starship">
               <MappingFragment StoreEntitySet="Starships">
+                <ScalarProperty Name="WarpCapable" ColumnName="WarpCapable" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PersonID" ColumnName="PersonID" />
