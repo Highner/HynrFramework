@@ -1,6 +1,6 @@
 ﻿Imports System.Data.Entity
 
-Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass), dbcontextclass As DbContext)
+Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
