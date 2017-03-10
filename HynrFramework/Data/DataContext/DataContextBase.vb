@@ -82,7 +82,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
     Public Overridable Function GetObject(id As Object) As entityclass Implements IDataContext(Of entityclass).GetObject
         Return DBContext.Set(GetType(entityclass)).Find(id)
     End Function
-    Public Function GetObjects(parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetObjects
+    Public Function GetObjects(parameters As Object) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetObjects
         Return DBContext.Set(GetType(entityclass)).Where(parameters)
     End Function
 #End Region
