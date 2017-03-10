@@ -37,7 +37,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         DataContext = GetInstance(GetType(datacontextclass))
         Return EntitiesToItems(DataContext.GetAllObjects)
     End Function
-    Public Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetItems
+    Public Overridable Function GetItems(parameters As Object) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetItems
         DataContext = GetInstance(GetType(datacontextclass))
         Return EntitiesToItems(DataContext.GetObjects(parameters))
     End Function
@@ -49,12 +49,12 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Next
         Return list
     End Function
-    Public Function GetItem(id As Object) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
+    Public Overridable Function GetItem(id As Object) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
         DataContext = GetInstance(GetType(datacontextclass))
         Dim newdataitem As dataclass = ToData(DataContext.GetObject(id))
         Return newdataitem
     End Function
-    Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).UpdateItem
+    Public Overridable Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).UpdateItem
         DataContext = GetInstance(GetType(datacontextclass))
         Dim entityitem = DataContext.GetObject(dataitem.ID)
         Dim newdataitem = ToEntity(dataitem, entityitem)
@@ -64,7 +64,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
             Return Nothing
         End If
     End Function
-    Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItem
+    Public Overridable Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItem
         DataContext = GetInstance(GetType(datacontextclass))
         If DataContext.DeleteObject(dataitem.ID) = True Then
             Return DataContext.Save()
