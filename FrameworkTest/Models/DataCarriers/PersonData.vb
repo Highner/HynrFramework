@@ -3,7 +3,7 @@
 Public Class PersonData
     Implements IHasID
 
-    Public Property ID As Integer Implements IHasID.ID
+    Public Property ID As Object Implements IHasID.ID
     Public Property Name As String
     Public Property Birthday As Date?
     Public Property Country As String

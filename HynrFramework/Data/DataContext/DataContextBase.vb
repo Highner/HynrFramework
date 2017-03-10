@@ -67,7 +67,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         End Try
         Return True
     End Function
-    Public Overridable Function DeleteObject(id As Integer) As Boolean Implements IDataContext(Of entityclass).DeleteObject
+    Public Overridable Function DeleteObject(id As Object) As Boolean Implements IDataContext(Of entityclass).DeleteObject
         Try
             DBContext.Set(GetType(entityclass)).Remove(GetObject(id))
         Catch ex As Exception
@@ -79,7 +79,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
     Public Overridable Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
         Return DBContext.Set(GetType(entityclass))
     End Function
-    Public Overridable Function GetObject(id As Integer) As entityclass Implements IDataContext(Of entityclass).GetObject
+    Public Overridable Function GetObject(id As Object) As entityclass Implements IDataContext(Of entityclass).GetObject
         Return DBContext.Set(GetType(entityclass)).Find(id)
     End Function
     Public Function GetObjects(parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetObjects

@@ -1,5 +1,5 @@
 ﻿Public Class PersonsDataController
-    Inherits HynrFramework.DataControllerBase(Of Person, PersonData, PersonsDataContext, FrameworkTestDBEntities)
+    Inherits HynrFramework.DataControllerBase(Of Person, PersonData, PersonsDataContext)
 
     Public Sub New(ByVal parentid As Integer)
         Me.ParentID = parentid

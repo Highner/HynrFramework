@@ -4,7 +4,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
-    Public Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
+    Private Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
 #End Region
 
 #Region "Constructor"
@@ -49,7 +49,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Next
         Return list
     End Function
-    Public Function GetItem(id As Integer) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
+    Public Function GetItem(id As Object) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
         DataContext = GetInstance(GetType(datacontextclass))
         Dim newdataitem As dataclass = ToData(DataContext.GetObject(id))
         Return newdataitem

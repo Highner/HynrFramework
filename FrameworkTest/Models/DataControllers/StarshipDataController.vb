@@ -1,5 +1,5 @@
 ﻿Public Class StarshipDataController
-    Inherits HynrFramework.DataControllerBase(Of Starship, StarshipData, StarshipDataContext, FrameworkTestDBEntities)
+    Inherits HynrFramework.DataControllerBase(Of Starship, StarshipData, StarshipDataContext)
 
     Public Sub New(ByVal parentid As Integer)
         Me.ParentID = parentid

@@ -36,11 +36,11 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
     End Property
     Private Property _OriginalData As dataclass
     <Browsable(False)>
-    Public Property ID As Integer Implements IHasID.ID
+    Public Property ID As Object Implements IHasID.ID
         Get
             Return Data.ID
         End Get
-        Set(value As Integer)
+        Set(value As Object)
             Data.ID = value
         End Set
     End Property

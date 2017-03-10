@@ -1,3 +1,3 @@
 ﻿Public Interface IHasID
-    Property ID As Integer
+    Property ID As Object
 End Interface
