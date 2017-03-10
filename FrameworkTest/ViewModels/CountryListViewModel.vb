@@ -1,7 +1,7 @@
 ﻿Imports HynrFramework
 
 Public Class CountryListViewModel
-    Inherits HynrFramework.ListViewModelBase(Of Country, CountryData, CountriesDataController, CountryItemViewModel, FrameworkTestDBEntities)
+    Inherits HynrFramework.ListViewModelBase(Of Country, CountryData, CountriesDataController, CountryItemViewModel)
 
 
     Public Overrides Sub CreateNewItem()

@@ -1,10 +1,10 @@
 ﻿Imports System.Data.Entity
 
-Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass, dbcontextclass), dbcontextclass As DbContext)
-    Implements IDataController(Of entityclass, dataclass, dbcontextclass)
+Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass), dbcontextclass As DbContext)
+    Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
-    Public Property DataContext As IDataContext(Of entityclass, dbcontextclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).DataContext
+    Public Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
 #End Region
 
 #Region "Constructor"
@@ -17,7 +17,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
 #End Region
 
 #Region "Crud"
-    Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).CreateNewItem
+    Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).CreateNewItem
         DataContext = GetInstance(GetType(datacontextclass))
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
         ToEntity(dataitem, newentityitem)
@@ -33,11 +33,11 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     ''' override this with a call to GetItems(parameters as string) or create custom call to datacontext and insert here if not ALL items are to be loaded
     ''' </summary>
     ''' <returns></returns>
-    Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetAllItems
+    Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetAllItems
         DataContext = GetInstance(GetType(datacontextclass))
         Return EntitiesToItems(DataContext.GetAllObjects)
     End Function
-    Public Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItems
+    Public Function GetItems(parameters As String) As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetItems
         DataContext = GetInstance(GetType(datacontextclass))
         Return EntitiesToItems(DataContext.GetObjects(parameters))
     End Function
@@ -49,12 +49,12 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Next
         Return list
     End Function
-    Public Function GetItem(id As Integer) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).GetItem
+    Public Function GetItem(id As Integer) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
         DataContext = GetInstance(GetType(datacontextclass))
         Dim newdataitem As dataclass = ToData(DataContext.GetObject(id))
         Return newdataitem
     End Function
-    Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).UpdateItem
+    Public Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).UpdateItem
         DataContext = GetInstance(GetType(datacontextclass))
         Dim entityitem = DataContext.GetObject(dataitem.ID)
         Dim newdataitem = ToEntity(dataitem, entityitem)
@@ -64,7 +64,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
             Return Nothing
         End If
     End Function
-    Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass, dbcontextclass).DeleteItem
+    Public Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItem
         DataContext = GetInstance(GetType(datacontextclass))
         If DataContext.DeleteObject(dataitem.ID) = True Then
             Return DataContext.Save()
@@ -78,7 +78,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     ''' override this to fill custom properties etc., but include call to mybase.ToData to map the base properties.
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
     ''' </summary>
-    Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).ToData
+    Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToData
         Dim newdataitem As Object
         newdataitem = GetInstance(GetType(dataclass))
         MapProperties(entityitem, newdataitem)
@@ -88,7 +88,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     ''' override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties.
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
     ''' </summary>
-    Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass, dbcontextclass).ToEntity
+    Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToEntity
         MapProperties(dataitem, entityitem)
         Return dataitem
     End Function

@@ -8,7 +8,7 @@ Imports System.ComponentModel
 ''' <summary>
 ''' only contructor and CreateNewItem need to be specified in inherited class
 ''' </summary>
-Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem, dbcontextclass), viewmodelitem As ItemViewModelBase(Of dataitem), dbcontextclass As DbContext)
+Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits ViewModelBase
     Implements IListViewModel(Of viewmodelitem)
 

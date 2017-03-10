@@ -1,7 +1,7 @@
 ﻿Imports HynrFramework
 
 Public Class StarshipListViewModel
-    Inherits ListViewModelBase(Of Starship, StarshipData, StarshipDataController, StarshipItemViewModel, FrameworkTestDBEntities)
+    Inherits ListViewModelBase(Of Starship, StarshipData, StarshipDataController, StarshipItemViewModel)
 
     Public Sub New(ByVal parentid As Integer)
         MyBase.New(New StarshipDataController(parentid), New WindowFactory)

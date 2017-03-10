@@ -3,7 +3,7 @@ Imports System.Data.Entity
 Imports System.Linq.Dynamic
 
 Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
-    Implements IDataContext(Of entityclass, dbcontextclass)
+    Implements IDataContext(Of entityclass)
 
 #Region "Properties"
     Private WithEvents _ErrorLog As New BindingList(Of String)
@@ -17,7 +17,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
             _DBContext = value
         End Set
     End Property
-    Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass, dbcontextclass).ErrorLog
+    Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass).ErrorLog
         Get
             Return _ErrorLog.ToList
         End Get
@@ -38,7 +38,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
 #Region "Error"
     Private Sub ShowNewError() Handles _ErrorLog.ListChanged
     End Sub
-    Public Sub AddError(ByVal ex As Exception, ByVal errortype As String) Implements IDataContext(Of entityclass, dbcontextclass).AddError
+    Public Sub AddError(ByVal ex As Exception, ByVal errortype As String) Implements IDataContext(Of entityclass).AddError
         Dim errortext As String = errortype & " Error: "
         If Not IsNothing(ex.InnerException) Then
             _ErrorLog.Add(errortext + ex.InnerException.ToString)
@@ -49,7 +49,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
 #End Region
 
 #Region "Crud"
-    Public Function Save() As Boolean Implements IDataContext(Of entityclass, dbcontextclass).Save
+    Public Function Save() As Boolean Implements IDataContext(Of entityclass).Save
         Try
             DBContext.SaveChanges()
         Catch ex As Exception
@@ -58,7 +58,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         End Try
         Return True
     End Function
-    Public Overridable Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass, dbcontextclass).AddObject
+    Public Overridable Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass).AddObject
         Try
             DBContext.Set(GetType(entityclass)).Add(entityobject)
         Catch ex As Exception
@@ -67,7 +67,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         End Try
         Return True
     End Function
-    Public Overridable Function DeleteObject(id As Integer) As Boolean Implements IDataContext(Of entityclass, dbcontextclass).DeleteObject
+    Public Overridable Function DeleteObject(id As Integer) As Boolean Implements IDataContext(Of entityclass).DeleteObject
         Try
             DBContext.Set(GetType(entityclass)).Remove(GetObject(id))
         Catch ex As Exception
@@ -76,13 +76,13 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
         End Try
         Return True
     End Function
-    Public Overridable Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass, dbcontextclass).GetAllObjects
+    Public Overridable Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
         Return DBContext.Set(GetType(entityclass))
     End Function
-    Public Overridable Function GetObject(id As Integer) As entityclass Implements IDataContext(Of entityclass, dbcontextclass).GetObject
+    Public Overridable Function GetObject(id As Integer) As entityclass Implements IDataContext(Of entityclass).GetObject
         Return DBContext.Set(GetType(entityclass)).Find(id)
     End Function
-    Public Function GetObjects(parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass, dbcontextclass).GetObjects
+    Public Function GetObjects(parameters As String) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetObjects
         Return DBContext.Set(GetType(entityclass)).Where(parameters)
     End Function
 #End Region

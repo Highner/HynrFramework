@@ -2,7 +2,7 @@
 Imports HynrFramework
 
 Public Class PersonsListViewModel
-    Inherits ListViewModelBase(Of Person, PersonData, PersonsDataController, PersonItemViewModel, FrameworkTestDBEntities)
+    Inherits ListViewModelBase(Of Person, PersonData, PersonsDataController, PersonItemViewModel)
 
     Public Sub New(ByVal parentid As Integer)
         MyBase.New(New PersonsDataController(parentid), New WindowFactory)
