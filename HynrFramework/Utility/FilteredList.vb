@@ -13,9 +13,9 @@ Module FilteredList
                         If Not IsDBNull(prop.GetValue(listviewmodel)) And Not (prop.GetValue(listviewmodel) = "") Then
                             If prevparamexists Then parameters = parameters + " and "
                             If att.ExactMatch Then
-                                parameters = parameters + att.FilteredField + " = " + Chr(34) + prop.GetValue(listviewmodel).ToString + Chr(34)
+                                parameters = parameters + att.FilteredField + " = " + Chr(34) + prop.GetValue(listviewmodel).ToString.Trim + Chr(34)
                             Else
-                                parameters = parameters + att.FilteredField + ".ToLower().Contains(" + Chr(34) + prop.GetValue(listviewmodel).ToString.ToLower + Chr(34) + ")"
+                                parameters = parameters + att.FilteredField + ".ToLower().Contains(" + Chr(34) + prop.GetValue(listviewmodel).ToString.ToLower.Trim + Chr(34) + ")"
                             End If
                             prevparamexists = True
                         End If
@@ -27,7 +27,7 @@ Module FilteredList
                                 If att.ExactMatch Then
                                     parameters = parameters + att.FilteredField + " = " & value & ""
                                 Else
-                                    parameters = parameters + att.FilteredField + ".ToString().Contains(" + Chr(34) + value.ToString + Chr(34) + ")"
+                                    parameters = parameters + att.FilteredField + ".ToString().Contains(" + Chr(34) + value.ToString.Trim + Chr(34) + ")"
                                 End If
                                 prevparamexists = True
                             End If

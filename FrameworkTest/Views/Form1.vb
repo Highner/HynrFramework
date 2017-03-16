@@ -1,4 +1,9 @@
-﻿Public Class Form1
+﻿
+Imports LiveCharts
+Imports LiveCharts.Defaults
+Imports LiveCharts.Wpf
+
+Public Class Form1
     Private Settings As HynrFramework.HynrUISettings = New HynrFramework.HynrUISettings
     Private WithEvents CountryVM As CountryViewModel
 
@@ -16,6 +21,40 @@
         HynrToolStripButton1.BindToViewModel(CountryVM.CountriesVM, CountryVM.CountriesVM.CreateCommand)
         HynrCheckboxWarp.BindToListViewModel(CountryVM.StarshipsVM, "WarpCapable")
         CountryVM.GetData()
+
+
+
+
+        Chart.Series = New SeriesCollection()
+
+        Dim ser = New OhlcSeries()
+        ser.Values = New ChartValues(Of ChartPoint)
+
+        Dim po As New ChartPoint
+
+        ''
+        '    Dim map As New
+
+        ser.Values.Add(po)
+        'ser.Values.Add(New OhlcPoint(33, 38, 31, 37))
+        'ser.Values.Add(New OhlcPoint(35, 42, 30, 40))
+        'ser.Values.Add(New OhlcPoint(37, 40, 35, 38))
+        'ser.Values.Add(New OhlcPoint(35, 38, 32, 33))
+
+        ' Chart.Series.Add(ser)
+
+        'based on https://github.com/beto-rodriguez/Live-Charts/issues/166 
+        'The Ohcl point X property is zero based indexed.
+        'this means the first point is 0, second 1, third 2.... and so on
+        'then you can use the Axis.Labels properties to map the chart X with a label in the array.
+        'for more info see (mapped labels section) 
+        'http://lvcharts.net/#/examples/v1/labels-wpf?path=WPF-Components-Labels
+
+        '  Chart.AxisX.Add(New Axis())
+
+
+
+
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
