@@ -4,7 +4,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
-    Private Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
+    Protected Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
 #End Region
 
 #Region "Constructor"
