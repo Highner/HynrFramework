@@ -32,7 +32,6 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     ''' <summary>
     ''' override this with a call to GetItems(parameters as string) or create custom call to datacontext and insert here if not ALL items are to be loaded
     ''' </summary>
-    ''' <returns></returns>
     Public Overridable Function GetAllItems() As IEnumerable(Of dataclass) Implements IDataController(Of entityclass, dataclass).GetAllItems
         InitializeConnection()
         Return EntitiesToItems(DataContext.GetAllObjects)
