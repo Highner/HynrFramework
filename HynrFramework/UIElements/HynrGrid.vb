@@ -151,8 +151,15 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         col.DataSource = New BindingSource(datasource, String.Empty)
     End Sub
     Private Sub OnBindingComplete() Handles Me.DataBindingComplete
-        If Me.ColumnCount = 0 Then Me.AutoGenerateColumns = True
+        If ColumnCount = 0 Then AutoGenerateColumns = True
     End Sub
+    'Private Sub ColumnAdd(sender As Object, e As DataGridViewColumnEventArgs) Handles Me.ColumnAdded
+    '    Dim coltype As Type = e.Column.ValueType.GetType
+    '    If ReferenceEquals(coltype, GetType(Decimal)) Then
+    '        e.Column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+    '    End If
+    'End Sub
+
 #End Region
 
 #Region "Events"
