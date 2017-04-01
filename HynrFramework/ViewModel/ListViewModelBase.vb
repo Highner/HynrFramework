@@ -146,8 +146,10 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
         If Not IsBusy Then
             Dim vmitem As viewmodelitem = sender
-            Dim data = _DataController.UpdateItem(vmitem.Data)
-            If Not IsNothing(data) Then vmitem.Data = data
+            If vmitem.CanSave Then
+                Dim data = _DataController.UpdateItem(vmitem.Data)
+                If Not IsNothing(data) Then vmitem.Data = data
+            End If
         End If
     End Sub
     Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
