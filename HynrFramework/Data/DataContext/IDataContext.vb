@@ -10,6 +10,5 @@ Public Interface IDataContext(Of T1)
 
     Sub AddError(ByVal ex As Exception, ByVal errortype As String)
 
-    'Property DBContext As dbcontextclass
     ReadOnly Property ErrorLog As List(Of String)
 End Interface

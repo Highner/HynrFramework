@@ -70,7 +70,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         End If
         Return False
     End Function
-    Protected Sub InitializeConnection()
+    Protected Overridable Sub InitializeConnection()
         DataContext = GetInstance(GetType(datacontextclass))
     End Sub
 #End Region
