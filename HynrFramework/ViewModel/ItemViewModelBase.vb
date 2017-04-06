@@ -14,7 +14,7 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
     <Browsable(False)>
     Public Property UpdateCommand As ICommand = New Command(AddressOf RaiseUpdatedEvent) Implements IItemViewModel(Of dataclass).UpdateCommand
     <Browsable(False)>
-    Public Property DoubleClickCommand As ICommand = New Command(AddressOf RaiseUpdatedEvent) Implements IItemViewModel(Of dataclass).DoubleClickCommand
+    Public Property DoubleClickCommand As ICommand = New Command(AddressOf RaiseDoubleClickedEvent) Implements IItemViewModel(Of dataclass).DoubleClickCommand
 #End Region
 
 #Region "Properties"
