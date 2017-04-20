@@ -86,6 +86,9 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
             If Not can = CanSave Then RaiseEvent CanSaveChanged(Me, Nothing)
         End If
     End Sub
+    Public Overridable Function Description() As String Implements IItemViewModel(Of dataclass).Description
+        Return Data.ID.ToString
+    End Function
 #End Region
 
 #Region "Events"

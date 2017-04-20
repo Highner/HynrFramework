@@ -10,6 +10,8 @@ Public Interface IItemViewModel(Of dataitem As IHasID)
     Property DoubleClickCommand As ICommand
     Property CanSave As Boolean
 
+    Function Description() As String
+
     Event Deleted(sender As Object, e As EventArgs)
     Event Updated(sender As Object, e As EventArgs)
     Event DoubleClicked(sender As Object, e As EventArgs)

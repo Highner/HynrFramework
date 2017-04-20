@@ -144,6 +144,9 @@
     <Compile Include="UIElements\HynrToolStripButton.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrTreeView.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\MatrixCircularProgressControl.Designer.vb">
       <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>
     </Compile>
@@ -169,6 +172,7 @@
     <Compile Include="ViewModel\IViewModelBase.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />
     <Compile Include="ViewModel\MainViewModelBase.vb" />
+    <Compile Include="ViewModel\GroupedListViewModelBase.vb" />
     <Compile Include="ViewModel\ViewModelBase.vb" />
   </ItemGroup>
   <ItemGroup>
