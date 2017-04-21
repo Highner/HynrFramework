@@ -1,10 +1,8 @@
-﻿Imports System.ComponentModel
-Imports System.Data.Entity
-Imports System.Windows.Forms
-Imports HynrFramework
+﻿Imports System.Windows.Forms
+Imports System.ComponentModel
 
-Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
-    Inherits DataGridView
+Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
+    Inherits FlowLayoutPanel
     Implements IBindableListControl(Of dataitem, viewmodelitem)
     Implements INotifyPropertyChanged
     Implements IHasHynrSettings
@@ -20,7 +18,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             OnPropertyChanged("SelectedItems")
         End Set
     End Property
-    Private Property _BindingSource As New BindingSource
+    Private WithEvents _BindingSource As New BindingSource
     Public Property BindingSourceDataSource As ObservableListSource(Of viewmodelitem)
         Get
             Return _BindingSource.DataSource
@@ -77,18 +75,12 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 
 #Region "Methods"
     Public Sub New()
-        DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
         Controls.Add(BusyIndicator)
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
-        DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
-        DefaultCellStyle.SelectionForeColor = HynrSettings.SelectedForecolor
-        GridColor = HynrSettings.GridColor
-        BackgroundColor = HynrSettings.GridBackcolor
-        RowHeadersVisible = HynrSettings.RowHeadersVisible
         BorderStyle = HynrSettings.GridBorderStyle
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
@@ -105,13 +97,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End If
         RaiseEvent ItemDoubleClick(SelectedItem)
     End Sub
-    Private Sub SelectedItemsChanged() Handles Me.SelectionChanged
-        Dim list As New List(Of viewmodelitem)
-        For Each row As DataGridViewRow In Me.SelectedRows
-            list.Add(row.DataBoundItem)
-        Next
-        SelectedItems = list
-    End Sub
+    'Private Sub SelectedItemsChanged() Handles Me.SelectionChanged
+    '    Dim list As New List(Of viewmodelitem)
+    '    For Each row As DataGridViewRow In Me.SelectedRows
+    '        list.Add(row.DataBoundItem)
+    '    Next
+    '    SelectedItems = list
+    'End Sub
     Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
         Enabled = Not busy
         If busy Then
@@ -143,15 +135,11 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
     End Sub
-    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
-        Dim col As DataGridViewComboBoxColumn = Columns(columnname)
-        col.DataPropertyName = datapropertyname
-        col.ValueMember = valuemember
-        col.DisplayMember = displaymember
-        col.DataSource = New BindingSource(datasource, String.Empty)
-    End Sub
-    Private Sub OnBindingComplete() Handles Me.DataBindingComplete
-        If ColumnCount = 0 Then AutoGenerateColumns = True
+    Private Sub DataSourceChanged() Handles _BindingSource.ListChanged
+        Me.Controls.Clear()
+        For Each item In BindingSourceDataSource
+            Me.Controls.Add(New HynrCard(Of dataitem)(item))
+        Next
     End Sub
 #End Region
 
@@ -160,4 +148,5 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Public Event ItemDoubleClick(ByRef item As viewmodelitem)
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
 #End Region
+
 End Class
