@@ -1,7 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.ComponentModel
 
-Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
+Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem), card As HynrCard(Of dataitem))
     Inherits FlowLayoutPanel
     Implements IBindableListControl(Of dataitem, viewmodelitem)
     Implements INotifyPropertyChanged
@@ -67,6 +67,7 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
             OnPropertyChanged("IsBusy")
         End Set
     End Property
+
     Property FireItemDoubleClick As Boolean = False
     Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
     Private BusyIndicator As New MatrixCircularProgressControl
@@ -82,6 +83,7 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         BorderStyle = HynrSettings.GridBorderStyle
+        BackColor = HynrSettings.GridBackcolor
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
         If Me.PropertyChangedEvent IsNot Nothing Then
@@ -97,13 +99,6 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         End If
         RaiseEvent ItemDoubleClick(SelectedItem)
     End Sub
-    'Private Sub SelectedItemsChanged() Handles Me.SelectionChanged
-    '    Dim list As New List(Of viewmodelitem)
-    '    For Each row As DataGridViewRow In Me.SelectedRows
-    '        list.Add(row.DataBoundItem)
-    '    Next
-    '    SelectedItems = list
-    'End Sub
     Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
         Enabled = Not busy
         If busy Then
@@ -136,9 +131,19 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
     End Sub
     Private Sub DataSourceChanged() Handles _BindingSource.ListChanged
-        Me.Controls.Clear()
+        Controls.Clear()
         For Each item In BindingSourceDataSource
-            Me.Controls.Add(New HynrCard(Of dataitem)(item))
+            Dim newitem As card = DirectCast(Activator.CreateInstance(GetType(card), item), card)
+            Controls.Add(newitem)
+        Next
+        AdjustCardWidth()
+    End Sub
+    Private Sub AdjustCardWidth() Handles Me.SizeChanged
+        For Each cont In Me.Controls
+            If TypeOf (cont) Is card Then
+                Dim card As card = cont
+                card.Width = ClientSize.Width - card.Margin.Left - card.Margin.Right
+            End If
         Next
     End Sub
 #End Region

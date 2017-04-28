@@ -21,7 +21,6 @@ Public Class HynrCardBase
         End Get
         Set(ByVal value As Boolean)
             CollapseButton.Visible = value
-            ToggleCollapseButtonIcon()
         End Set
     End Property
 
@@ -42,24 +41,23 @@ Public Class HynrCardBase
         InitializeComponent()
 
     End Sub
-    Overridable Sub SetBindings()
-
-    End Sub
     Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
-
+        LabelStrip.HynrSettings = HynrSettings
     End Sub
-    Private Sub ToggleCollapseButtonIcon()
 
-    End Sub
     Private Sub ToggleCollapsed()
         If Collapsed Then
             Height = _OldHeight
             Collapsed = False
+            CollapseButton.Text = "Collapse"
+            CollapseButton.Image = My.Resources.chevron
         Else
             Dim remHeight As Integer = Height
-            Height = ToolStrip.Height
+            Height = LabelStrip.Height
             _OldHeight = remHeight
             Collapsed = True
+            CollapseButton.Text = "Expand"
+            CollapseButton.Image = My.Resources.chevron_expand
         End If
         RaiseEvent CollapsedChanged(Me)
     End Sub
@@ -69,7 +67,9 @@ Public Class HynrCardBase
     Private Sub HeightChanged() Handles Me.SizeChanged
         _OldHeight = Height
     End Sub
-
+    Public Sub SetWidth(ByVal width As Integer)
+        Me.Width = width
+    End Sub
 #End Region
 
 #Region "Events"
