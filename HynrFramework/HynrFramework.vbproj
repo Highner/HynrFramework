@@ -120,6 +120,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Shared\BindableObjectBase.vb" />
     <Compile Include="UIElements\HynrCard.vb">
       <SubType>UserControl</SubType>
     </Compile>

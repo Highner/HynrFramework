@@ -5,6 +5,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
 
 #Region "Properties"
     Protected Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
+    Protected Property PushTimer As Timers.Timer
 #End Region
 
 #Region "Constructor"

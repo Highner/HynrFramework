@@ -28,20 +28,20 @@ Public Class Form1
         Chart.Series = New SeriesCollection()
 
         Dim ser = New OhlcSeries()
-        ser.Values = New ChartValues(Of ChartPoint)
+        ser.Values = New ChartValues(Of OhlcPoint)
 
-        Dim po As New ChartPoint
+        Dim po As New OhlcPoint
 
         ''
         '    Dim map As New
 
-        ser.Values.Add(po)
-        'ser.Values.Add(New OhlcPoint(33, 38, 31, 37))
-        'ser.Values.Add(New OhlcPoint(35, 42, 30, 40))
-        'ser.Values.Add(New OhlcPoint(37, 40, 35, 38))
-        'ser.Values.Add(New OhlcPoint(35, 38, 32, 33))
+        'ser.Values.Add(po)
+        ser.Values.Add(New OhlcPoint(33, 38, 31, 37))
+        ser.Values.Add(New OhlcPoint(35, 42, 30, 40))
+        ser.Values.Add(New OhlcPoint(37, 40, 35, 38))
+        ser.Values.Add(New OhlcPoint(35, 38, 32, 33))
 
-        ' Chart.Series.Add(ser)
+        Chart.Series.Add(ser)
 
         'based on https://github.com/beto-rodriguez/Live-Charts/issues/166 
         'The Ohcl point X property is zero based indexed.

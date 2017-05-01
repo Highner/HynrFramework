@@ -203,7 +203,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         'End If
         If ItemList.Any Then SelectedItem = ItemList(0)
     End Sub
-    Public Function DataToItem(ByRef dataitem As dataitem) As viewmodelitem
+    ''' <summary>
+    ''' Override this in order to add additional event handlers to the item
+    ''' </summary>
+    ''' <param name="dataitem"></param>
+    ''' <returns></returns>
+    Public Overridable Function DataToItem(ByRef dataitem As dataitem) As viewmodelitem
         Dim newvmitem As viewmodelitem = GetInstance(GetType(viewmodelitem))
         newvmitem.Data = dataitem
         newvmitem.CancellationSource = CancellationSource
