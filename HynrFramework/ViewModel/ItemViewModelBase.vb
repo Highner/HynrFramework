@@ -15,6 +15,8 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
     Public Property UpdateCommand As ICommand = New Command(AddressOf RaiseUpdatedEvent) Implements IItemViewModel(Of dataclass).UpdateCommand
     <Browsable(False)>
     Public Property DoubleClickCommand As ICommand = New Command(AddressOf RaiseDoubleClickedEvent) Implements IItemViewModel(Of dataclass).DoubleClickCommand
+    <Browsable(False)>
+    Public Property ClickCommand As ICommand = New Command(AddressOf RaiseClickedEvent) Implements IItemViewModel(Of dataclass).ClickCommand
 #End Region
 
 #Region "Properties"
@@ -79,6 +81,9 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
     Private Sub RaiseDoubleClickedEvent()
         RaiseEvent DoubleClicked(Me, Nothing)
     End Sub
+    Private Sub RaiseClickedEvent()
+        RaiseEvent Clicked(Me, Nothing)
+    End Sub
     Private Sub ValueChanged() Handles Me.PropertyChanged
         If Not IsBusy Then
             Dim can As Boolean = CanSave
@@ -95,6 +100,7 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
     Public Event Deleted As IItemViewModel(Of dataclass).DeletedEventHandler Implements IItemViewModel(Of dataclass).Deleted
     Public Event Updated As IItemViewModel(Of dataclass).UpdatedEventHandler Implements IItemViewModel(Of dataclass).Updated
     Public Event DoubleClicked As IItemViewModel(Of dataclass).DoubleClickedEventHandler Implements IItemViewModel(Of dataclass).DoubleClicked
+    Public Event Clicked As IItemViewModel(Of dataclass).ClickedEventHandler Implements IItemViewModel(Of dataclass).Clicked
     Public Event CanSaveChanged As IItemViewModel(Of dataclass).CanSaveChangedEventHandler Implements IItemViewModel(Of dataclass).CanSaveChanged
 #End Region
 End Class

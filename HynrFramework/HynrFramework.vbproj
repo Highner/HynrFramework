@@ -157,6 +157,9 @@
     <Compile Include="UIElements\HynrToolStripButton.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrToolStripDropDownButton.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrTreeView.vb">
       <SubType>Component</SubType>
     </Compile>
