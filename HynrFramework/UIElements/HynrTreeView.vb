@@ -87,7 +87,7 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
         BorderStyle = HynrSettings.GridBorderStyle
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
-        If Me.PropertyChangedEvent IsNot Nothing Then
+        If PropertyChangedEvent IsNot Nothing Then
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(strPropertyName))
         End If
     End Sub
@@ -103,11 +103,7 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
         End If
     End Sub
     Private Sub TreeviewClick(sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown
-        Dim NodeClicked As TreeNode
-        ' Get the node clicked on
-        NodeClicked = GetNodeAt(e.X, e.Y)
-        SelectedNode = NodeClicked
-
+        SelectedNode = GetNodeAt(e.X, e.Y)
         Dim list As New List(Of viewmodelitem)
         If Not IsNothing(SelectedNode) Then
             If Not IsNothing(SelectedNode.Tag) Then
@@ -138,8 +134,6 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
         If Not IsNothing(BindingSourceDataSource) Then
             Nodes.Clear()
             Dim ListOfObjectsSorted = (From g In BindingSourceDataSource Order By g.GetType().GetProperty(_GroupHeader).GetValue(g) Select g.GetType().GetProperty(_GroupHeader).GetValue(g)).Distinct
-
-
             For Each rootnodeName As String In ListOfObjectsSorted
                 Dim list As List(Of viewmodelitem) = (From g In BindingSourceDataSource Where g.GetType().GetProperty(_GroupHeader).GetValue(g) = rootnodeName Select g).ToList
                 Dim rootnode As New TreeNode(rootnodeName & " (" & list.Count & ")")
@@ -161,9 +155,11 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
 #End Region
 
 #Region "Binding"
-    Public Sub BindToList(ByRef list As IEnumerable(Of viewmodelitem), ByVal groupheader As String)
+    Public TargetList As IEnumerable(Of viewmodelitem)
+    Public Sub BindToList(ByRef targetlist As IEnumerable(Of viewmodelitem), ByVal groupheader As String)
+        'Me.TargetList = targetlist
         BindingSourceDataSource = New ObservableListSource(Of viewmodelitem)
-        'DataBindings.Add("BindingSourceDataSource", list, "", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+        'DataBindings.Add("BindingSourceDataSource", Me, "TargetList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         _GroupHeader = groupheader
     End Sub
 
@@ -183,7 +179,7 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
 #End Region
 
 #Region "DragDrop/Interaction"
-    Private Sub Treeviewtarget_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
+    Private Sub Treeviewtarget_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs) Handles Me.KeyDown
         If EnableDelete = True Then
             If e.KeyCode = Keys.Delete Then
                 Dim obj As List(Of viewmodelitem) = SelectedNode.Tag

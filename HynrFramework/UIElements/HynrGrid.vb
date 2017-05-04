@@ -131,7 +131,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #End Region
 
 #Region "Binding"
-    Public Sub BindToListViewModel(ByRef listviewmodel As IViewModelBase) ' IListViewModel(Of viewmodelitem))
+    Public Sub BindToListViewModel(ByRef listviewmodel As IViewModelBase)
         LazyBindingViewModel = listviewmodel
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         AddHandler listviewmodel.LoadingCompleted, AddressOf CompleteBinding
@@ -145,13 +145,23 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     End Sub
     Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
         Dim col As DataGridViewComboBoxColumn = Columns(columnname)
+        col.DataSource = New BindingSource(datasource, String.Empty)
         col.DataPropertyName = datapropertyname
         col.ValueMember = valuemember
         col.DisplayMember = displaymember
-        col.DataSource = New BindingSource(datasource, String.Empty)
     End Sub
     Private Sub OnBindingComplete() Handles Me.DataBindingComplete
         If ColumnCount = 0 Then AutoGenerateColumns = True
+    End Sub
+    Private Sub view_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles Me.DataError
+        If e.Exception.Message = "DataGridViewComboBoxCell value is not valid." Then
+            Dim value As Object = Rows(e.RowIndex).Cells(e.ColumnIndex).Value
+            If Not DirectCast(Columns(e.ColumnIndex), DataGridViewComboBoxColumn).Items.Contains(value) Then
+                DirectCast(Columns(e.ColumnIndex), DataGridViewComboBoxColumn).Items.Add(value)
+                e.ThrowException = False
+            End If
+        End If
+
     End Sub
 #End Region
 

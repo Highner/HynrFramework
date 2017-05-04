@@ -13,6 +13,7 @@ Public Class HynrCardBase
         End Get
         Set(value As Boolean)
             _Collapsed = value
+
         End Set
     End Property
     Public Property CollapseButtonVisible() As Boolean
@@ -65,7 +66,7 @@ Public Class HynrCardBase
         ToggleCollapsed()
     End Sub
     Private Sub HeightChanged() Handles Me.SizeChanged
-        _OldHeight = Height
+        If Not Collapsed Then _OldHeight = Height
     End Sub
     Public Sub SetWidth(ByVal width As Integer)
         Me.Width = width
