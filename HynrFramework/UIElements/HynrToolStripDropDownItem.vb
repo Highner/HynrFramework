@@ -3,7 +3,7 @@ Imports System.Windows.Forms
 Imports HynrFramework
 
 Public Class HynrToolStripDropDownItem
-    Inherits ToolStripItem
+    Inherits ToolStripMenuItem
     Implements IBindableComponent
 
 #Region "Properties"
@@ -47,6 +47,7 @@ Public Class HynrToolStripDropDownItem
         Me.Command = command
         Me.ViewModel = viewmodel
         Me.ToolTipText = text
+        Me.Text = text
         DataBindings.Add("IsBusy", Me.ViewModel, "IsBusy", True, DataSourceUpdateMode.Never)
         If imagepropertyname <> "" Then DataBindings.Add("Image", Me.ViewModel, imagepropertyname, True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
