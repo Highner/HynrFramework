@@ -131,7 +131,8 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 
 #Region "Crud"
     ''' <summary>
-    ''' override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass)
+    ''' override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass).
+    ''' include call to ItemListChanged event if necessary
     ''' </summary>
     Public Overridable Sub CreateNewItem()
     End Sub
@@ -152,11 +153,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             End If
         End If
     End Sub
-    Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
+    Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs, Optional ByVal raiselistchangedevent As Boolean = True)
         If Not IsBusy Then
             Dim vmitem As viewmodelitem = sender
             If _DataController.DeleteItem(vmitem.Data) = True Then
                 ItemList.Remove(vmitem)
+                If raiselistchangedevent Then RaiseEvent ItemListChanged()
             End If
         End If
     End Sub
@@ -170,8 +172,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Protected Overridable Sub DeleteSelectedItems()
         If Not IsBusy Then
             For Each item In SelectedItems
-                DeleteItem(item, Nothing)
+                DeleteItem(item, Nothing, False)
             Next
+            RaiseEvent ItemListChanged()
         End If
     End Sub
     Public Async Sub GetData()
@@ -227,5 +230,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 
 #Region "Events"
     Public Event SelectedItemChanged() Implements IListViewModel(Of viewmodelitem).SelectedItemChanged
+    Public Event ItemListChanged() Implements IListViewModel(Of viewmodelitem).ItemListChanged
 #End Region
 End Class

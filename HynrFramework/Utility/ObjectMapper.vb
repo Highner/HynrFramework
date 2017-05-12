@@ -1,6 +1,6 @@
 ﻿Imports System.Reflection
 
-Module ObjectMapper
+Public Module ObjectMapper
     Public Sub MapProperties(ByVal source As Object, ByRef destination As Object)
         If Not IsNothing(source) AndAlso Not IsNothing(destination) Then
             Dim destProperties = destination.[GetType]().GetProperties()

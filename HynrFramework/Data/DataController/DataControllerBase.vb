@@ -91,7 +91,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     ''' override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties.
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
     ''' </summary>
-    Public Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToEntity
+    Public Overridable Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToEntity
         MapProperties(dataitem, entityitem)
         Return dataitem
     End Function

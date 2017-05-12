@@ -130,7 +130,7 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
     End Sub
-    Private Sub DataSourceChanged() Handles _BindingSource.ListChanged
+    Private Sub DataSourceChanged() Handles _BindingSource.DataSourceChanged
         Controls.Clear()
         For Each item In BindingSourceDataSource
             Dim newitem As card = DirectCast(Activator.CreateInstance(GetType(card), item), card)

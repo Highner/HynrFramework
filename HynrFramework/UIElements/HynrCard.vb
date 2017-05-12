@@ -22,6 +22,7 @@
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.Name = "HynrCard"
+        Me.Size = New System.Drawing.Size(544, 132)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

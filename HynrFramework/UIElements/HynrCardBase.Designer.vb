@@ -62,6 +62,6 @@ Partial Class HynrCardBase
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents CollapseButton As HynrToolStripButton
     Public WithEvents LabelStrip As HynrLabelStrip
+    Public WithEvents CollapseButton As HynrToolStripButton
 End Class

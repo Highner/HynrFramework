@@ -13,7 +13,6 @@ Public Class HynrCardBase
         End Get
         Set(value As Boolean)
             _Collapsed = value
-
         End Set
     End Property
     Public Property CollapseButtonVisible() As Boolean
