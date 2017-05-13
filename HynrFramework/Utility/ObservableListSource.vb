@@ -6,9 +6,18 @@ Imports System.Data.Entity
 Public Class ObservableListSource(Of T As Class)
         Inherits ObservableCollection(Of T)
         Implements IListSource
-        Private _bindingList As IBindingList
+    Private _bindingList As IBindingList
 
-        Private ReadOnly Property IListSource_ContainsListCollection() As Boolean Implements IListSource.ContainsListCollection
+    Public Sub New()
+    End Sub
+
+    Public Sub New(ByVal list As IEnumerable(Of T))
+        For Each listitem In list
+            Add(listitem)
+        Next
+    End Sub
+
+    Private ReadOnly Property IListSource_ContainsListCollection() As Boolean Implements IListSource.ContainsListCollection
             Get
                 Return False
             End Get
