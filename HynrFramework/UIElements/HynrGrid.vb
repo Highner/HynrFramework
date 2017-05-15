@@ -128,6 +128,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         Dim y As Integer = Me.Height / 2 - BusyIndicator.Height / 2
         BusyIndicator.Location = New Drawing.Point(x, y)
     End Sub
+    Private Sub Grid_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles Me.CurrentCellDirtyStateChanged
+        If TypeOf (CurrentCell) Is DataGridViewCheckBoxCell Then
+            If IsCurrentCellDirty Then
+                CommitEdit(DataGridViewDataErrorContexts.Commit)
+            End If
+        End If
+    End Sub
 #End Region
 
 #Region "Binding"

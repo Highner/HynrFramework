@@ -28,10 +28,17 @@ Public MustInherit Class ViewModelBase
             If Not (_IsBusy = value) Then
                 _IsBusy = value
                 OnPropertyChanged("IsBusy")
+                OnPropertyChanged("IsNotBusy")
             End If
         End Set
     End Property
 
+    <Browsable(False)>
+    Public ReadOnly Property IsNotBusy As Boolean
+        Get
+            Return Not _IsBusy
+        End Get
+    End Property
     Protected Sub RaiseLoadingCompleted()
         RaiseEvent LoadingCompleted()
     End Sub

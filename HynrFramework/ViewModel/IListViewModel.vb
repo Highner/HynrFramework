@@ -6,4 +6,8 @@
 
     Event SelectedItemChanged()
     Event ItemListChanged()
+    Event CreateCommandExecuted()
+    Event UpdateAllCommandExecuted()
+    Event DeleteSelectedItemCommandExecuted()
+    Event DeleteSelectedItemsCommandExecuted()
 End Interface
