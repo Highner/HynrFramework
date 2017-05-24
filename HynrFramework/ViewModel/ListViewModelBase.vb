@@ -28,7 +28,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     <Browsable(False)>
     Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
     <Browsable(False)>
-    Public Property RefreshAllCommand As ICommand = New Command(AddressOf GetData)
+    Public Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync)
 #End Region
 
 #Region "Properties"
@@ -84,22 +84,30 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             OnPropertyChanged("CanSave")
         End Set
     End Property
+    'Private FilterTimer As New System.Windows.Forms.Timer
 #End Region
 
 #Region "Constructor"
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
+        'SetupTimer()
     End Sub
     Public Sub New(ByRef windowfactory As IWindowFactory)
         _WindowFactory = windowfactory
+        'SetupTimer()
     End Sub
     Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
+        'SetupTimer()
     End Sub
 #End Region
 
 #Region "Methods"
+    Private Sub SetupTimer()
+        'AddHandler FilterTimer.Tick, AddressOf Filter
+        'FilterTimer.Interval = 350
+    End Sub
     Protected Overridable Sub OpenNewForm()
         If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
     End Sub
@@ -113,10 +121,13 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     ''' add bound properties with ListViewModelFilterAttribute to inherited listviewmodelclass for every filter parameter
     ''' </summary>
     Protected Async Sub ApplyFilter()
+        'FilterTimer.Stop()
+        If Not IsNothing(CancellationSource) Then CancellationSource.Cancel()
+        CancellationSource = New Threading.CancellationTokenSource
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
             Dim newlist As New ObservableListSource(Of viewmodelitem)
-            Dim filteredlist = Await Task.Run(Function() _OriginalItemList.ToList.Where(filterparameters).ToList)
+            Dim filteredlist = Await Task.Run(Function() _OriginalItemList.ToList.Where(filterparameters).ToList, CancellationSource.Token)
             For Each item In filteredlist
                 newlist.Add(item)
             Next
@@ -125,6 +136,10 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             ItemList = _OriginalItemList
         End If
     End Sub
+    'Protected Sub ApplyFilter()
+    'FilterTimer.Stop()
+    'FilterTimer.Start()
+    'End Sub
 #End Region
 
 #Region "Crud"
@@ -185,12 +200,15 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             Next
         End If
     End Sub
-    Public Async Sub GetData()
+    Protected Overrides Sub GetData()
+        GetDataAsync()
+    End Sub
+    Private Async Sub GetDataAsync()
         IsBusy = True
         Dim dataitemlist As IEnumerable(Of dataitem) = Nothing
         CancellationSource = New Threading.CancellationTokenSource
         Try
-            dataitemlist = Await Task.Run(Function() _DataController.GetAllItems(), CancellationSource.Token)
+            dataitemlist = Await Task.Run(Function() GetItems(), CancellationSource.Token)
         Catch ex As Exception
             _DataController.DataContext.AddError(ex, "ListViewModel GetData")
         End Try
@@ -200,6 +218,13 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         IsBusy = False
         RaiseLoadingCompleted()
     End Sub
+    ''' <summary>
+    ''' override this in order to use different "get functions" from the datacontroller
+    ''' </summary>
+    ''' <returns></returns>
+    Public Overridable Function GetItems() As IEnumerable(Of dataitem)
+        Return _DataController.GetAllItems()
+    End Function
     Private Sub DataToList(ByRef dataitemlist As IEnumerable(Of dataitem))
         Dim selectedindex As Integer = ItemList.IndexOf(SelectedItem)
         Dim list = New ObservableListSource(Of viewmodelitem)

@@ -7,19 +7,19 @@ Public Class CountryViewModel
     Public WithEvents PersonsVM As New PersonsListViewModel(0)
     Public WithEvents StarshipsVM As New StarshipListViewModel(0)
 
-    Public Sub GetData()
-        CountriesVM.GetData()
+    Protected Overrides Sub GetData()
+        CountriesVM.RefreshAllCommand.Execute(Nothing)
     End Sub
 
     Private Sub LoadPersons() Handles CountriesVM.SelectedItemChanged
         PersonsVM.ParentID = CountriesVM.SelectedItemID
-        PersonsVM.GetData()
+        PersonsVM.RefreshAllCommand.Execute(Nothing)
 
     End Sub
 
     Private Sub LoadStarships() Handles PersonsVM.SelectedItemChanged
         StarshipsVM.ParentID = PersonsVM.SelectedItemID
-        StarshipsVM.GetData()
+        StarshipsVM.RefreshAllCommand.Execute(Nothing)
         'Name = PersonsVM.SelectedItem.Name
         ' RaiseLoadingCompleted()
     End Sub

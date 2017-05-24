@@ -1,11 +1,15 @@
 ﻿Imports System.ComponentModel
 Imports System.Threading
+Imports System.Windows.Input
 Imports HynrFramework
 
 <Serializable>
 Public MustInherit Class ViewModelBase
     Implements INotifyPropertyChanged
     Implements IViewModelBase
+
+    <Browsable(False)>
+    Public Property RefreshAllCommand As ICommand = New Command(AddressOf GetData)
 
     Private _Cts As CancellationTokenSource
     <Browsable(False)>
@@ -32,13 +36,17 @@ Public MustInherit Class ViewModelBase
             End If
         End Set
     End Property
-
     <Browsable(False)>
     Public ReadOnly Property IsNotBusy As Boolean
         Get
             Return Not _IsBusy
         End Get
     End Property
+    ''' <summary>
+    ''' override to get base data. fires when RefreshAllCommand is called.
+    ''' </summary>
+    Protected Overridable Sub GetData()
+    End Sub
     Protected Sub RaiseLoadingCompleted()
         RaiseEvent LoadingCompleted()
     End Sub

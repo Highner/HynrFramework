@@ -1,16 +1,18 @@
 ﻿Imports System.Data.Entity
+Imports System.Data.Entity.Infrastructure
 
 Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
-    Protected Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
+    Public Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
+
     Protected Property PushTimer As Timers.Timer
 #End Region
 
 #Region "Constructor"
     Public Sub New()
-        DataContext = GetInstance(GetType(datacontextclass))
+        InitializeConnection()
     End Sub
     Public Sub New(ByRef context As datacontextclass)
         DataContext = context

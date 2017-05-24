@@ -148,6 +148,12 @@
     <Compile Include="UIElements\HynrItemViewForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UIElements\HynrSplitContainer.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrTextBox.vb">
       <SubType>Component</SubType>
     </Compile>

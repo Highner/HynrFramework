@@ -4,7 +4,7 @@ Imports System.Windows.Input
 Imports HynrFramework
 
 <Serializable>
-Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextclass As DbContext
+Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID)
     Inherits ViewModelBase
     Implements IItemViewModel(Of dataclass)
 
@@ -38,7 +38,7 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
     End Property
     Private Property _OriginalData As dataclass
     <Browsable(False)>
-    Public Property ID As Object Implements IHasID.ID
+    Public Property ID As Object Implements IItemViewModel(Of dataclass).ID
         Get
             Return Data.ID
         End Get
@@ -46,32 +46,19 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID) ', dbcontextc
             Data.ID = value
         End Set
     End Property
-    'Private Property DataContext As dbcontextclass
     <Browsable(False)>
     Public Property CanSave As Boolean = False Implements IItemViewModel(Of dataclass).CanSave
 #End Region
 
 #Region "Constructor"
     ''' <summary>
-    ''' no parameter allowed! set GetDataOnLoad in inheriting class
+    ''' no parameter allowed!
     ''' </summary>
     Public Sub New()
     End Sub
 #End Region
 
 #Region "Methods"
-    ''' <summary>
-    ''' in case child lists need to be updated. insert every child listviewmodels getdata() here.
-    ''' </summary>
-    Protected Overridable Sub _GetData()
-    End Sub
-    Public Async Sub GetData()
-        If Not IsBusy Then
-            IsBusy = True
-        End If
-        Await Task.Run(Sub() _GetData())
-        IsBusy = False
-    End Sub
     Private Sub RaiseDeletedEvent()
         RaiseEvent Deleted(Me, Nothing)
     End Sub
