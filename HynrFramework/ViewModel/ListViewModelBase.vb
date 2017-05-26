@@ -29,6 +29,8 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
     <Browsable(False)>
     Public Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync)
+    <Browsable(False)>
+    Public Property ClearListCommand As ICommand = New Command(AddressOf ClearList)
 #End Region
 
 #Region "Properties"
@@ -59,9 +61,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             End If
         End Get
         Set(ByVal value As viewmodelitem)
-            _SelectedItem = value
-            RaiseEvent SelectedItemChanged()
-            OnPropertyChanged("SelectedItem")
+            If Not value.Equals(_SelectedItem) Then
+                _SelectedItem = value
+                RaiseEvent SelectedItemChanged()
+                ' OnPropertyChanged("SelectedItem")
+                OnPropertyChanged("SelectedItemID")
+            End If
         End Set
     End Property
     Public ReadOnly Property SelectedItemID As Integer Implements IListViewModel(Of viewmodelitem).SelectedItemID
@@ -199,6 +204,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
                 DeleteItem(item, Nothing, False)
             Next
         End If
+    End Sub
+    Private Sub ClearList()
+        ItemList.Clear()
+        SelectedItem = Nothing
+        SelectedItems = Nothing
+        OnPropertyChanged("SelectedItems")
     End Sub
     Protected Overrides Sub GetData()
         GetDataAsync()
