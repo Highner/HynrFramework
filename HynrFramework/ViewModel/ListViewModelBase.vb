@@ -151,11 +151,11 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     ''' <summary>
     ''' override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass).
     ''' </summary>
-    Public Overridable Sub CreateNewItem()
-    End Sub
+    Public Overridable Function CreateNewItem() As viewmodelitem
+    End Function
     Private Sub ExecuteCreateNewItem()
-        CreateNewItem()
-        RaiseEvent CreateCommandExecuted()
+        Dim item = CreateNewItem()
+        RaiseEvent CreateCommandExecuted(item)
     End Sub
     Private Sub UpdateAll()
         If Not IsBusy Then
@@ -177,17 +177,18 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Sub
     Private Sub ExecuteDeleteSelectedItem()
         DeleteSelectedItem()
-        RaiseEvent DeleteSelectedItemCommandExecuted()
+        'RaiseEvent DeleteSelectedItemCommandExecuted()
     End Sub
     Private Sub ExecuteDeleteSelectedItems()
         DeleteSelectedItems()
         RaiseEvent DeleteSelectedItemsCommandExecuted()
     End Sub
-    Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs, Optional ByVal raiselistchangedevent As Boolean = True)
+    Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
         If Not IsBusy Then
             Dim vmitem As viewmodelitem = sender
             If _DataController.DeleteItem(vmitem.Data) = True Then
                 ItemList.Remove(vmitem)
+                RaiseEvent DeleteSelectedItemCommandExecuted(vmitem)
             End If
         End If
     End Sub
@@ -201,7 +202,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Protected Overridable Sub DeleteSelectedItems()
         If Not IsBusy Then
             For Each item In SelectedItems
-                DeleteItem(item, Nothing, False)
+                DeleteItem(item, Nothing)
             Next
         End If
     End Sub
@@ -275,9 +276,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 #Region "Events"
     Public Event SelectedItemChanged() Implements IListViewModel(Of viewmodelitem).SelectedItemChanged
     Public Event ItemListChanged() Implements IListViewModel(Of viewmodelitem).ItemListChanged
-    Public Event CreateCommandExecuted() Implements IListViewModel(Of viewmodelitem).CreateCommandExecuted
+    Public Event CreateCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).CreateCommandExecuted
     Public Event UpdateAllCommandExecuted() Implements IListViewModel(Of viewmodelitem).UpdateAllCommandExecuted
-    Public Event DeleteSelectedItemCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
+    Public Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
     Public Event DeleteSelectedItemsCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemsCommandExecuted
 #End Region
 End Class

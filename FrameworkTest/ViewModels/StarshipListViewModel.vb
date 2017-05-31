@@ -8,14 +8,14 @@ Public Class StarshipListViewModel
         Me.ParentID = parentid
     End Sub
 
-    Public Overrides Sub CreateNewItem()
+    Public Overrides Function CreateNewItem() As StarshipItemViewModel
         Dim person = New StarshipData
         person.PersonID = ParentID
         person.Name = "New Vessel"
         person.Type = "New Vesseltype"
         _DataController.CreateNewItem(person)
         GetData()
-    End Sub
+    End Function
 
 
     Private _ParentID As Integer

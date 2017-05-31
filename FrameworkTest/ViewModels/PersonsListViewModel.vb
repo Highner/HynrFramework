@@ -9,10 +9,10 @@ Public Class PersonsListViewModel
         Me.ParentID = parentid
     End Sub
 
-    Public Overrides Sub CreateNewItem()
+    Public Overrides Function CreateNewItem() As PersonItemViewModel
         _DataController.CreateNewItem(CreateNewPersonDataItem(ParentID))
         GetData()
-    End Sub
+    End Function
 
     Private _ParentID As Integer
     Public Property ParentID As Integer

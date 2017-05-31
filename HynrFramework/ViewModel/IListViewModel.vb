@@ -6,8 +6,8 @@
 
     Event SelectedItemChanged()
     Event ItemListChanged()
-    Event CreateCommandExecuted()
+    Event CreateCommandExecuted(ByVal item As viewmodelitem)
     Event UpdateAllCommandExecuted()
-    Event DeleteSelectedItemCommandExecuted()
+    Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem)
     Event DeleteSelectedItemsCommandExecuted()
 End Interface
