@@ -42,7 +42,6 @@ Public Class HynrPanel
     End Sub
 
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
-
         BorderStyle = HynrSettings.GridBorderStyle
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)

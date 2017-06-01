@@ -3,8 +3,9 @@
 Public Class WindowFactory
     Implements HynrFramework.IWindowFactory
 
-    Public Sub OpenNewForm(ByRef datacontext As Object) Implements IWindowFactory.OpenNewForm
+    Public Function OpenNewForm(ByRef datacontext As Object) As IHasID Implements IWindowFactory.OpenNewForm
         Dim form As New PersonView(New HynrUISettings, datacontext)
         form.Show()
-    End Sub
+    End Function
+
 End Class

@@ -20,9 +20,9 @@ Public Class HynrTextBox
         Set(ByVal value As Boolean)
             _IsBusy = value
             If Not value Then
-                Me.Enabled = True
+                Enabled = True
             Else
-                Me.Enabled = False
+                Enabled = False
             End If
         End Set
     End Property
@@ -37,11 +37,11 @@ Public Class HynrTextBox
             _Label.Visible = value
             If value Then
                 If Not IsNothing(Me.Parent) Then
-                    If Not Me.Parent.Controls.Contains(_Label) Then Parent.Controls.Add(_Label)
+                    If Not Parent.Controls.Contains(_Label) Then Parent.Controls.Add(_Label)
                 End If
             Else
                 If Not IsNothing(Me.Parent) Then
-                    If Me.Parent.Controls.Contains(_Label) Then Parent.Controls.Add(_Label)
+                    If Parent.Controls.Contains(_Label) Then Parent.Controls.Add(_Label)
                 End If
             End If
         End Set
@@ -85,7 +85,6 @@ Public Class HynrTextBox
     Private Sub PlaceLabel() Handles Me.LocationChanged, _Label.SizeChanged
         _Label.TextAlign = Drawing.ContentAlignment.MiddleLeft
         _Label.Location = New Drawing.Point(Me.Location.X - _Label.Size.Width + 15, Me.Location.Y)
-
     End Sub
     Private Sub AddLabel() Handles Me.ParentChanged
         _Label.Parent = Me.Parent

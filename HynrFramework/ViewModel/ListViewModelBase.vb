@@ -22,7 +22,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     <Browsable(False)>
     Public Property DeleteSelectedItemsCommand As ICommand = New Command(AddressOf ExecuteDeleteSelectedItems)
     <Browsable(False)>
-    Public Property OpenNewFormCommand As ICommand = New Command(AddressOf OpenNewForm)
+    Public Property OpenNewFormCommand As ICommand = New Command(AddressOf ExecuteOpenNewForm)
     <Browsable(False)>
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
     <Browsable(False)>
@@ -35,7 +35,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 
 #Region "Properties"
     Protected Property _DataController As datacontrollerclass
-    Protected ReadOnly Property _WindowFactory As IWindowFactory
+    Protected Property _WindowFactory As IWindowFactory
     Private _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
@@ -113,8 +113,23 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         'AddHandler FilterTimer.Tick, AddressOf Filter
         'FilterTimer.Interval = 350
     End Sub
-    Protected Overridable Sub OpenNewForm()
-        If (Not IsNothing(_WindowFactory) And Not IsNothing(SelectedItem)) Then _WindowFactory.OpenNewForm(SelectedItem)
+    Protected Overridable Function OpenNewForm(Optional ByRef dataitem As dataitem = Nothing) As dataitem
+        If Not IsNothing(_WindowFactory) Then
+            Dim newdataitem As dataitem
+            If Not IsNothing(dataitem) Then
+                newdataitem = dataitem
+            ElseIf Not IsNothing(SelectedItem) Then
+                newdataitem = SelectedItem.Data
+            End If
+            If Not IsNothing(newdataitem) Then Return _WindowFactory.OpenNewForm(newdataitem)
+        End If
+        Return Nothing
+    End Function
+    Private Sub ExecuteOpenNewForm()
+        Dim dataitem As dataitem = OpenNewForm()
+        If Not IsNothing(dataitem) Then
+            UpdateItem(DataToItem(dataitem), Nothing)
+        End If
     End Sub
     Private Sub ToggleCanSave()
         CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
@@ -171,7 +186,10 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             Dim vmitem As viewmodelitem = sender
             If vmitem.CanSave Then
                 Dim data = _DataController.UpdateItem(vmitem.Data)
-                If Not IsNothing(data) Then vmitem.Data = data
+                If Not IsNothing(data) Then
+                    vmitem.Data = data
+                    RaiseEvent UpdateItemCommandExecuted(vmitem)
+                End If
             End If
         End If
     End Sub
@@ -262,7 +280,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         newvmitem.CancellationSource = CancellationSource
         AddHandler newvmitem.Deleted, AddressOf DeleteItem
         AddHandler newvmitem.Updated, AddressOf UpdateItem
-        AddHandler newvmitem.DoubleClicked, AddressOf OpenNewForm
+        AddHandler newvmitem.DoubleClicked, AddressOf ExecuteOpenNewForm
         AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
         Return newvmitem
     End Function
@@ -278,6 +296,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Event ItemListChanged() Implements IListViewModel(Of viewmodelitem).ItemListChanged
     Public Event CreateCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).CreateCommandExecuted
     Public Event UpdateAllCommandExecuted() Implements IListViewModel(Of viewmodelitem).UpdateAllCommandExecuted
+    Public Event UpdateItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).UpdateItemCommandExecuted
     Public Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
     Public Event DeleteSelectedItemsCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemsCommandExecuted
 #End Region
