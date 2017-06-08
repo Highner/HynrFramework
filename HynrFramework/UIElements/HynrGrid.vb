@@ -136,10 +136,11 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End If
     End Sub
     Private Sub EnterComboboxNullvalue(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        Dim items = {"UltraDateTimeEditorColumn", "DataGridViewComboBoxColumn", "UltraDataGridViewCell"}
-        If e.KeyCode = Keys.Delete And CurrentCell.ReadOnly = False And items.Contains(CurrentCell.OwningColumn.CellType.Name) Then
-            CurrentCell.Value = Nothing
-
+        If Not IsNothing(CurrentCell) Then
+            Dim items = {"UltraDateTimeEditorColumn", "DataGridViewComboBoxColumn", "UltraDataGridViewCell"}
+            If e.KeyCode = Keys.Delete And CurrentCell.ReadOnly = False And items.Contains(CurrentCell.OwningColumn.CellType.Name) Then
+                CurrentCell.Value = Nothing
+            End If
         End If
     End Sub
 #End Region

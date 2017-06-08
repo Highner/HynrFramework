@@ -7,6 +7,11 @@ Public Class HynrLabelStrip
 
 #Region "PROPERTIES"
     Private Property _Label As New ToolStripLabel
+    Public ReadOnly Property Label As ToolStripLabel
+        Get
+            Return _Label
+        End Get
+    End Property
     Public Property LabelText As String
         Get
             Return _Label.Text

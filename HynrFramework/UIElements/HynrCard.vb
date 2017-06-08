@@ -1,7 +1,7 @@
 ﻿Public Class HynrCard(Of dataitem As IHasID)
     Inherits HynrCardBase
     Private components As ComponentModel.IContainer
-    Protected Property ItemViewModel As ItemViewModelBase(Of dataitem)
+    Protected WithEvents ItemViewModel As ItemViewModelBase(Of dataitem)
 
     Public Sub New(ByRef viewmodelitem As ItemViewModelBase(Of dataitem))
         MyBase.New
@@ -14,6 +14,16 @@
     ''' </summary>
     Overridable Sub CreateView()
     End Sub
+
+    Protected Sub OnItemClick() Handles Me.Click
+        RaiseEvent ItemClick(ItemViewModel)
+    End Sub
+    Protected Sub OnItemDoubleClick() Handles Me.DoubleClick
+        RaiseEvent ItemDoubleClick(ItemViewModel)
+    End Sub
+
+    Public Event ItemClick(ByRef itemviewmodel As ItemViewModelBase(Of dataitem))
+    Public Event ItemDoubleClick(ByRef itemviewmodel As ItemViewModelBase(Of dataitem))
 
     Private Sub InitializeComponent()
         Me.SuspendLayout()

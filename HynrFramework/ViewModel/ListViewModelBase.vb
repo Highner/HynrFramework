@@ -35,7 +35,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 
 #Region "Properties"
     Protected Property _DataController As datacontrollerclass
-    Protected Property _WindowFactory As IWindowFactory
+    Protected Property _WindowFactory As IWindowFactory(Of dataitem)
     Private _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
@@ -62,9 +62,11 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         End Get
         Set(ByVal value As viewmodelitem)
             If Not value.Equals(_SelectedItem) Then
+                If Not IsNothing(_SelectedItem) Then _SelectedItem.IsSelected = False
                 _SelectedItem = value
+                value.IsSelected = True
                 RaiseEvent SelectedItemChanged()
-                ' OnPropertyChanged("SelectedItem")
+                OnPropertyChanged("SelectedItem")
                 OnPropertyChanged("SelectedItemID")
             End If
         End Set
@@ -89,44 +91,47 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             OnPropertyChanged("CanSave")
         End Set
     End Property
-    'Private FilterTimer As New System.Windows.Forms.Timer
 #End Region
 
 #Region "Constructor"
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
-        'SetupTimer()
     End Sub
-    Public Sub New(ByRef windowfactory As IWindowFactory)
+    Public Sub New(ByRef windowfactory As IWindowFactory(Of dataitem))
         _WindowFactory = windowfactory
-        'SetupTimer()
     End Sub
-    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
+    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory(Of dataitem) = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
-        'SetupTimer()
     End Sub
 #End Region
 
 #Region "Methods"
-    Private Sub SetupTimer()
-        'AddHandler FilterTimer.Tick, AddressOf Filter
-        'FilterTimer.Interval = 350
-    End Sub
-    Protected Overridable Function OpenNewForm(Optional ByRef dataitem As dataitem = Nothing) As dataitem
+    Protected Overridable Function OpenNewForm() As dataitem
+        Dim newdataitem As dataitem = CreateNewItem()
         If Not IsNothing(_WindowFactory) Then
-            Dim newdataitem As dataitem
-            If Not IsNothing(dataitem) Then
-                newdataitem = dataitem
-            ElseIf Not IsNothing(SelectedItem) Then
-                newdataitem = SelectedItem.Data
-            End If
             If Not IsNothing(newdataitem) Then Return _WindowFactory.OpenNewForm(newdataitem)
+        End If
+        Return newdataitem 'maybe Nothing???
+    End Function
+    Protected Overridable Function OpenEditForm() As dataitem
+        If Not IsNothing(_WindowFactory) Then
+            If Not IsNothing(SelectedItem) Then
+                Return _WindowFactory.OpenEditForm(SelectedItem.Data)
+            End If
         End If
         Return Nothing
     End Function
     Private Sub ExecuteOpenNewForm()
+        IsBusy = True
         Dim dataitem As dataitem = OpenNewForm()
+        If Not IsNothing(dataitem) Then
+            UpdateItem(DataToItem(dataitem), Nothing)
+        End If
+        IsBusy = False
+    End Sub
+    Private Sub ExecuteOpenEditForm()
+        Dim dataitem As dataitem = OpenEditForm()
         If Not IsNothing(dataitem) Then
             UpdateItem(DataToItem(dataitem), Nothing)
         End If
@@ -141,7 +146,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     ''' add bound properties with ListViewModelFilterAttribute to inherited listviewmodelclass for every filter parameter
     ''' </summary>
     Protected Async Sub ApplyFilter()
-        'FilterTimer.Stop()
         If Not IsNothing(CancellationSource) Then CancellationSource.Cancel()
         CancellationSource = New Threading.CancellationTokenSource
         Dim filterparameters As String = GenerateFilterParameters(Me)
@@ -156,21 +160,17 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             ItemList = _OriginalItemList
         End If
     End Sub
-    'Protected Sub ApplyFilter()
-    'FilterTimer.Stop()
-    'FilterTimer.Start()
-    'End Sub
 #End Region
 
 #Region "Crud"
     ''' <summary>
     ''' override in order to use the specific data context of EntityItem to create a filled instance of DataClass and then use the datacontrollers CreateNewItem (Of DataClass).
     ''' </summary>
-    Public Overridable Function CreateNewItem() As viewmodelitem
+    Public Overridable Function CreateNewItem() As dataitem
     End Function
     Private Sub ExecuteCreateNewItem()
         Dim item = CreateNewItem()
-        RaiseEvent CreateCommandExecuted(item)
+        RaiseEvent CreateCommandExecuted(DataToItem(item))
     End Sub
     Private Sub UpdateAll()
         If Not IsBusy Then
@@ -181,6 +181,11 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         End If
         RaiseEvent UpdateAllCommandExecuted()
     End Sub
+    ''' <summary>
+    ''' this one will (also) be fired after EditWindow is closed. override in order to save other stuff than just properties to db table (i.e. relationships to other tables)
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
         If Not IsBusy Then
             Dim vmitem As viewmodelitem = sender
@@ -195,7 +200,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Sub
     Private Sub ExecuteDeleteSelectedItem()
         DeleteSelectedItem()
-        'RaiseEvent DeleteSelectedItemCommandExecuted()
     End Sub
     Private Sub ExecuteDeleteSelectedItems()
         DeleteSelectedItems()
@@ -280,7 +284,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         newvmitem.CancellationSource = CancellationSource
         AddHandler newvmitem.Deleted, AddressOf DeleteItem
         AddHandler newvmitem.Updated, AddressOf UpdateItem
-        AddHandler newvmitem.DoubleClicked, AddressOf ExecuteOpenNewForm
+        AddHandler newvmitem.DoubleClicked, AddressOf ExecuteOpenEditForm
         AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
         Return newvmitem
     End Function

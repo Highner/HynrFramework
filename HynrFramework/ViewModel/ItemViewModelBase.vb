@@ -48,6 +48,21 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID)
     End Property
     <Browsable(False)>
     Public Property CanSave As Boolean = False Implements IItemViewModel(Of dataclass).CanSave
+    <Browsable(False)>
+    Property _IsSelected As Boolean = False
+    <Browsable(False)>
+    Public Property IsSelected As Boolean
+        Get
+            Return _IsSelected
+        End Get
+        Set(value As Boolean)
+            If Not value = _IsSelected Then
+                _IsSelected = value
+                OnPropertyChanged("IsSelected")
+                RaiseEvent IsSelectedChanged(Me, Nothing)
+            End If
+        End Set
+    End Property
 #End Region
 
 #Region "Constructor"
@@ -89,5 +104,6 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID)
     Public Event DoubleClicked As IItemViewModel(Of dataclass).DoubleClickedEventHandler Implements IItemViewModel(Of dataclass).DoubleClicked
     Public Event Clicked As IItemViewModel(Of dataclass).ClickedEventHandler Implements IItemViewModel(Of dataclass).Clicked
     Public Event CanSaveChanged As IItemViewModel(Of dataclass).CanSaveChangedEventHandler Implements IItemViewModel(Of dataclass).CanSaveChanged
+    Public Event IsSelectedChanged As IItemViewModel(Of dataclass).IsSelectedChangedEventHandler Implements IItemViewModel(Of dataclass).IsSelectedChanged
 #End Region
 End Class

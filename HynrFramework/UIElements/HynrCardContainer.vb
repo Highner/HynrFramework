@@ -37,9 +37,11 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         Set(value As viewmodelitem)
             If _BindingSource.Count > 0 Then
                 If Not IsNothing(value) Then
-                    _BindingSource.Position = _BindingSource.IndexOf(value)
-                    _SelectedItem = value
-                    OnPropertyChanged("SelectedItem")
+                    If Not value.Equals(_SelectedItem) Then
+                        _BindingSource.Position = _BindingSource.IndexOf(value)
+                        _SelectedItem = value
+                        OnPropertyChanged("SelectedItem")
+                    End If
                 End If
             End If
         End Set
@@ -93,11 +95,20 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
     Private Sub SelectedItemChanged()
         SelectedItem = _BindingSource.Current
     End Sub
-    Private Sub ItemDoubleClicked() Handles Me.MouseDoubleClick
+    Private Sub ItemDoubleClicked(ByRef item As viewmodelitem)
+        SelectedItem = item
         If Not IsNothing(SelectedItem) Then
             SelectedItem.DoubleClickCommand.Execute(Nothing)
         End If
         RaiseEvent ItemDoubleClick(SelectedItem)
+    End Sub
+
+    Private Sub SelectItem(ByRef item As viewmodelitem)
+        SelectedItem = item
+        If Not IsNothing(SelectedItem) Then
+            SelectedItem.ClickCommand.Execute(Nothing)
+        End If
+        RaiseEvent ItemClick(SelectedItem)
     End Sub
     Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
         Enabled = Not busy
@@ -134,6 +145,8 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         Controls.Clear()
         For Each item In BindingSourceDataSource
             Dim newitem As card = DirectCast(Activator.CreateInstance(GetType(card), item), card)
+            AddHandler newitem.ItemClick, AddressOf SelectItem
+            AddHandler newitem.ItemDoubleClick, AddressOf ItemDoubleClicked
             Controls.Add(newitem)
         Next
         AdjustCardWidth()
@@ -151,6 +164,7 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
 #Region "Events"
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Public Event ItemDoubleClick(ByRef item As viewmodelitem)
+    Public Event ItemClick(ByRef item As viewmodelitem)
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
 #End Region
 

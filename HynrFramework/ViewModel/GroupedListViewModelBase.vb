@@ -9,10 +9,10 @@
     Public Sub New()
         MyBase.New
     End Sub
-    Public Sub New(ByRef windowfactory As IWindowFactory)
+    Public Sub New(ByRef windowfactory As IWindowFactory(Of dataitem))
         MyBase.New(windowfactory)
     End Sub
-    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory = Nothing)
+    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory(Of dataitem) = Nothing)
         MyBase.New(datacontroller, windowfactory)
     End Sub
 #End Region

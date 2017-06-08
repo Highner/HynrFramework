@@ -4,11 +4,11 @@ Public Class StarshipListViewModel
     Inherits ListViewModelBase(Of Starship, StarshipData, StarshipDataController, StarshipItemViewModel)
 
     Public Sub New(ByVal parentid As Integer)
-        MyBase.New(New StarshipDataController(parentid), New WindowFactory)
+        MyBase.New(New StarshipDataController(parentid), New WindowFactory(Of StarshipData))
         Me.ParentID = parentid
     End Sub
 
-    Public Overrides Function CreateNewItem() As StarshipItemViewModel
+    Public Overrides Function CreateNewItem() As StarshipData
         Dim person = New StarshipData
         person.PersonID = ParentID
         person.Name = "New Vessel"

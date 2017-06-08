@@ -5,11 +5,11 @@ Public Class PersonsListViewModel
     Inherits ListViewModelBase(Of Person, PersonData, PersonsDataController, PersonItemViewModel)
 
     Public Sub New(ByVal parentid As Integer)
-        MyBase.New(New PersonsDataController(parentid), New WindowFactory)
+        MyBase.New(New PersonsDataController(parentid), New WindowFactory(Of PersonData))
         Me.ParentID = parentid
     End Sub
 
-    Public Overrides Function CreateNewItem() As PersonItemViewModel
+    Public Overrides Function CreateNewItem() As PersonData
         _DataController.CreateNewItem(CreateNewPersonDataItem(ParentID))
         GetData()
     End Function

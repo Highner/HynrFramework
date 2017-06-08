@@ -70,6 +70,7 @@ Public Class HynrCardBase
     Public Sub SetWidth(ByVal width As Integer)
         Me.Width = width
     End Sub
+
 #End Region
 
 #Region "Events"

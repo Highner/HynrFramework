@@ -20,7 +20,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
 #End Region
 
 #Region "Crud"
-    Public Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).CreateNewItem
+    Public Overridable Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).CreateNewItem
         InitializeConnection()
         Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
         ToEntity(dataitem, newentityitem)

@@ -4,7 +4,7 @@ Public Class CountryListViewModel
     Inherits HynrFramework.ListViewModelBase(Of Country, CountryData, CountriesDataController, CountryItemViewModel)
 
 
-    Public Overrides Function CreateNewItem() As CountryItemViewModel
+    Public Overrides Function CreateNewItem() As CountryData
         Dim cntry As New CountryData
         cntry.Name = "New Country"
         _DataController.CreateNewItem(cntry)

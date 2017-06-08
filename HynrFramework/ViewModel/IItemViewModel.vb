@@ -18,4 +18,5 @@ Public Interface IItemViewModel(Of dataitem As IHasID)
     Event DoubleClicked(sender As Object, e As EventArgs)
     Event Clicked(sender As Object, e As EventArgs)
     Event CanSaveChanged(sender As Object, e As EventArgs)
+    Event IsSelectedChanged(sender As Object, e As EventArgs)
 End Interface
