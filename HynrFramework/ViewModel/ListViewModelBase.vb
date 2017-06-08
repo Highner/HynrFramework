@@ -35,7 +35,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 
 #Region "Properties"
     Protected Property _DataController As datacontrollerclass
-    Protected Property _WindowFactory As IWindowFactory(Of dataitem)
+    Protected Property _WindowFactory As IListViewWindowFactory(Of dataitem)
     Private _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private _ItemList As New ObservableListSource(Of viewmodelitem)
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
@@ -97,10 +97,10 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
     End Sub
-    Public Sub New(ByRef windowfactory As IWindowFactory(Of dataitem))
+    Public Sub New(ByRef windowfactory As IListViewWindowFactory(Of dataitem))
         _WindowFactory = windowfactory
     End Sub
-    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IWindowFactory(Of dataitem) = Nothing)
+    Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IListViewWindowFactory(Of dataitem) = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
     End Sub
@@ -126,7 +126,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         IsBusy = True
         Dim dataitem As dataitem = OpenNewForm()
         If Not IsNothing(dataitem) Then
-            UpdateItem(DataToItem(dataitem), Nothing)
+            Dim item = DataToItem(dataitem)
+            UpdateItem(item, Nothing)
+            AddItemToList(item)
         End If
         IsBusy = False
     End Sub
@@ -138,6 +140,17 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Sub
     Private Sub ToggleCanSave()
         CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
+    End Sub
+    Private Sub AddItemToList(ByRef viewmodelitem As viewmodelitem)
+        _OriginalItemList.Insert(0, viewmodelitem)
+        ApplyFilter()
+    End Sub
+    Private Sub RemoveItemFromList(ByVal viewmodelitem As viewmodelitem)
+        Dim item = (From i In _OriginalItemList Where i.ID = viewmodelitem.ID Select i).FirstOrDefault
+        If Not IsNothing(item) Then
+            _OriginalItemList.Remove(item)
+            ApplyFilter()
+        End If
     End Sub
 #End Region
 
@@ -198,18 +211,28 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             End If
         End If
     End Sub
+    Private Function GetDeleteConfirmation() As Boolean
+        If Not IsNothing(_WindowFactory) Then
+            If Not IsNothing(SelectedItem) Then
+                Return _WindowFactory.DeleteConfirmationForm(SelectedItem.Data)
+            End If
+        End If
+        Return True
+    End Function
     Private Sub ExecuteDeleteSelectedItem()
-        DeleteSelectedItem()
+        If GetDeleteConfirmation() Then DeleteSelectedItem()
     End Sub
     Private Sub ExecuteDeleteSelectedItems()
-        DeleteSelectedItems()
-        RaiseEvent DeleteSelectedItemsCommandExecuted()
+        If GetDeleteConfirmation() Then
+            DeleteSelectedItems()
+            RaiseEvent DeleteSelectedItemsCommandExecuted()
+        End If
     End Sub
     Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
         If Not IsBusy Then
             Dim vmitem As viewmodelitem = sender
             If _DataController.DeleteItem(vmitem.Data) = True Then
-                ItemList.Remove(vmitem)
+                RemoveItemFromList(vmitem)
                 RaiseEvent DeleteSelectedItemCommandExecuted(vmitem)
             End If
         End If

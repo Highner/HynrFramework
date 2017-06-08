@@ -126,6 +126,9 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         Dim y As Integer = Me.Height / 2 - BusyIndicator.Height / 2
         BusyIndicator.Location = New Drawing.Point(x, y)
     End Sub
+    Private Function CountItems() As Integer
+        Return (From c In Me.Controls Where c.GetType Is GetType(card)).Count
+    End Function
 #End Region
 
 #Region "Binding"
@@ -141,15 +144,17 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
     End Sub
-    Private Sub DataSourceChanged() Handles _BindingSource.DataSourceChanged
-        Controls.Clear()
-        For Each item In BindingSourceDataSource
-            Dim newitem As card = DirectCast(Activator.CreateInstance(GetType(card), item), card)
-            AddHandler newitem.ItemClick, AddressOf SelectItem
-            AddHandler newitem.ItemDoubleClick, AddressOf ItemDoubleClicked
-            Controls.Add(newitem)
-        Next
-        AdjustCardWidth()
+    Private Sub DataSourceChanged() Handles _BindingSource.ListChanged, _BindingSource.DataSourceChanged
+        If Not CountItems() = _BindingSource.Count Then
+            Controls.Clear()
+            For Each item In BindingSourceDataSource
+                Dim newitem As card = DirectCast(Activator.CreateInstance(GetType(card), item), card)
+                AddHandler newitem.ItemClick, AddressOf SelectItem
+                AddHandler newitem.ItemDoubleClick, AddressOf ItemDoubleClicked
+                Controls.Add(newitem)
+            Next
+            AdjustCardWidth()
+        End If
     End Sub
     Private Sub AdjustCardWidth() Handles Me.SizeChanged
         For Each cont In Me.Controls
