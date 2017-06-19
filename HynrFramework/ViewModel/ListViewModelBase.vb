@@ -135,7 +135,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private Sub ExecuteOpenEditForm()
         Dim dataitem As dataitem = OpenEditForm()
         If Not IsNothing(dataitem) Then
-            UpdateItem(DataToItem(dataitem), Nothing)
+            Dim item = DataToItem(dataitem)
+            UpdateItem(item, Nothing)
+            ReplaceItemInList(item)
         End If
     End Sub
     Private Sub ToggleCanSave()
@@ -149,6 +151,15 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         Dim item = (From i In _OriginalItemList Where i.ID = viewmodelitem.ID Select i).FirstOrDefault
         If Not IsNothing(item) Then
             _OriginalItemList.Remove(item)
+            ApplyFilter()
+        End If
+    End Sub
+    Private Sub ReplaceItemInList(ByVal viewmodelitem As viewmodelitem)
+        Dim item = (From i In _OriginalItemList Where i.ID = viewmodelitem.ID Select i).FirstOrDefault
+        If Not IsNothing(item) Then
+            Dim index = _OriginalItemList.IndexOf(item)
+            _OriginalItemList.Remove(item)
+            _OriginalItemList.Insert(index, viewmodelitem)
             ApplyFilter()
         End If
     End Sub

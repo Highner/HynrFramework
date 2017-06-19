@@ -82,6 +82,7 @@ Public Class HynrCardContainer(Of dataitem As IHasID, viewmodelitem As ItemViewM
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
         Controls.Add(BusyIndicator)
+        AdjustBusyIndicatorLocation()
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         BorderStyle = HynrSettings.GridBorderStyle

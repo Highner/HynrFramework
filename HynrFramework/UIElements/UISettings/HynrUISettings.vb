@@ -116,6 +116,21 @@ Public Class HynrUISettings
                 hynrcontrol.HynrSettings = Me
             End If
             If TypeOf (control) Is ContainerControl Then ApplyToControlContainer(control)
+            If TypeOf (control) Is SplitContainer Then
+                Dim split As SplitContainer = control
+                For Each splitcontrol In split.Panel1.Controls
+                    If TypeOf (splitcontrol) Is IHasHynrSettings Then
+                        Dim hynrcontrol As IHasHynrSettings = splitcontrol
+                        hynrcontrol.HynrSettings = Me
+                    End If
+                Next
+                For Each splitcontrol In split.Panel2.Controls
+                    If TypeOf (splitcontrol) Is IHasHynrSettings Then
+                        Dim hynrcontrol As IHasHynrSettings = splitcontrol
+                        hynrcontrol.HynrSettings = Me
+                    End If
+                Next
+            End If
         Next
     End Sub
 #End Region

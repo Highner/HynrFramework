@@ -38,7 +38,7 @@ Public Class HynrPanel
     Public Sub New()
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
-        ' Controls.Add(BusyIndicator)
+        Controls.Add(BusyIndicator)
     End Sub
 
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
@@ -52,8 +52,6 @@ Public Class HynrPanel
     Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
         Enabled = Not busy
         If busy Then
-            Controls.Clear()
-            Controls.Add(BusyIndicator)
             BusyIndicator.StartAngle = 30
             BusyIndicator.Show()
             BusyIndicator.Start()
