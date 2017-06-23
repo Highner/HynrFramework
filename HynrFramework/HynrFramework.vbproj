@@ -69,6 +69,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
@@ -100,6 +101,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Common\IHasDisplayName.vb" />
     <Compile Include="Data\Common\IHasID.vb" />
     <Compile Include="Data\DataContext\DataContextBase.vb" />
     <Compile Include="Data\DataContext\IDataContext.vb" />
@@ -185,14 +187,17 @@
     <Compile Include="UIElements\UIBase\IHasHynrSettings.vb" />
     <Compile Include="UIElements\UIBase\IWindowFactory.vb" />
     <Compile Include="UIElements\UISettings\HynrUISettings.vb" />
+    <Compile Include="Utility\AutoRefreshWrapper.vb" />
     <Compile Include="Utility\DynamicExtension.vb" />
     <Compile Include="Utility\FilteredList.vb" />
     <Compile Include="Utility\GenericObjectInstantiator.vb" />
     <Compile Include="Utility\HynrHelpers.vb" />
+    <Compile Include="Utility\INotifyRefresh.vb" />
     <Compile Include="Utility\ListViewModelFilterAttribute.vb" />
     <Compile Include="Utility\ObjectMapper.vb" />
     <Compile Include="Utility\ObservableListSource.vb" />
     <Compile Include="Utility\Command.vb" />
+    <Compile Include="Utility\ServiceBrokerUtility.vb" />
     <Compile Include="ViewModel\IListViewModel.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IItemViewModel.vb" />
@@ -246,6 +251,35 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\chevron-expand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Outlook">
+      <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

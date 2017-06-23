@@ -1,6 +1,10 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Linq.Dynamic
+Imports System.Data.SqlClient
+Imports HynrFramework
+Imports System.Data.Entity.Core.Objects
+Imports System.Data.Entity.Infrastructure
 
 Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     Implements IDataContext(Of entityclass)
@@ -9,6 +13,7 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
     Private WithEvents _ErrorLog As New BindingList(Of String)
     Protected ShowError As Boolean = True
     Private _DBContext As dbcontextclass = GetInstance(GetType(dbcontextclass))
+
     Public Property DBContext As dbcontextclass
         Get
             Return _DBContext
@@ -33,6 +38,11 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
 #End Region
 
 #Region "Methods"
+
+#End Region
+
+#Region "ChangeNotification"
+
 #End Region
 
 #Region "Error"
@@ -85,5 +95,9 @@ Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbCon
     Public Function GetObjects(parameters As Object) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetObjects
         Return DBContext.Set(GetType(entityclass)).Where(parameters)
     End Function
+    Public Function GetAllObjectsQuery() As IQueryable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjectsQuery
+        Return DBContext.Set(GetType(entityclass)).AsQueryable
+    End Function
 #End Region
+
 End Class

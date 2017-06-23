@@ -36,8 +36,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 #Region "Properties"
     Protected Property _DataController As datacontrollerclass
     Protected Property _WindowFactory As IListViewWindowFactory(Of dataitem)
-    Private _OriginalItemList As New ObservableListSource(Of viewmodelitem)
-    Private _ItemList As New ObservableListSource(Of viewmodelitem)
+    Private WithEvents _Timer As Timer
+    Private WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
+    Private WithEvents _ItemList As New ObservableListSource(Of viewmodelitem)
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
         Get
@@ -91,6 +92,26 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             OnPropertyChanged("CanSave")
         End Set
     End Property
+    Private _ListCount As Boolean
+    Public Property ListCount() As Boolean
+        Get
+            Return _ListCount
+        End Get
+        Set(ByVal value As Boolean)
+            _ListCount = value
+            OnPropertyChanged("ListCount")
+        End Set
+    End Property
+    Private _FilteredListCount As Boolean
+    Public Property FilteredListCount() As Boolean
+        Get
+            Return _FilteredListCount
+        End Get
+        Set(ByVal value As Boolean)
+            _FilteredListCount = value
+            OnPropertyChanged("FilteredListCount")
+        End Set
+    End Property
 #End Region
 
 #Region "Constructor"
@@ -110,7 +131,15 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Protected Overridable Function OpenNewForm() As dataitem
         Dim newdataitem As dataitem = CreateNewItem()
         If Not IsNothing(_WindowFactory) Then
-            If Not IsNothing(newdataitem) Then Return _WindowFactory.OpenNewForm(newdataitem)
+            If Not IsNothing(newdataitem) Then
+                Dim editeditem As dataitem = _WindowFactory.OpenNewForm(newdataitem)
+                If IsNothing(editeditem) Then
+                    _DataController.DeleteItem(newdataitem)
+                    Return Nothing
+                Else
+                    Return editeditem
+                End If
+            End If
         End If
         Return newdataitem 'maybe Nothing???
     End Function
@@ -163,6 +192,24 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             ApplyFilter()
         End If
     End Sub
+    Public Sub SetTimer(ByVal interval As Integer)
+        If IsNothing(_Timer) Then
+            _Timer = New Timer
+        End If
+        StopTimer()
+        _Timer.Interval = interval
+        StartTimer()
+    End Sub
+    Public Sub StopTimer()
+        _Timer.Stop()
+    End Sub
+    Public Sub StartTimer()
+        _Timer.Start()
+    End Sub
+    Private Sub TimerTick() Handles _Timer.Tick
+        If Not IsBusy Then RefreshAllCommand.Execute(Nothing)
+    End Sub
+
 #End Region
 
 #Region "Filter"
@@ -194,7 +241,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Function
     Private Sub ExecuteCreateNewItem()
         Dim item = CreateNewItem()
-        RaiseEvent CreateCommandExecuted(DataToItem(item))
+        If Not IsNothing(item) Then RaiseEvent CreateCommandExecuted(DataToItem(item))
     End Sub
     Private Sub UpdateAll()
         If Not IsBusy Then
@@ -211,14 +258,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Protected Overridable Sub UpdateItem(sender As Object, e As EventArgs)
-        If Not IsBusy Then
-            Dim vmitem As viewmodelitem = sender
-            If vmitem.CanSave Then
-                Dim data = _DataController.UpdateItem(vmitem.Data)
-                If Not IsNothing(data) Then
-                    vmitem.Data = data
-                    RaiseEvent UpdateItemCommandExecuted(vmitem)
-                End If
+        Dim vmitem As viewmodelitem = sender
+        If vmitem.CanSave Then
+            Dim data = _DataController.UpdateItem(vmitem.Data)
+            If Not IsNothing(data) Then
+                vmitem.Data = data
+                RaiseEvent UpdateItemCommandExecuted(vmitem)
             End If
         End If
     End Sub
@@ -326,6 +371,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         If Not IsNothing(CancellationSource) Then
             CancellationSource.Cancel()
         End If
+    End Sub
+    Private Sub ListChanged() Handles _OriginalItemList.CollectionChanged
+        ListCount = _OriginalItemList.Count
+    End Sub
+    Private Sub FilteredListChanged() Handles _ItemList.CollectionChanged
+        FilteredListCount = ItemList.Count
     End Sub
 #End Region
 

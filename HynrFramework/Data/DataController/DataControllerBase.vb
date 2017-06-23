@@ -1,13 +1,14 @@
 ﻿Imports System.Data.Entity
 Imports System.Data.Entity.Infrastructure
+Imports HynrFramework
+Imports System.Data.SqlClient
+Imports System.Data.Entity.Core.Objects
 
 Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
     Public Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
-
-    Protected Property PushTimer As Timers.Timer
 #End Region
 
 #Region "Constructor"
@@ -17,6 +18,10 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     Public Sub New(ByRef context As datacontextclass)
         DataContext = context
     End Sub
+#End Region
+
+#Region "Push Notification"
+
 #End Region
 
 #Region "Crud"
@@ -89,6 +94,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         MapProperties(entityitem, newdataitem)
         Return newdataitem
     End Function
+
     ''' <summary>
     ''' override this to fill custom properties in child entities etc., but include call to mybase.ToEntity to map the base properties.
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
@@ -98,4 +104,5 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Return dataitem
     End Function
 #End Region
+
 End Class
