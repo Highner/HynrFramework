@@ -128,47 +128,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
 #End Region
 
 #Region "Methods"
-    Protected Overridable Function OpenNewForm() As dataitem
-        Dim newdataitem As dataitem = CreateNewItem()
-        If Not IsNothing(_WindowFactory) Then
-            If Not IsNothing(newdataitem) Then
-                Dim editeditem As dataitem = _WindowFactory.OpenNewForm(newdataitem)
-                If IsNothing(editeditem) Then
-                    _DataController.DeleteItem(newdataitem)
-                    Return Nothing
-                Else
-                    Return editeditem
-                End If
-            End If
-        End If
-        Return newdataitem 'maybe Nothing???
-    End Function
-    Protected Overridable Function OpenEditForm() As dataitem
-        If Not IsNothing(_WindowFactory) Then
-            If Not IsNothing(SelectedItem) Then
-                Return _WindowFactory.OpenEditForm(SelectedItem.Data)
-            End If
-        End If
-        Return Nothing
-    End Function
-    Private Sub ExecuteOpenNewForm()
-        IsBusy = True
-        Dim dataitem As dataitem = OpenNewForm()
-        If Not IsNothing(dataitem) Then
-            Dim item = DataToItem(dataitem)
-            UpdateItem(item, Nothing)
-            AddItemToList(item)
-        End If
-        IsBusy = False
-    End Sub
-    Private Sub ExecuteOpenEditForm()
-        Dim dataitem As dataitem = OpenEditForm()
-        If Not IsNothing(dataitem) Then
-            Dim item = DataToItem(dataitem)
-            UpdateItem(item, Nothing)
-            ReplaceItemInList(item)
-        End If
-    End Sub
     Private Sub ToggleCanSave()
         CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
     End Sub
@@ -239,9 +198,55 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     ''' </summary>
     Public Overridable Function CreateNewItem() As dataitem
     End Function
+    Protected Overridable Function OpenNewForm() As dataitem
+        Dim newdataitem As dataitem = CreateNewItem()
+        If Not IsNothing(_WindowFactory) Then
+            If Not IsNothing(newdataitem) Then
+                Dim editeditem As dataitem = _WindowFactory.OpenNewForm(newdataitem)
+                If IsNothing(editeditem) Then
+                    ' _DataController.DeleteItem(newdataitem)
+                    _DataController.UpdateItem(editeditem)
+                    Return Nothing
+                Else
+                    Return editeditem
+                End If
+            End If
+        End If
+        Return newdataitem 'maybe Nothing???
+    End Function
+    Protected Overridable Function OpenEditForm() As dataitem
+        If Not IsNothing(_WindowFactory) Then
+            If Not IsNothing(SelectedItem) Then
+                Return _WindowFactory.OpenEditForm(SelectedItem.Data)
+            End If
+        End If
+        Return Nothing
+    End Function
+    Private Sub ExecuteOpenNewForm()
+        IsBusy = True
+        Dim dataitem As dataitem = OpenNewForm()
+        If Not IsNothing(dataitem) Then
+            ' UpdateItem(item, Nothing)
+            _DataController.CreateNewItem(dataitem)
+            Dim item = DataToItem(dataitem)
+            AddItemToList(item)
+        End If
+        IsBusy = False
+    End Sub
+    Private Sub ExecuteOpenEditForm()
+        Dim dataitem As dataitem = OpenEditForm()
+        If Not IsNothing(dataitem) Then
+            Dim item = DataToItem(dataitem)
+            UpdateItem(item, Nothing)
+            ReplaceItemInList(item)
+        End If
+    End Sub
     Private Sub ExecuteCreateNewItem()
         Dim item = CreateNewItem()
-        If Not IsNothing(item) Then RaiseEvent CreateCommandExecuted(DataToItem(item))
+        If Not IsNothing(item) Then
+            _DataController.CreateNewItem(item)
+            RaiseEvent CreateCommandExecuted(DataToItem(item))
+        End If
     End Sub
     Private Sub UpdateAll()
         If Not IsBusy Then
@@ -318,6 +323,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     End Sub
     Private Async Sub GetDataAsync()
         IsBusy = True
+        CancelLoading()
         Dim dataitemlist As IEnumerable(Of dataitem) = Nothing
         CancellationSource = New Threading.CancellationTokenSource
         Try

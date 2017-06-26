@@ -20,10 +20,6 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
     End Sub
 #End Region
 
-#Region "Push Notification"
-
-#End Region
-
 #Region "Crud"
     Public Overridable Function CreateNewItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).CreateNewItem
         InitializeConnection()
