@@ -55,6 +55,11 @@ Public MustInherit Class ViewModelBase
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(strPropertyName))
         End If
     End Sub
+    Public Sub AllPropertiesChanged()
+        For Each prop In Me.[GetType]().GetProperties()
+            OnPropertyChanged(prop.Name)
+        Next
+    End Sub
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted

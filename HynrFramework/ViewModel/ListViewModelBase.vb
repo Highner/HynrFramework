@@ -24,6 +24,8 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     <Browsable(False)>
     Public Property OpenNewFormCommand As ICommand = New Command(AddressOf ExecuteOpenNewForm)
     <Browsable(False)>
+    Public Property OpenEditFormCommand As ICommand = New Command(AddressOf ExecuteOpenEditForm)
+    <Browsable(False)>
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
     <Browsable(False)>
     Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
@@ -168,6 +170,12 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private Sub TimerTick() Handles _Timer.Tick
         If Not IsBusy Then RefreshAllCommand.Execute(Nothing)
     End Sub
+    Protected Sub DataItemChanged(ByRef dataitem As IHasID)
+        Dim id As Integer = dataitem.ID
+        Dim changedlistitem = (From i In ItemList Where i.ID = id Select i).Single
+        changedlistitem.Data = dataitem
+        changedlistitem.AllPropertiesChanged()
+    End Sub
 
 #End Region
 
@@ -201,18 +209,9 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Protected Overridable Function OpenNewForm() As dataitem
         Dim newdataitem As dataitem = CreateNewItem()
         If Not IsNothing(_WindowFactory) Then
-            If Not IsNothing(newdataitem) Then
-                Dim editeditem As dataitem = _WindowFactory.OpenNewForm(newdataitem)
-                If IsNothing(editeditem) Then
-                    ' _DataController.DeleteItem(newdataitem)
-                    _DataController.UpdateItem(editeditem)
-                    Return Nothing
-                Else
-                    Return editeditem
-                End If
-            End If
+            If Not IsNothing(newdataitem) Then Return _WindowFactory.OpenNewForm(newdataitem)
         End If
-        Return newdataitem 'maybe Nothing???
+        Return newdataitem
     End Function
     Protected Overridable Function OpenEditForm() As dataitem
         If Not IsNothing(_WindowFactory) Then
@@ -226,7 +225,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         IsBusy = True
         Dim dataitem As dataitem = OpenNewForm()
         If Not IsNothing(dataitem) Then
-            ' UpdateItem(item, Nothing)
             _DataController.CreateNewItem(dataitem)
             Dim item = DataToItem(dataitem)
             AddItemToList(item)
