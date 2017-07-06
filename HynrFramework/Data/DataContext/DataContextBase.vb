@@ -1,10 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Linq.Dynamic
-Imports System.Data.SqlClient
-Imports HynrFramework
-Imports System.Data.Entity.Core.Objects
-Imports System.Data.Entity.Infrastructure
 
 Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     Implements IDataContext(Of entityclass)

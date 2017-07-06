@@ -67,6 +67,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SummaryDataGridView">
+      <HintPath>G:\Mitarbeiter\Rantzau\ClassLibraries\SummaryDataGridView.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -144,6 +147,9 @@
     <Compile Include="UIElements\HynrGrid.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrGridCrudToolstrip.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrLabelStrip.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -198,6 +204,7 @@
     <Compile Include="Utility\ObservableListSource.vb" />
     <Compile Include="Utility\Command.vb" />
     <Compile Include="Utility\ServiceBrokerUtility.vb" />
+    <Compile Include="ViewModel\ICrudObject.vb" />
     <Compile Include="ViewModel\IListViewModel.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IItemViewModel.vb" />

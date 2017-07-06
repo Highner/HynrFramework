@@ -10,27 +10,27 @@ Imports System.ComponentModel
 ''' </summary>
 Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits ViewModelBase
-    Implements IListViewModel(Of viewmodelitem)
+    Implements IListViewModel(Of viewmodelitem), ICrudObject
 
 #Region "Commands"
     <Browsable(False)>
     Public Property CreateCommand As ICommand = New Command(AddressOf ExecuteCreateNewItem)
     <Browsable(False)>
-    Public Property UpdateAllCommand As ICommand = New Command(AddressOf UpdateAll)
+    Public Property UpdateAllCommand As ICommand = New Command(AddressOf UpdateAll) Implements ICrudObject.UpdateAllCommand
     <Browsable(False)>
     Public Property DeleteSelectedItemCommand As ICommand = New Command(AddressOf ExecuteDeleteSelectedItem)
     <Browsable(False)>
-    Public Property DeleteSelectedItemsCommand As ICommand = New Command(AddressOf ExecuteDeleteSelectedItems)
+    Public Property DeleteSelectedItemsCommand As ICommand = New Command(AddressOf ExecuteDeleteSelectedItems) Implements ICrudObject.DeleteSelectedItemsCommand
     <Browsable(False)>
-    Public Property OpenNewFormCommand As ICommand = New Command(AddressOf ExecuteOpenNewForm)
+    Public Property OpenNewFormCommand As ICommand = New Command(AddressOf ExecuteOpenNewForm) Implements ICrudObject.OpenNewFormCommand
     <Browsable(False)>
-    Public Property OpenEditFormCommand As ICommand = New Command(AddressOf ExecuteOpenEditForm)
+    Public Property OpenEditFormCommand As ICommand = New Command(AddressOf ExecuteOpenEditForm) Implements ICrudObject.OpenEditFormCommand
     <Browsable(False)>
     Public Property ApplyFilterCommand As ICommand = New Command(AddressOf ApplyFilter)
     <Browsable(False)>
     Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
     <Browsable(False)>
-    Public Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync)
+    Public Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync) Implements ICrudObject.RefreshAllAsyncCommand
     <Browsable(False)>
     Public Property ClearListCommand As ICommand = New Command(AddressOf ClearList)
 #End Region
@@ -234,9 +234,11 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private Sub ExecuteOpenEditForm()
         Dim dataitem As dataitem = OpenEditForm()
         If Not IsNothing(dataitem) Then
-            Dim item = DataToItem(dataitem)
-            UpdateItem(item, Nothing)
-            ReplaceItemInList(item)
+            ' Dim item = DataToItem(dataitem)
+            ' UpdateItem(item, Nothing)
+            _DataController.UpdateItem(dataitem)
+            DataItemChanged(dataitem)
+            ' ReplaceItemInList(item)
         End If
     End Sub
     Private Sub ExecuteCreateNewItem()
