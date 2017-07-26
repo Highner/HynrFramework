@@ -12,81 +12,55 @@ Public Class HynrUISettings
     Private _DefaultCompanyColor As Color = Color.IndianRed
     Private _DefaultLabelstripForecolor As Color = Color.White
 
-
-
-    Private _SelectedBackcolor As Color
+    Private _SelectedBackcolor As Color = _DefaultSelectedBackcolor
     Public Property SelectedBackColor() As Color
         Get
-            If (_SelectedBackcolor.Name = 0) Then
-                Return _DefaultSelectedBackcolor
-            Else
-                Return _SelectedBackcolor
-            End If
+            Return _SelectedBackcolor
         End Get
         Set(ByVal value As Color)
             _SelectedBackcolor = value
         End Set
     End Property
-    Private _SelectedForecolor As Color
+    Private _SelectedForecolor As Color = _DefaultSelectedForecolor
     Public Property SelectedForecolor() As Color
         Get
-            If (_SelectedForecolor.Name = 0) Then
-                Return _DefaultSelectedForecolor
-            Else
-                Return _SelectedForecolor
-            End If
+            Return _SelectedForecolor
         End Get
         Set(ByVal value As Color)
             _SelectedForecolor = value
         End Set
     End Property
-    Private _GridColor As Color
+    Private _GridColor As Color = _DefaultGridColor
     Public Property GridColor() As Color
         Get
-            If (_GridColor.Name = 0) Then
-                Return _DefaultGridColor
-            Else
-                Return _GridColor
-            End If
+            Return _GridColor
         End Get
         Set(ByVal value As Color)
             _GridColor = value
         End Set
     End Property
-    Private _GridBackcolor As Color
+    Private _GridBackcolor As Color = _DefaultGridBackcolor
     Public Property GridBackcolor() As Color
         Get
-            If (_GridBackcolor.Name = 0) Then
-                Return _DefaultGridBackcolor
-            Else
-                Return _GridBackcolor
-            End If
+            Return _GridBackcolor
         End Get
         Set(ByVal value As Color)
             _GridBackcolor = value
         End Set
     End Property
-    Private _CompanyColor As Color
+    Private _CompanyColor As Color = _DefaultCompanyColor
     Public Property CompanyColor() As Color
         Get
-            If (_CompanyColor.Name = 0) Then
-                Return _DefaultCompanyColor
-            Else
-                Return _CompanyColor
-            End If
+            Return _CompanyColor
         End Get
         Set(ByVal value As Color)
             _CompanyColor = value
         End Set
     End Property
-    Private _LabelstripForecolor As Color
+    Private _LabelstripForecolor As Color = _DefaultLabelstripForecolor
     Public Property LabelstripColor() As Color
         Get
-            If (_LabelstripForecolor.Name = 0) Then
-                Return _DefaultLabelstripForecolor
-            Else
-                Return _LabelstripForecolor
-            End If
+            Return _LabelstripForecolor
         End Get
         Set(ByVal value As Color)
             _LabelstripForecolor = value
@@ -109,7 +83,7 @@ Public Class HynrUISettings
 #End Region
 
 #Region "METHODS"
-    Sub ApplyToControlContainer(ByRef container As ContainerControl)
+    Public Sub ApplyToControlContainer(ByRef container As ContainerControl)
         For Each control In container.Controls
             If TypeOf (control) Is IHasHynrSettings Then
                 Dim hynrcontrol As IHasHynrSettings = control

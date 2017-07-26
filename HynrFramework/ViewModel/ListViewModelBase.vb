@@ -176,7 +176,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         changedlistitem.Data = dataitem
         changedlistitem.AllPropertiesChanged()
     End Sub
-
 #End Region
 
 #Region "Filter"
@@ -234,11 +233,8 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private Sub ExecuteOpenEditForm()
         Dim dataitem As dataitem = OpenEditForm()
         If Not IsNothing(dataitem) Then
-            ' Dim item = DataToItem(dataitem)
-            ' UpdateItem(item, Nothing)
             _DataController.UpdateItem(dataitem)
             DataItemChanged(dataitem)
-            ' ReplaceItemInList(item)
         End If
     End Sub
     Private Sub ExecuteCreateNewItem()

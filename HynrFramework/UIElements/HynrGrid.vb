@@ -49,7 +49,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             End If
         End Set
     End Property
-    Private _HynrSettings As HynrUISettings
+    Private _HynrSettings As New HynrUISettings
     Public Property HynrSettings As HynrUISettings Implements IHasHynrSettings.HynrSettings
         Get
             Return _HynrSettings
@@ -96,6 +96,9 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         BackgroundColor = HynrSettings.GridBackcolor
         RowHeadersVisible = HynrSettings.RowHeadersVisible
         BorderStyle = HynrSettings.GridBorderStyle
+    End Sub
+    Private Sub RewriteSettings() Handles Me.ParentChanged
+        If Not IsNothing(Me._HynrSettings) Then ApplyHynrSettings()
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
         If Me.PropertyChangedEvent IsNot Nothing Then
@@ -279,10 +282,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Clear()
         DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         DataBindings.Add("SelectedItem", LazyBindingViewModel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+            DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         'necessary for the summary grid
-        MyBase.OnColumnAdded(New DataGridViewColumnEventArgs(Me.Columns(Me.Columns.Count - 1)))
+        If Me.ColumnCount > 0 Then MyBase.OnColumnAdded(New DataGridViewColumnEventArgs(Me.Columns(Me.Columns.Count - 1)))
     End Sub
     Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
         Dim col As DataGridViewComboBoxColumn = Columns(columnname)
