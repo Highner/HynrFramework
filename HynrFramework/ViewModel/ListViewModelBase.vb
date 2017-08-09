@@ -144,7 +144,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
             ApplyFilter()
         End If
     End Sub
-    Private Sub ReplaceItemInList(ByVal viewmodelitem As viewmodelitem)
+    Protected Sub ReplaceItemInList(ByVal viewmodelitem As viewmodelitem)
         Dim item = (From i In _OriginalItemList Where i.ID = viewmodelitem.ID Select i).FirstOrDefault
         If Not IsNothing(item) Then
             Dim index = _OriginalItemList.IndexOf(item)
@@ -320,6 +320,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private Async Sub GetDataAsync()
         IsBusy = True
         CancelLoading()
+        ItemList.Clear()
         Dim dataitemlist As IEnumerable(Of dataitem) = Nothing
         CancellationSource = New Threading.CancellationTokenSource
         Try

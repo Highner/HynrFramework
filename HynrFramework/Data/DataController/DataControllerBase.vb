@@ -48,7 +48,7 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         Dim list As New List(Of dataclass)
         For Each entityitem In entities
             Dim newdataitem As dataclass = ToData(entityitem)
-            list.Add(newdataitem)
+            If Not IsNothing(newdataitem) Then list.Add(newdataitem)
         Next
         Return list
     End Function
