@@ -44,10 +44,13 @@ Public Class HynrToolStripButton
 
 #Region "Methods"
     Public Sub BindToViewModel(ByRef viewmodel As IViewModelBase, ByRef command As Command, Optional ByVal text As String = "", Optional ByVal imagepropertyname As String = "")
+        BindToViewModelCommand(viewmodel, command, text, imagepropertyname)
+        DataBindings.Add("IsBusy", Me.ViewModel, "IsBusy", True, DataSourceUpdateMode.Never)
+    End Sub
+    Public Sub BindToViewModelCommand(ByRef viewmodel As IViewModelBase, ByRef command As Command, Optional ByVal text As String = "", Optional ByVal imagepropertyname As String = "")
         Me.Command = command
         Me.ViewModel = viewmodel
         Me.ToolTipText = text
-        DataBindings.Add("IsBusy", Me.ViewModel, "IsBusy", True, DataSourceUpdateMode.Never)
         If imagepropertyname <> "" Then DataBindings.Add("Image", Me.ViewModel, imagepropertyname, True, DataSourceUpdateMode.OnPropertyChanged)
     End Sub
     Private Sub ExecuteCommand() Handles Me.Click

@@ -150,6 +150,9 @@
     <Compile Include="UIElements\HynrGridCrudToolstrip.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrItemViewFormDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrLabelStrip.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -226,6 +229,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrCardBase.resx">
       <DependentUpon>HynrCardBase.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrItemViewForm.resx">
+      <DependentUpon>HynrItemViewForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrItemViewFormDialog.resx">
+      <DependentUpon>HynrItemViewFormDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\MatrixCircularProgressControl.resx">
       <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>

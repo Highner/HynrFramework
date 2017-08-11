@@ -74,6 +74,12 @@ Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass 
         End If
         Return False
     End Function
+    Public Overridable Function DeleteItems(list As IEnumerable(Of dataclass)) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItems
+        For Each item In list
+            If Not DeleteItem(item) Then Return False
+        Next
+        Return True
+    End Function
     Protected Overridable Sub InitializeConnection()
         DataContext = GetInstance(GetType(datacontextclass))
     End Sub

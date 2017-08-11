@@ -20,7 +20,7 @@ Public Class HynrForm
     End Property
 
     Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
-        BackColor = HynrSettings.SelectedBackColor
+        '  BackColor = HynrSettings.SelectedBackColor
     End Sub
 
     Public Sub New()
