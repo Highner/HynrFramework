@@ -2,7 +2,7 @@
 Imports System.Data.Entity
 Imports System.Linq.Dynamic
 
-Public MustInherit Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
+Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     Implements IDataContext(Of entityclass)
 
 #Region "Properties"

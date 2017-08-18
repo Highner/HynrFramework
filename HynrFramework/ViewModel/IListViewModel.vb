@@ -1,6 +1,7 @@
 ﻿Public Interface IListViewModel(Of viewmodelitem)
     Property SelectedItem As viewmodelitem
     Property SelectedItems As List(Of viewmodelitem)
+    Property CheckedItems As List(Of viewmodelitem)
     ReadOnly Property SelectedItemID As Integer
     Property CanSave As Boolean
 
@@ -11,4 +12,5 @@
     Event UpdateItemCommandExecuted(ByVal item As viewmodelitem)
     Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem)
     Event DeleteSelectedItemsCommandExecuted()
+    Event ItemCheckedChanged(ByVal item As viewmodelitem)
 End Interface

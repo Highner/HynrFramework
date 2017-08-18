@@ -4,7 +4,7 @@ Imports System.Windows.Input
 Imports HynrFramework
 
 <Serializable>
-Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID)
+Public Class ItemViewModelBase(Of dataclass As IHasID)
     Inherits ViewModelBase
     Implements IItemViewModel(Of dataclass)
 
@@ -86,6 +86,9 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID)
     Private Sub RaiseClickedEvent()
         RaiseEvent Clicked(Me, Nothing)
     End Sub
+    Protected Sub RaiseCheckedChanged()
+        RaiseEvent CheckedChanged(Me, Nothing)
+    End Sub
     Private Sub ValueChanged() Handles Me.PropertyChanged
         If Not IsBusy Then
             Dim can As Boolean = CanSave
@@ -105,5 +108,6 @@ Public MustInherit Class ItemViewModelBase(Of dataclass As IHasID)
     Public Event Clicked As IItemViewModel(Of dataclass).ClickedEventHandler Implements IItemViewModel(Of dataclass).Clicked
     Public Event CanSaveChanged As IItemViewModel(Of dataclass).CanSaveChangedEventHandler Implements IItemViewModel(Of dataclass).CanSaveChanged
     Public Event IsSelectedChanged As IItemViewModel(Of dataclass).IsSelectedChangedEventHandler Implements IItemViewModel(Of dataclass).IsSelectedChanged
+    Public Event CheckedChanged As IItemViewModel(Of dataclass).CheckedChangedEventHandler Implements IItemViewModel(Of dataclass).CheckedChanged
 #End Region
 End Class

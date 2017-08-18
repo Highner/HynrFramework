@@ -89,6 +89,10 @@ Public Class HynrTextBox
     Private Sub AddLabel() Handles Me.ParentChanged
         _Label.Parent = Me.Parent
     End Sub
+    Public Sub SelectText()
+        SelectionStart = 0
+        SelectionLength = Text.Length
+    End Sub
 #End Region
 
 #Region "Events"

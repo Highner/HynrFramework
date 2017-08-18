@@ -8,7 +8,7 @@ Imports System.ComponentModel
 ''' <summary>
 ''' only contructor and CreateNewItem need to be specified in inherited class
 ''' </summary>
-Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As ItemViewModelBase(Of dataitem))
+Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits ViewModelBase
     Implements IListViewModel(Of viewmodelitem), ICrudObject
 
@@ -112,6 +112,16 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         Set(ByVal value As Boolean)
             _FilteredListCount = value
             OnPropertyChanged("FilteredListCount")
+        End Set
+    End Property
+    Private _CheckedItems As New List(Of viewmodelitem)
+    Public Property CheckedItems() As List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).CheckedItems
+        Get
+            Return _CheckedItems
+        End Get
+        Set(ByVal value As List(Of viewmodelitem))
+            _CheckedItems = value
+            OnPropertyChanged("CheckedItems")
         End Set
     End Property
 #End Region
@@ -368,6 +378,7 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
         AddHandler newvmitem.Updated, AddressOf UpdateItem
         AddHandler newvmitem.DoubleClicked, AddressOf ExecuteOpenEditForm
         AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
+        AddHandler newvmitem.CheckedChanged, AddressOf RaiseItemCheckedChanged
         Return newvmitem
     End Function
     Private Sub CancelLoading() 'not working
@@ -381,6 +392,16 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Private Sub FilteredListChanged() Handles _ItemList.CollectionChanged
         FilteredListCount = ItemList.Count
     End Sub
+    Private Sub RaiseItemCheckedChanged(sender As Object, e As EventArgs)
+        Dim item = sender
+        If item.Checked Then
+            CheckedItems.Add(item)
+        Else
+            If CheckedItems.Contains(item) Then CheckedItems.Remove(item)
+        End If
+        OnPropertyChanged("CheckedItems")
+        RaiseEvent ItemCheckedChanged(item)
+    End Sub
 #End Region
 
 #Region "Events"
@@ -391,5 +412,6 @@ Public MustInherit Class ListViewModelBase(Of entityitme As IHasID, dataitem As 
     Public Event UpdateItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).UpdateItemCommandExecuted
     Public Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
     Public Event DeleteSelectedItemsCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemsCommandExecuted
+    Public Event ItemCheckedChanged(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).ItemCheckedChanged
 #End Region
 End Class

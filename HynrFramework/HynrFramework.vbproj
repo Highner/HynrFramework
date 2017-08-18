@@ -104,6 +104,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\CheckboxFilterDataItemViewModel.vb" />
+    <Compile Include="Data\Common\ICheckboxFilterItem.vb" />
+    <Compile Include="Data\Common\IIsCheckable.vb" />
     <Compile Include="Data\Common\IHasDisplayName.vb" />
     <Compile Include="Data\Common\IHasID.vb" />
     <Compile Include="Data\DataContext\DataContextBase.vb" />

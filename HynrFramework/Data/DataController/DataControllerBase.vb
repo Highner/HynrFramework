@@ -4,7 +4,7 @@ Imports HynrFramework
 Imports System.Data.SqlClient
 Imports System.Data.Entity.Core.Objects
 
-Public MustInherit Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
+Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
