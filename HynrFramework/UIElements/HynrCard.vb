@@ -3,6 +3,9 @@
     Private components As ComponentModel.IContainer
     Protected WithEvents ItemViewModel As ItemViewModelBase(Of dataitem)
 
+    Public Sub New()
+    End Sub
+
     Public Sub New(ByRef viewmodelitem As ItemViewModelBase(Of dataitem))
         MyBase.New
         ItemViewModel = viewmodelitem

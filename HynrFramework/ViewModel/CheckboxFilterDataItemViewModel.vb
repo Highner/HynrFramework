@@ -19,7 +19,7 @@ Public Class CheckboxFilterDataItemViewModel(Of dataitem As ICheckboxFilterItem)
     <DisplayName("Item")>
     Public ReadOnly Property DisplayName As String
         Get
-            Return Data.DisplayName
+            If Not IsNothing(Data.DisplayName) Then Return Data.DisplayName Else Return "no data"
         End Get
     End Property
 End Class

@@ -102,6 +102,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
     ''' </summary>
     Public Overridable Function ToEntity(dataitem As dataclass, ByRef entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToEntity
+        TrimStrings(dataitem)
         MapProperties(dataitem, entityitem)
         Return dataitem
     End Function

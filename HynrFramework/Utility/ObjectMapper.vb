@@ -11,4 +11,15 @@ Public Module ObjectMapper
             Next
         End If
     End Sub
+    Public Sub TrimStrings(ByRef obj As Object)
+        If Not IsNothing(obj) Then
+            Dim sourceProperties = obj.[GetType]().GetProperties()
+            For Each sourceProperty As PropertyInfo In sourceProperties
+                Dim val = sourceProperty.GetValue(obj, Nothing)
+                If TypeOf (val) Is String Then
+                    sourceProperty.SetValue(obj, val.ToString.Trim)
+                End If
+            Next
+        End If
+    End Sub
 End Module
