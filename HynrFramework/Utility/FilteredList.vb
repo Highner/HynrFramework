@@ -50,4 +50,31 @@ Module FilteredList
         Next
         Return parameters
     End Function
+    Public Function CreateStringListforText(ByVal list As IEnumerable(Of String), Optional ByVal useand As Boolean = True) As String
+        Dim text As String = ""
+        Dim lastseparator As String
+        If Not useand Then lastseparator = ", " Else lastseparator = " and "
+        Dim counter As Integer = 1
+
+        If list.Count > 1 Then
+            For Each s In list
+                If counter < list.Count - 1 Then
+                    text = text & s & ", "
+                ElseIf counter = list.Count - 1 Then
+                    text = text & s & lastseparator & list.Last
+                End If
+                counter = counter + 1
+            Next
+        ElseIf list.Count = 1 Then
+            text = list(0)
+        End If
+        Return text
+    End Function
+    Public Function CreateStringListforFilter(ByVal list As IEnumerable(Of String)) As String
+        Dim newlist As New List(Of String)
+        For Each item In list
+            newlist.Add(Chr(34) & item & Chr(34))
+        Next
+        Return "(" & CreateStringListforText(newlist, False) & ")"
+    End Function
 End Module

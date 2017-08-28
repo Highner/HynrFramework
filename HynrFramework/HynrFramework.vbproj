@@ -104,6 +104,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UIElements\HynrFilterGridPanel.Designer.vb">
+      <DependentUpon>HynrFilterGridPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UIElements\HynrFilterGridPanel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ViewModel\CheckboxFilterDataItemViewModel.vb" />
     <Compile Include="Data\Common\ICheckboxFilterItem.vb" />
     <Compile Include="Data\Common\IIsCheckable.vb" />
@@ -210,7 +216,9 @@
     <Compile Include="Utility\ObservableListSource.vb" />
     <Compile Include="Utility\Command.vb" />
     <Compile Include="Utility\ServiceBrokerUtility.vb" />
+    <Compile Include="ViewModel\FilterListViewModel.vb" />
     <Compile Include="ViewModel\ICrudObject.vb" />
+    <Compile Include="ViewModel\IFilterListViewModel.vb" />
     <Compile Include="ViewModel\IListViewModel.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IItemViewModel.vb" />
@@ -232,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrCardBase.resx">
       <DependentUpon>HynrCardBase.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrFilterGridPanel.resx">
+      <DependentUpon>HynrFilterGridPanel.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrItemViewForm.resx">
       <DependentUpon>HynrItemViewForm.vb</DependentUpon>

@@ -114,16 +114,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             OnPropertyChanged("FilteredListCount")
         End Set
     End Property
-    Private _CheckedItems As New List(Of viewmodelitem)
-    Public Property CheckedItems() As List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).CheckedItems
-        Get
-            Return _CheckedItems
-        End Get
-        Set(ByVal value As List(Of viewmodelitem))
-            _CheckedItems = value
-            OnPropertyChanged("CheckedItems")
-        End Set
-    End Property
 #End Region
 
 #Region "Constructor"
@@ -378,7 +368,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         AddHandler newvmitem.Updated, AddressOf UpdateItem
         AddHandler newvmitem.DoubleClicked, AddressOf ExecuteOpenEditForm
         AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
-        AddHandler newvmitem.CheckedChanged, AddressOf RaiseItemCheckedChanged
         Return newvmitem
     End Function
     Private Sub CancelLoading() 'not working
@@ -392,16 +381,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Private Sub FilteredListChanged() Handles _ItemList.CollectionChanged
         FilteredListCount = ItemList.Count
     End Sub
-    Private Sub RaiseItemCheckedChanged(sender As Object, e As EventArgs)
-        Dim item = sender
-        If item.Checked Then
-            CheckedItems.Add(item)
-        Else
-            If CheckedItems.Contains(item) Then CheckedItems.Remove(item)
-        End If
-        OnPropertyChanged("CheckedItems")
-        RaiseEvent ItemCheckedChanged(item)
-    End Sub
+
 #End Region
 
 #Region "Events"
@@ -412,6 +392,5 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Event UpdateItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).UpdateItemCommandExecuted
     Public Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
     Public Event DeleteSelectedItemsCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemsCommandExecuted
-    Public Event ItemCheckedChanged(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).ItemCheckedChanged
 #End Region
 End Class
