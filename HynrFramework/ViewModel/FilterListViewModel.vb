@@ -7,7 +7,7 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
 
 #Region "Commands"
     <Browsable(False)>
-    Public Property ToggleCheckedItemsCommand As ICommand = New Command(AddressOf ExecuteToggleCheckedItems)
+    Public Property ToggleCheckedItemsCommand As ICommand = New Command(AddressOf ExecuteToggleCheckedItems) Implements IFilterListViewModel(Of viewmodelitem).ToggleCheckedItemsCommand
 #End Region
 
 #Region "Properties"
@@ -38,6 +38,9 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
 #Region "Methods"
     Public Overridable Function GetFilterString() As String
         Return CreateStringListforFilter((From i In CheckedItems Select i.DisplayName).ToList)
+    End Function
+    Public Overridable Function GetFilterArray() As Array
+        Return (From c In CheckedItems Select c.Data.FilterString).ToArray
     End Function
     Private Sub ExecuteToggleCheckedItems()
         If CheckedItems.Any Then

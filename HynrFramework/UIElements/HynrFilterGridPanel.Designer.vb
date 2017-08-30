@@ -37,9 +37,9 @@ Partial Class HynrFilterGridPanel
         '
         'ButtonSelect
         '
-        Me.ButtonSelect.Location = New System.Drawing.Point(0, -1)
+        Me.ButtonSelect.Location = New System.Drawing.Point(-1, -1)
         Me.ButtonSelect.Name = "ButtonSelect"
-        Me.ButtonSelect.Size = New System.Drawing.Size(35, 21)
+        Me.ButtonSelect.Size = New System.Drawing.Size(36, 22)
         Me.ButtonSelect.TabIndex = 1
         Me.ButtonSelect.UseVisualStyleBackColor = True
         '
