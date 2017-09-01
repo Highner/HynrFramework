@@ -81,6 +81,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Return True
     End Function
     Protected Overridable Sub InitializeConnection()
+        DataContext = Nothing
         DataContext = GetInstance(GetType(datacontextclass))
     End Sub
 #End Region

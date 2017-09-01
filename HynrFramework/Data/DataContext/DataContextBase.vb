@@ -31,6 +31,9 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context
     End Sub
+    Protected Overrides Sub Finalize()
+        DBContext.Dispose()
+    End Sub
 #End Region
 
 #Region "Methods"

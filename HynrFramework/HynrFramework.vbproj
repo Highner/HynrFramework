@@ -104,6 +104,9 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UIElements\HynrButton.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrFilterGrid.vb">
       <SubType>Component</SubType>
     </Compile>

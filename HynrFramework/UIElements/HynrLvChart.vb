@@ -43,15 +43,14 @@ Public Class HynrLvChart
     Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
         Enabled = Not busy
         If busy Then
-            Me.Visible = False
+            Visible = False
             BusyIndicator.StartAngle = 30
             BusyIndicator.Show()
             BusyIndicator.Start()
-
         Else
             BusyIndicator.Stop()
             BusyIndicator.Hide()
-            Me.Visible = True
+            Visible = True
         End If
     End Sub
     Private Sub AdjustBusyIndicatorLocation() Handles Me.SizeChanged
