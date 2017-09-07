@@ -83,6 +83,11 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             End If
         End Get
     End Property
+    Public ReadOnly Property HasSelectedItem As Boolean
+        Get
+            Return Not IsNothing(SelectedItem)
+        End Get
+    End Property
     Public Property SelectedItems As New List(Of viewmodelitem) Implements IListViewModel(Of viewmodelitem).SelectedItems
     Private _CanSave As Boolean
     Public Property CanSave As Boolean Implements IListViewModel(Of viewmodelitem).CanSave

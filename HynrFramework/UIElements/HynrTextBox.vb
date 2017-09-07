@@ -52,6 +52,12 @@ Public Class HynrTextBox
     Public Sub New()
         _Label.Text = "labeltext"
     End Sub
+    ''' <summary>
+    ''' use this to bind to filter text box
+    ''' </summary>
+    ''' <param name="viewmodel"></param>
+    ''' <param name="displayproperty"></param>
+    ''' <param name="labeltext"></param>
     Public Sub BindToViewModel(ByRef viewmodel As IViewModelBase, ByVal displayproperty As String, Optional ByVal labeltext As String = "")
         _Label.Text = labeltext
         If labeltext <> "" Then IncludeLabel = True

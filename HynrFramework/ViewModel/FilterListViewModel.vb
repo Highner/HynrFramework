@@ -8,6 +8,10 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
 #Region "Commands"
     <Browsable(False)>
     Public Property ToggleCheckedItemsCommand As ICommand = New Command(AddressOf ExecuteToggleCheckedItems) Implements IFilterListViewModel(Of viewmodelitem).ToggleCheckedItemsCommand
+    <Browsable(False)>
+    Public Property CheckAllItemsCommand As ICommand = New Command(AddressOf CheckAllItems)
+    <Browsable(False)>
+    Public Property UncheckAllItemsCommand As ICommand = New Command(AddressOf UncheckAllItems)
 #End Region
 
 #Region "Properties"
@@ -50,6 +54,7 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
         End If
     End Sub
     Private Sub CheckAllItems()
+        CheckedItems.Clear()
         For Each item In ItemList
             item.Checked = True
         Next
