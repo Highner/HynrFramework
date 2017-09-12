@@ -18,4 +18,13 @@ Public Class Command
     Public Sub Execute(parameter As Object) Implements ICommand.Execute
         _action()
     End Sub
+    Public Sub Execute() Implements ICommand.Execute
+        Execute(Nothing)
+    End Sub
 End Class
+
+Public Interface ICommand
+    Inherits System.Windows.Input.ICommand
+
+    Overloads Sub Execute()
+End Interface

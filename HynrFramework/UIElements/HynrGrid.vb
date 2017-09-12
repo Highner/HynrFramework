@@ -31,6 +31,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         Set(value As ObservableListSource(Of viewmodelitem))
             If Not IsNothing(value) Then
                 _BindingSource.DataSource = value
+                OnPropertyChanged("BindingSourceDataSource")
             End If
         End Set
     End Property

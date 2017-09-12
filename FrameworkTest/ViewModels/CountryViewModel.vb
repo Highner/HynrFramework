@@ -8,7 +8,7 @@ Public Class CountryViewModel
     Public WithEvents StarshipsVM As New StarshipListViewModel(0)
 
     Protected Overrides Sub GetData()
-        CountriesVM.RefreshAllCommand.Execute(Nothing)
+        CountriesVM.RefreshAllCommand.Execute()
     End Sub
 
     Private Sub LoadPersons() Handles CountriesVM.SelectedItemChanged

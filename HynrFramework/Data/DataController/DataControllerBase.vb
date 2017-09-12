@@ -60,12 +60,13 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Public Overridable Function UpdateItem(dataitem As dataclass) As dataclass Implements IDataController(Of entityclass, dataclass).UpdateItem
         InitializeConnection()
         Dim entityitem = DataContext.GetObject(dataitem.ID)
-        Dim newdataitem = ToEntity(dataitem, entityitem)
-        If DataContext.Save() Then
-            Return newdataitem
-        Else
-            Return Nothing
+        If Not IsNothing(entityitem) Then
+            Dim newdataitem = ToEntity(dataitem, entityitem)
+            If DataContext.Save() Then
+                Return newdataitem
+            End If
         End If
+        Return Nothing
     End Function
     Public Overridable Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItem
         InitializeConnection()

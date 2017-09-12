@@ -138,19 +138,22 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Private Sub ToggleCanSave()
         CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
     End Sub
-    Private Sub AddItemToList(ByRef viewmodelitem As viewmodelitem)
+    Public Sub AddItemToList(ByRef viewmodelitem As viewmodelitem)
         _OriginalItemList.Insert(0, viewmodelitem)
         ApplyFilter()
     End Sub
     Private Sub RemoveItemFromList(ByVal viewmodelitem As viewmodelitem)
-        Dim item = (From i In _OriginalItemList Where i.ID = viewmodelitem.ID Select i).FirstOrDefault
+        RemoveItemFromList(viewmodelitem.Data.ID)
+    End Sub
+    Public Sub RemoveItemFromList(ByVal id As Object)
+        Dim item = (From i In _OriginalItemList Where i.Data.ID = id Select i).FirstOrDefault
         If Not IsNothing(item) Then
             _OriginalItemList.Remove(item)
             ApplyFilter()
         End If
     End Sub
     Protected Sub ReplaceItemInList(ByVal viewmodelitem As viewmodelitem)
-        Dim item = (From i In _OriginalItemList Where i.ID = viewmodelitem.ID Select i).FirstOrDefault
+        Dim item = (From i In _OriginalItemList Where i.Data.ID = viewmodelitem.Data.ID Select i).FirstOrDefault
         If Not IsNothing(item) Then
             Dim index = _OriginalItemList.IndexOf(item)
             _OriginalItemList.Remove(item)
@@ -229,7 +232,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         IsBusy = True
         Dim dataitem As dataitem = OpenNewForm()
         If Not IsNothing(dataitem) Then
-            _DataController.CreateNewItem(dataitem)
+            dataitem = _DataController.CreateNewItem(dataitem)
             Dim item = DataToItem(dataitem)
             AddItemToList(item)
         End If
