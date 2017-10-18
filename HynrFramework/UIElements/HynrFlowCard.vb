@@ -1,5 +1,5 @@
 ﻿Public Class HynrCard(Of dataitem As IHasID)
-    Inherits HynrCardBase
+    Inherits HynrFlowCardBase
     Private components As ComponentModel.IContainer
     Protected WithEvents ItemViewModel As ItemViewModelBase(Of dataitem)
 

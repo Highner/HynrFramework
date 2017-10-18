@@ -1,7 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports HynrFramework
 
-Public Class HynrCardBase
+Public Class HynrFlowCardBase
     Implements IHasHynrSettings
 
 #Region "Properties"
@@ -74,6 +74,6 @@ Public Class HynrCardBase
 #End Region
 
 #Region "Events"
-    Public Event CollapsedChanged(ByRef card As HynrCardBase)
+    Public Event CollapsedChanged(ByRef card As HynrFlowCardBase)
 #End Region
 End Class

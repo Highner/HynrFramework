@@ -1,4 +1,5 @@
 ﻿Public Interface IListViewModel(Of viewmodelitem)
+    Inherits IListViewModelBase
     Property SelectedItem As viewmodelitem
     Property SelectedItems As List(Of viewmodelitem)
 

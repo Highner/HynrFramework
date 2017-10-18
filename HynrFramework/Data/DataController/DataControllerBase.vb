@@ -87,10 +87,15 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     End Sub
 #End Region
 
+#Region "Methods"
+
+#End Region
+
 #Region "Data Mapping"
     ''' <summary>
     ''' override this to fill custom properties etc., but include call to mybase.ToData to map the base properties.
     ''' in case of performance issues, possibly better to map manually and exclude call to MapProperties!
+    ''' can return "nothing" in case item not to be added to list.
     ''' </summary>
     Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToData
         Dim newdataitem As Object

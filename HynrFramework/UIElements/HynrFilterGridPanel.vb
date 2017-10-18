@@ -2,13 +2,15 @@
 
 Public Class HynrFilterGridPanel
 
+    Private _AllowSelectAll As Boolean = True
     Public WithEvents Grid As Object ' HynrFilterGrid(Of ICheckboxFilterItem, CheckboxFilterDataItemViewModel(Of ICheckboxFilterItem))
     Public WithEvents ListViewModel As Object ' IFilterListViewModel(Of CheckboxFilterDataItemViewModel(Of ICheckboxFilterItem))
 
     Public Sub New()
         InitializeComponent()
     End Sub
-    Public Sub AddGrid(Of dataitem As ICheckboxFilterItem)(ByRef lvm As Object, ByVal header As String)
+    Public Sub AddGrid(Of dataitem As ICheckboxFilterItem)(ByRef lvm As Object, ByVal header As String, Optional ByVal allowselectall As Boolean = True)
+        _AllowSelectAll = allowselectall
         ListViewModel = lvm
         Me.Grid = New HynrFilterGrid(Of dataitem, CheckboxFilterDataItemViewModel(Of dataitem))
         Me.Grid.Location = New Drawing.Point(0, 21)
@@ -30,6 +32,10 @@ Public Class HynrFilterGridPanel
     End Sub
 
     Private Sub ButtonSelect_Click(sender As Object, e As EventArgs) Handles ButtonSelect.Click
-        If Not IsNothing(ListViewModel) Then ListViewModel.ToggleCheckedItemsCommand.Execute(Nothing)
+        If _AllowSelectAll Then
+            If Not IsNothing(ListViewModel) Then ListViewModel.ToggleCheckedItemsCommand.Execute()
+        Else
+            If Not IsNothing(ListViewModel) Then ListViewModel.UncheckAllItemsCommand.Execute()
+        End If
     End Sub
 End Class

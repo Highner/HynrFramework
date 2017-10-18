@@ -7,7 +7,12 @@ Public Module ObjectMapper
             Dim sourceProperties = source.[GetType]().GetProperties()
             For Each sourceProperty As PropertyInfo In sourceProperties
                 Dim destprop = (From p In destProperties Where p.Name = sourceProperty.Name AndAlso p.PropertyType.IsAssignableFrom(sourceProperty.PropertyType) AndAlso p.CanWrite = True).FirstOrDefault
-                If Not IsNothing(destprop) Then destprop.SetValue(destination, sourceProperty.GetValue(source, New Object() {}), New Object() {})
+                If Not IsNothing(destprop) Then
+                    Dim val = sourceProperty.GetValue(source, New Object() {})
+                    If TypeOf (val) Is String AndAlso IsNothing(val) Then val = ""
+                    'destprop.SetValue(destination, sourceProperty.GetValue(source, New Object() {}), New Object() {})
+                    destprop.SetValue(destination, val, New Object() {})
+                End If
             Next
         End If
     End Sub

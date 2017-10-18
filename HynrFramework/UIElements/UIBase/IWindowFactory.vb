@@ -4,4 +4,5 @@ Public Interface IListViewWindowFactory(Of dataitem As IHasID)
     Function OpenNewForm(ByRef datacontext As dataitem) As dataitem
     Function OpenEditForm(ByRef datacontext As dataitem) As dataitem
     Function DeleteConfirmationForm(ByRef datacontext As dataitem) As Boolean
+    Event FormClosed(ByRef datacontext As dataitem)
 End Interface

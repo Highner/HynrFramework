@@ -37,7 +37,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 
 #Region "Properties"
     Protected Property _DataController As datacontrollerclass
-    Protected Property _WindowFactory As IListViewWindowFactory(Of dataitem)
+    Protected WithEvents _WindowFactory As IListViewWindowFactory(Of dataitem)
     Private WithEvents _Timer As Timer
     Private WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private WithEvents _ItemList As New ObservableListSource(Of viewmodelitem)
@@ -178,7 +178,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Private Sub TimerTick() Handles _Timer.Tick
         If Not IsBusy Then RefreshAllCommand.Execute(Nothing)
     End Sub
-    Protected Sub DataItemChanged(ByRef dataitem As IHasID)
+    Protected Sub DataItemChanged(ByRef dataitem As IHasID) Handles _WindowFactory.FormClosed
         Dim id As Integer = dataitem.ID
         Dim changedlistitem = (From i In ItemList Where i.ID = id Select i).Single
         changedlistitem.Data = dataitem
@@ -205,6 +205,21 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             ItemList = _OriginalItemList
         End If
     End Sub
+
+    Public Function GetUniqueItemsForFilter(ByVal propertyname As String) As String() Implements IListViewModel(Of viewmodelitem).GetUniqueItemsForFilter
+        If _OriginalItemList.Any Then
+            Dim ar As New List(Of String)
+            Dim propinfo As PropertyInfo = GetType(viewmodelitem).GetProperty(propertyname)
+            If Not IsNothing(propinfo) Then
+                For Each item In _OriginalItemList.OrderBy(propertyname)
+                    Dim val = propinfo.GetValue(item, Nothing)
+                    If Not IsNothing(val) Then ar.Add(val)
+                Next
+                Return ar.Distinct.ToArray
+            End If
+        End If
+        Return New String() {}
+    End Function
 #End Region
 
 #Region "Crud"

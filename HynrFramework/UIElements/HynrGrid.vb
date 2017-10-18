@@ -6,6 +6,11 @@ Imports System.Windows.Forms
 Imports HynrFramework
 Imports Microsoft.Office.Interop
 
+Public Class HynrGrid
+    Inherits HynrGrid(Of IHasID, ItemViewModelBase(Of IHasID))
+
+End Class
+
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits DataHelper.DataGridViewSummary.DataGridViewSummary
     Implements IBindableListControl(Of dataitem, viewmodelitem)
@@ -13,6 +18,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Implements IHasHynrSettings
 
 #Region "Properties"
+    Public Property UseColoring As Boolean = False
     Private Property _SelectedItems As New List(Of viewmodelitem)
     Property SelectedItems As List(Of viewmodelitem)
         Get
@@ -89,6 +95,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
         Controls.Add(BusyIndicator)
+        SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        RowHeadersVisible = False
+        AllowUserToResizeRows = False
+        AllowUserToAddRows = False
     End Sub
     Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
@@ -152,6 +162,25 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                 CurrentCell.Value = Nothing
             End If
         End If
+    End Sub
+    Private Sub ColorRows()
+        If UseColoring Then
+            If (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "BackColor").Any Then
+                For Each row As DataGridViewRow In Rows
+                    Dim item As Object = row.DataBoundItem
+                    row.DefaultCellStyle.BackColor = item.BackColor
+                Next
+            End If
+            If (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "ForeColor").Any Then
+                For Each row As DataGridViewRow In Rows
+                    Dim item As Object = row.DataBoundItem
+                    row.DefaultCellStyle.BackColor = item.ForeColor
+                Next
+            End If
+        End If
+    End Sub
+    Private Sub SortClicked() Handles Me.Sorted
+        ColorRows()
     End Sub
 #End Region
 
@@ -287,6 +316,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         'necessary for the summary grid
         If Me.ColumnCount > 0 Then MyBase.OnColumnAdded(New DataGridViewColumnEventArgs(Me.Columns(Me.Columns.Count - 1)))
+        For Each col As DataGridViewColumn In Columns
+            If col.ValueType = GetType(Decimal) Then
+                col.DefaultCellStyle.Format = "N2"
+                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+            End If
+        Next
+        ColorRows()
     End Sub
     Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
         Dim col As DataGridViewComboBoxColumn = Columns(columnname)

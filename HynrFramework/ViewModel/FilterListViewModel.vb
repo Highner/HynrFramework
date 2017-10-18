@@ -56,12 +56,12 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
     Private Sub CheckAllItems()
         CheckedItems.Clear()
         For Each item In ItemList
-            item.Checked = True
+            If Not item.Checked Then item.Checked = True
         Next
     End Sub
     Private Sub UncheckAllItems()
         For Each item In ItemList
-            item.Checked = False
+            If item.Checked Then item.Checked = False
         Next
     End Sub
     Public Overrides Function DataToItem(ByRef dataitem As dataitem) As viewmodelitem

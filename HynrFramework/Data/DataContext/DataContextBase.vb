@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
 Imports System.Linq.Dynamic
+Imports System.Reflection
 
 Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     Implements IDataContext(Of entityclass)
@@ -37,7 +38,6 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
 #End Region
 
 #Region "Methods"
-
 #End Region
 
 #Region "ChangeNotification"
@@ -96,6 +96,9 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     End Function
     Public Function GetAllObjectsQuery() As IQueryable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjectsQuery
         Return DBContext.Set(GetType(entityclass)).AsQueryable
+    End Function
+    Public Function GetAllObjectsQuery(ByRef entities As DbContext) As IQueryable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjectsQuery
+        Return entities.Set(GetType(entityclass)).AsQueryable
     End Function
 #End Region
 

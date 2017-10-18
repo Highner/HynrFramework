@@ -3,6 +3,8 @@
 Public Class WindowFactory(Of dataitem As IHasID)
     Implements HynrFramework.IListViewWindowFactory(Of dataitem)
 
+    Public Event FormClosed As IListViewWindowFactory(Of dataitem).FormClosedEventHandler Implements IListViewWindowFactory(Of dataitem).FormClosed
+
     Public Function DeleteConfirmationForm(ByRef datacontext As dataitem) As Boolean Implements IListViewWindowFactory(Of dataitem).DeleteConfirmationForm
         Return True
     End Function

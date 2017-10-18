@@ -107,6 +107,9 @@
     <Compile Include="UIElements\HynrButton.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrComboBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrFilterGrid.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -114,6 +117,12 @@
       <DependentUpon>HynrFilterGridPanel.vb</DependentUpon>
     </Compile>
     <Compile Include="UIElements\HynrFilterGridPanel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UIElements\HynrUICard.Designer.vb">
+      <DependentUpon>HynrUICard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UIElements\HynrUICard.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ViewModel\CheckboxFilterDataItemViewModel.vb" />
@@ -140,17 +149,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Shared\BindableObjectBase.vb" />
-    <Compile Include="UIElements\HynrCard.vb">
+    <Compile Include="UIElements\HynrFlowCard.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UIElements\HynrCardBase.Designer.vb">
-      <DependentUpon>HynrCardBase.vb</DependentUpon>
+    <Compile Include="UIElements\HynrFlowCardBase.Designer.vb">
+      <DependentUpon>HynrFlowCardBase.vb</DependentUpon>
     </Compile>
-    <Compile Include="UIElements\HynrCardBase.vb">
+    <Compile Include="UIElements\HynrFlowCardBase.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UIElements\HynrCardContainer.vb">
+    <Compile Include="UIElements\HynrFlowCardContainer.vb">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UIElements\HynrCheckbox.vb">
@@ -226,6 +234,7 @@
     <Compile Include="ViewModel\ICrudObject.vb" />
     <Compile Include="ViewModel\IFilterListViewModel.vb" />
     <Compile Include="ViewModel\IListViewModel.vb" />
+    <Compile Include="ViewModel\IListViewModelBase.vb" />
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IItemViewModel.vb" />
     <Compile Include="ViewModel\IViewModelBase.vb" />
@@ -241,11 +250,11 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UIElements\HynrCard.resx">
-      <DependentUpon>HynrCard.vb</DependentUpon>
+    <EmbeddedResource Include="UIElements\HynrFlowCard.resx">
+      <DependentUpon>HynrFlowCard.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UIElements\HynrCardBase.resx">
-      <DependentUpon>HynrCardBase.vb</DependentUpon>
+    <EmbeddedResource Include="UIElements\HynrFlowCardBase.resx">
+      <DependentUpon>HynrFlowCardBase.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrFilterGridPanel.resx">
       <DependentUpon>HynrFilterGridPanel.vb</DependentUpon>
@@ -255,6 +264,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrItemViewFormDialog.resx">
       <DependentUpon>HynrItemViewFormDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrUICard.resx">
+      <DependentUpon>HynrUICard.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\MatrixCircularProgressControl.resx">
       <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>
