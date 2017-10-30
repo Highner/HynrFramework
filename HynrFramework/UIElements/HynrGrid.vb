@@ -7,18 +7,162 @@ Imports HynrFramework
 Imports Microsoft.Office.Interop
 
 Public Class HynrGrid
-    Inherits HynrGrid(Of IHasID, ItemViewModelBase(Of IHasID))
+    Inherits DataHelper.DataGridViewSummary.DataGridViewSummary
+    Implements IHasHynrSettings
+    Implements INotifyPropertyChanged
 
+#Region "Properties"
+    Private _HynrSettings As HynrUISettings = New HynrUISettings
+    Public Property HynrSettings As HynrUISettings Implements IHasHynrSettings.HynrSettings
+        Get
+            Return _HynrSettings
+        End Get
+        Set(value As HynrUISettings)
+            If Not IsNothing(value) Then
+                _HynrSettings = value
+                ApplyHynrSettings()
+            End If
+        End Set
+    End Property
+    Private _EnableDirectGridExport As Boolean
+    Public Property EnableDirectGridExport() As Boolean
+        Get
+            Return _EnableDirectGridExport
+        End Get
+        Set(ByVal value As Boolean)
+            _EnableDirectGridExport = value
+            If value = True Then
+                AddHandler Me.MouseClick, AddressOf AddContextMenu
+            Else
+                RemoveHandler Me.MouseClick, AddressOf AddContextMenu
+            End If
+        End Set
+    End Property
+    Protected _IsBusy As Boolean
+    Public Property IsBusy() As Boolean 'Implements IBindableListControl(Of dataitem, viewmodelitem).IsBusy
+        Get
+            Return _IsBusy
+        End Get
+        Set(ByVal value As Boolean)
+            _IsBusy = value
+            ToggleBusyIndicator(_IsBusy)
+            OnPropertyChanged("IsBusy")
+        End Set
+    End Property
+    Private BusyIndicator As New MatrixCircularProgressControl
+
+#End Region
+
+#Region "Methods"
+    Public Sub New()
+        SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        RowHeadersVisible = False
+        AllowUserToResizeRows = False
+        AllowUserToAddRows = False
+        BusyIndicator.Height = 50
+        BusyIndicator.Width = 50
+        Controls.Add(BusyIndicator)
+    End Sub
+    Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
+        If Me.PropertyChangedEvent IsNot Nothing Then
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(strPropertyName))
+        End If
+    End Sub
+    Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
+        DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
+        DefaultCellStyle.SelectionForeColor = HynrSettings.SelectedForecolor
+        GridColor = HynrSettings.GridColor
+        BackgroundColor = HynrSettings.GridBackcolor
+        RowHeadersVisible = HynrSettings.RowHeadersVisible
+        BorderStyle = HynrSettings.GridBorderStyle
+    End Sub
+    Private Sub RewriteSettings() Handles Me.ParentChanged
+        If Not IsNothing(Me._HynrSettings) Then ApplyHynrSettings()
+    End Sub
+    Private Sub Grid_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles Me.CurrentCellDirtyStateChanged
+        If TypeOf (CurrentCell) Is DataGridViewCheckBoxCell Then
+            If IsCurrentCellDirty Then
+                CommitEdit(DataGridViewDataErrorContexts.Commit)
+            End If
+        End If
+    End Sub
+    Private Sub EnterComboboxNullvalue(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If Not IsNothing(CurrentCell) Then
+            Dim items = {"UltraDateTimeEditorColumn", "DataGridViewComboBoxColumn", "UltraDataGridViewCell"}
+            If e.KeyCode = Keys.Delete And CurrentCell.ReadOnly = False And items.Contains(CurrentCell.OwningColumn.CellType.Name) Then
+                CurrentCell.Value = Nothing
+            End If
+        End If
+    End Sub
+    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
+        Dim col As DataGridViewComboBoxColumn = Columns(columnname)
+        col.DataSource = New BindingSource(datasource, String.Empty)
+        col.DataPropertyName = datapropertyname
+        col.ValueMember = valuemember
+        col.DisplayMember = displaymember
+    End Sub
+    Private Sub OnBindingComplete() Handles Me.DataBindingComplete
+        If ColumnCount = 0 Then AutoGenerateColumns = True
+    End Sub
+    Private Sub view_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles Me.DataError
+        If e.Exception.Message = "DataGridViewComboBoxCell value is not valid." Then
+            Dim value As Object = Rows(e.RowIndex).Cells(e.ColumnIndex).Value
+            If Not DirectCast(Columns(e.ColumnIndex), DataGridViewComboBoxColumn).Items.Contains(value) Then
+                DirectCast(Columns(e.ColumnIndex), DataGridViewComboBoxColumn).Items.Add(value)
+                e.ThrowException = False
+            End If
+        End If
+    End Sub
+    Protected Sub ToggleBusyIndicator(ByVal busy As Boolean)
+        Enabled = Not busy
+        If busy Then
+            BusyIndicator.StartAngle = 30
+            BusyIndicator.Show()
+            BusyIndicator.Start()
+        Else
+            BusyIndicator.Stop()
+            BusyIndicator.Hide()
+        End If
+    End Sub
+    Private Sub AdjustBusyIndicatorLocation() Handles Me.SizeChanged
+        Dim x As Integer = Me.Width / 2 - BusyIndicator.Width / 2
+        Dim y As Integer = Me.Height / 2 - BusyIndicator.Height / 2
+        BusyIndicator.Location = New Drawing.Point(x, y)
+    End Sub
+#End Region
+
+#Region "Export"
+    WithEvents ToolstripItemExport As New ToolStripMenuItem()
+    Private mouseLocation As DataGridViewCellEventArgs
+
+    Private Sub AddContextMenu()
+        ToolstripItemExport.Text = "Export"
+        Dim strip As New ContextMenuStrip()
+        For Each column As DataGridViewColumn In Columns()
+            column.ContextMenuStrip = strip
+            column.ContextMenuStrip.Items.Add(ToolstripItemExport)
+        Next
+    End Sub
+
+    Private Sub toolStripItem1_Click(ByVal sender As Object, ByVal args As EventArgs) Handles ToolstripItemExport.Click
+        RaiseEvent TableExport(DataGridViewToDataTable(Me))
+    End Sub
+    Private Sub dataGridView_CellMouseEnter(ByVal sender As Object, ByVal location As DataGridViewCellEventArgs) Handles Me.CellMouseEnter
+        mouseLocation = location
+    End Sub
+#End Region
+
+#Region "Events"
+    Public Event TableExport(ByRef table As DataTable)
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+#End Region
 End Class
 
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
-    Inherits DataHelper.DataGridViewSummary.DataGridViewSummary
+    Inherits HynrGrid
     Implements IBindableListControl(Of dataitem, viewmodelitem)
-    Implements INotifyPropertyChanged
-    Implements IHasHynrSettings
 
 #Region "Properties"
-    Public Property UseColoring As Boolean = False
     Private Property _SelectedItems As New List(Of viewmodelitem)
     Property SelectedItems As List(Of viewmodelitem)
         Get
@@ -56,20 +200,13 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             End If
         End Set
     End Property
-    Private _HynrSettings As New HynrUISettings
-    Public Property HynrSettings As HynrUISettings Implements IHasHynrSettings.HynrSettings
-        Get
-            Return _HynrSettings
-        End Get
-        Set(value As HynrUISettings)
-            If Not IsNothing(value) Then
-                _HynrSettings = value
-                ApplyHynrSettings()
-            End If
-        End Set
-    End Property
-    Private _IsBusy As Boolean
-    Public Property IsBusy() As Boolean Implements IBindableListControl(Of dataitem, viewmodelitem).IsBusy
+
+    Property FireItemDoubleClick As Boolean = False
+    Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
+    Private LazyBindingViewModel As IViewModelBase
+    Public Property FileDropToItemOnly As Boolean = True
+
+    Public Overloads Property IsBusy As Boolean Implements IViewModelBase.IsBusy
         Get
             Return _IsBusy
         End Get
@@ -79,42 +216,16 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             OnPropertyChanged("IsBusy")
         End Set
     End Property
-    Property FireItemDoubleClick As Boolean = False
-    Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
-    Private BusyIndicator As New MatrixCircularProgressControl
-    Private LazyBindingViewModel As IViewModelBase
-    Public Property FileDropToItemOnly As Boolean = True
+
     Private _BackColor As Color
     Private _SelectionColor As Color
 #End Region
 
 #Region "Methods"
     Public Sub New()
+        MyBase.New
         DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
-        BusyIndicator.Height = 50
-        BusyIndicator.Width = 50
-        Controls.Add(BusyIndicator)
-        SelectionMode = DataGridViewSelectionMode.FullRowSelect
-        RowHeadersVisible = False
-        AllowUserToResizeRows = False
-        AllowUserToAddRows = False
-    End Sub
-    Private Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
-        DefaultCellStyle.SelectionBackColor = HynrSettings.SelectedBackColor
-        DefaultCellStyle.SelectionForeColor = HynrSettings.SelectedForecolor
-        GridColor = HynrSettings.GridColor
-        BackgroundColor = HynrSettings.GridBackcolor
-        RowHeadersVisible = HynrSettings.RowHeadersVisible
-        BorderStyle = HynrSettings.GridBorderStyle
-    End Sub
-    Private Sub RewriteSettings() Handles Me.ParentChanged
-        If Not IsNothing(Me._HynrSettings) Then ApplyHynrSettings()
-    End Sub
-    Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
-        If Me.PropertyChangedEvent IsNot Nothing Then
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(strPropertyName))
-        End If
     End Sub
     Private Sub SelectedItemChanged()
         SelectedItem = _BindingSource.Current
@@ -132,55 +243,39 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         Next
         SelectedItems = list
     End Sub
-    Private Sub ToggleBusyIndicator(ByVal busy As Boolean)
-        Enabled = Not busy
-        If busy Then
-            BusyIndicator.StartAngle = 30
-            BusyIndicator.Show()
-            BusyIndicator.Start()
-        Else
-            BusyIndicator.Stop()
-            BusyIndicator.Hide()
-        End If
-    End Sub
-    Private Sub AdjustBusyIndicatorLocation() Handles Me.SizeChanged
-        Dim x As Integer = Me.Width / 2 - BusyIndicator.Width / 2
-        Dim y As Integer = Me.Height / 2 - BusyIndicator.Height / 2
-        BusyIndicator.Location = New Drawing.Point(x, y)
-    End Sub
-    Private Sub Grid_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles Me.CurrentCellDirtyStateChanged
-        If TypeOf (CurrentCell) Is DataGridViewCheckBoxCell Then
-            If IsCurrentCellDirty Then
-                CommitEdit(DataGridViewDataErrorContexts.Commit)
-            End If
-        End If
-    End Sub
-    Private Sub EnterComboboxNullvalue(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If Not IsNothing(CurrentCell) Then
-            Dim items = {"UltraDateTimeEditorColumn", "DataGridViewComboBoxColumn", "UltraDataGridViewCell"}
-            If e.KeyCode = Keys.Delete And CurrentCell.ReadOnly = False And items.Contains(CurrentCell.OwningColumn.CellType.Name) Then
-                CurrentCell.Value = Nothing
-            End If
-        End If
-    End Sub
+
     Private Sub ColorRows()
-        If UseColoring Then
-            If (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "BackColor").Any Then
-                For Each row As DataGridViewRow In Rows
-                    Dim item As Object = row.DataBoundItem
-                    row.DefaultCellStyle.BackColor = item.BackColor
-                Next
-            End If
-            If (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "ForeColor").Any Then
-                For Each row As DataGridViewRow In Rows
-                    Dim item As Object = row.DataBoundItem
-                    row.DefaultCellStyle.BackColor = item.ForeColor
-                Next
-            End If
+        Dim back = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "BackColor").Any
+        Dim front = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "ForeColor").Any
+        If back Or front Then
+            For Each row As DataGridViewRow In Rows
+                If back Then row.DefaultCellStyle.BackColor = row.DataBoundItem.BackColor
+                If front Then row.DefaultCellStyle.BackColor = row.DataBoundItem.ForeColor
+            Next
         End If
     End Sub
     Private Sub SortClicked() Handles Me.Sorted
         ColorRows()
+    End Sub
+    Private Sub Grid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) ' Handles Me.RowPostPaint
+        If Rows(e.RowIndex).Selected Then
+            Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = Color.Empty
+            If Not IsNothing(HynrSettings) Then
+
+                Using pen As New Pen(HynrSettings.SelectedBackColor)
+                    Dim penWidth As Integer = 2
+
+                    pen.Width = penWidth
+
+                    Dim x As Integer = e.RowBounds.Left + (penWidth / 2)
+                    Dim y As Integer = e.RowBounds.Top + (penWidth / 2)
+                    Dim width As Integer = e.RowBounds.Width - penWidth
+                    Dim height As Integer = e.RowBounds.Height - penWidth
+
+                    e.Graphics.DrawRectangle(pen, x, y, width, height)
+                End Using
+            End If
+        End If
     End Sub
 #End Region
 
@@ -324,30 +419,9 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         Next
         ColorRows()
     End Sub
-    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
-        Dim col As DataGridViewComboBoxColumn = Columns(columnname)
-        col.DataSource = New BindingSource(datasource, String.Empty)
-        col.DataPropertyName = datapropertyname
-        col.ValueMember = valuemember
-        col.DisplayMember = displaymember
-    End Sub
-    Private Sub OnBindingComplete() Handles Me.DataBindingComplete
-        If ColumnCount = 0 Then AutoGenerateColumns = True
-    End Sub
-    Private Sub view_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles Me.DataError
-        If e.Exception.Message = "DataGridViewComboBoxCell value is not valid." Then
-            Dim value As Object = Rows(e.RowIndex).Cells(e.ColumnIndex).Value
-            If Not DirectCast(Columns(e.ColumnIndex), DataGridViewComboBoxColumn).Items.Contains(value) Then
-                DirectCast(Columns(e.ColumnIndex), DataGridViewComboBoxColumn).Items.Add(value)
-                e.ThrowException = False
-            End If
-        End If
-
-    End Sub
 #End Region
 
 #Region "Events"
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Public Event ItemDoubleClick(ByRef item As viewmodelitem)
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
     Public Event FileDropped(ByRef item As viewmodelitem, ByRef data As Object)

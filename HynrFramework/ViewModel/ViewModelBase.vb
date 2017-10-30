@@ -8,9 +8,14 @@ Public MustInherit Class ViewModelBase
     Implements INotifyPropertyChanged
     Implements IViewModelBase
 
+#Region "Commands"
     <Browsable(False)>
     Public Property RefreshAllCommand As ICommand = New Command(AddressOf GetData)
+    <Browsable(False)>
+    Public Property RefreshAllCommandAsync As ICommand = New Command(AddressOf ExecuteGetData)
+#End Region
 
+#Region "Properties"
     Private _Cts As CancellationTokenSource
     <Browsable(False)>
     Public Property CancellationSource As CancellationTokenSource
@@ -42,10 +47,32 @@ Public MustInherit Class ViewModelBase
             Return Not _IsBusy
         End Get
     End Property
+    Private _DataLoaded As Boolean = False
+    <Browsable(False)>
+    Public Property DataLoaded() As Boolean
+        Get
+            Return _DataLoaded
+        End Get
+        Set(ByVal value As Boolean)
+            _DataLoaded = value
+            OnPropertyChanged("DataLoaded")
+        End Set
+    End Property
+#End Region
+
+#Region "Methods"
     ''' <summary>
-    ''' override to get base data. fires when RefreshAllCommand is called.
+    ''' override to get base data. fires when RefreshAllCommand is executed.
     ''' </summary>
     Protected Overridable Sub GetData()
+    End Sub
+    Private Async Sub ExecuteGetData()
+        DataLoaded = False
+        IsBusy = True
+        CancellationSource = New Threading.CancellationTokenSource
+        Await Task.Run(Sub() GetData(), CancellationSource.Token)
+        IsBusy = False
+        DataLoaded = True
     End Sub
     Protected Sub RaiseLoadingCompleted()
         RaiseEvent LoadingCompleted()
@@ -60,7 +87,10 @@ Public MustInherit Class ViewModelBase
             OnPropertyChanged(prop.Name)
         Next
     End Sub
+#End Region
 
+#Region "Events"
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
+#End Region
 End Class

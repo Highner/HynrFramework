@@ -3,16 +3,24 @@
 Public Module ObjectMapper
     Public Sub MapProperties(ByVal source As Object, ByRef destination As Object)
         If Not IsNothing(source) AndAlso Not IsNothing(destination) Then
-            Dim destProperties = destination.[GetType]().GetProperties()
-            Dim sourceProperties = source.[GetType]().GetProperties()
+
+            Dim destProperties As PropertyInfo() = Nothing
+            destProperties = destination.[GetType]().GetProperties()
+
+            Dim sourceProperties As PropertyInfo() = Nothing
+            sourceProperties = source.[GetType]().GetProperties()
+
             For Each sourceProperty As PropertyInfo In sourceProperties
-                Dim destprop = (From p In destProperties Where p.Name = sourceProperty.Name AndAlso p.PropertyType.IsAssignableFrom(sourceProperty.PropertyType) AndAlso p.CanWrite = True).FirstOrDefault
+                Dim destprop As PropertyInfo = Nothing
+                destprop = (From p In destProperties Where p.Name = sourceProperty.Name AndAlso p.PropertyType.IsAssignableFrom(sourceProperty.PropertyType) AndAlso p.CanWrite = True).FirstOrDefault
+
                 If Not IsNothing(destprop) Then
-                    Dim val = sourceProperty.GetValue(source, New Object() {})
+                    Dim val = Nothing
+                    val = sourceProperty.GetValue(source, New Object() {})
                     If TypeOf (val) Is String AndAlso IsNothing(val) Then val = ""
-                    'destprop.SetValue(destination, sourceProperty.GetValue(source, New Object() {}), New Object() {})
                     destprop.SetValue(destination, val, New Object() {})
                 End If
+
             Next
         End If
     End Sub

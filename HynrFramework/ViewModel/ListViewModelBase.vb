@@ -4,6 +4,8 @@ Imports System.Windows.Forms
 Imports System.Windows.Input
 Imports System.Linq.Dynamic
 Imports System.ComponentModel
+Imports System.Text
+
 
 ''' <summary>
 ''' only contructor and CreateNewItem need to be specified in inherited class
@@ -341,6 +343,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         GetDataAsync()
     End Sub
     Private Async Sub GetDataAsync()
+        DataLoaded = False
         IsBusy = True
         CancelLoading()
         ItemList.Clear()
@@ -355,6 +358,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         DataToList(dataitemlist)
         ToggleCanSave()
         IsBusy = False
+        DataLoaded = True
         RaiseLoadingCompleted()
     End Sub
     ''' <summary>

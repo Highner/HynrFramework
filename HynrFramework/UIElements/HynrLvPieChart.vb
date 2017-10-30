@@ -1,8 +1,5 @@
-﻿Imports System.ComponentModel
-Imports HynrFramework
-
-Public Class HynrLvChart
-    Inherits LiveCharts.WinForms.CartesianChart
+﻿Public Class HynrLvPieChart
+    Inherits LiveCharts.WinForms.PieChart
     Implements IHasHynrSettings
 
 
