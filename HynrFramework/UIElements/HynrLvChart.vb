@@ -1,5 +1,4 @@
-﻿Imports System.ComponentModel
-Imports HynrFramework
+﻿Imports System.Collections.Specialized
 
 Public Class HynrLvChart
     Inherits LiveCharts.WinForms.CartesianChart
@@ -19,15 +18,26 @@ Public Class HynrLvChart
             End If
         End Set
     End Property
-
+    WithEvents ChartSeries As LiveCharts.SeriesCollection
+    Public ReadOnly Property HasSeries As Boolean
+        Get
+            Return ChartSeries.Any
+        End Get
+    End Property
 #End Region
 
-
 #Region "Methods"
+    Public Sub New()
+        ChartSeries = Series
+    End Sub
     Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
+    End Sub
+    Private Sub SeriesAdded(sender As Object, e As NotifyCollectionChangedEventArgs) Handles ChartSeries.CollectionChanged
+        If e.Action = NotifyCollectionChangedAction.Add Or e.Action = NotifyCollectionChangedAction.Remove Then RaiseEvent Activated()
     End Sub
 #End Region
 
 #Region "Events"
+    Public Event Activated()
 #End Region
 End Class

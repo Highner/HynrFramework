@@ -39,7 +39,7 @@ Public Class HynrFlowCardBase
 #Region "Methods"
     Public Sub New()
         InitializeComponent()
-
+        Me.LabelStrip.IsSubHeader = True
     End Sub
     Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         LabelStrip.HynrSettings = HynrSettings

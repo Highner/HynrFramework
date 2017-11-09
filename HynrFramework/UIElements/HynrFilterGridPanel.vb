@@ -29,6 +29,7 @@ Public Class HynrFilterGridPanel
         Controls.Add(Me.Grid)
 
         TextBoxFilter.DataBindings.Add("Text", ListViewModel, "DisplayNameFilter", True, DataSourceUpdateMode.OnPropertyChanged)
+        ButtonSelect.DataBindings.Add("Text", ListViewModel, "CheckedItemsCount")
     End Sub
 
     Private Sub ButtonSelect_Click(sender As Object, e As EventArgs) Handles ButtonSelect.Click

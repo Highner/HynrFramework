@@ -25,6 +25,8 @@ Partial Class HynrLvChartPanel
         Me.PieChart = New HynrFramework.HynrLvPieChart()
         Me.CartesianChart = New HynrFramework.HynrLvChart()
         Me.LabelStrip = New HynrFramework.HynrLabelStrip()
+        Me.ButtonSeries = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.LabelStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'PieChart
@@ -52,12 +54,24 @@ Partial Class HynrLvChartPanel
         'LabelStrip
         '
         Me.LabelStrip.HynrSettings = Nothing
+        Me.LabelStrip.IsSubHeader = False
+        Me.LabelStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonSeries})
         Me.LabelStrip.LabelText = "Chart"
         Me.LabelStrip.Location = New System.Drawing.Point(0, 0)
         Me.LabelStrip.Name = "LabelStrip"
         Me.LabelStrip.Size = New System.Drawing.Size(466, 25)
         Me.LabelStrip.TabIndex = 1
         Me.LabelStrip.Text = "HynrLabelStrip1"
+        '
+        'ButtonSeries
+        '
+        Me.ButtonSeries.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ButtonSeries.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonSeries.Image = Global.HynrFramework.My.Resources.Resources.chart__pencil
+        Me.ButtonSeries.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonSeries.Name = "ButtonSeries"
+        Me.ButtonSeries.Size = New System.Drawing.Size(29, 22)
+        Me.ButtonSeries.Text = "Show/Hide Series"
         '
         'HynrLvChartPanel
         '
@@ -68,6 +82,8 @@ Partial Class HynrLvChartPanel
         Me.Controls.Add(Me.LabelStrip)
         Me.Name = "HynrLvChartPanel"
         Me.Size = New System.Drawing.Size(466, 397)
+        Me.LabelStrip.ResumeLayout(False)
+        Me.LabelStrip.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -76,4 +92,5 @@ Partial Class HynrLvChartPanel
     Public WithEvents CartesianChart As HynrLvChart
     Friend WithEvents LabelStrip As HynrLabelStrip
     Public WithEvents PieChart As HynrLvPieChart
+    Friend WithEvents ButtonSeries As System.Windows.Forms.ToolStripDropDownButton
 End Class

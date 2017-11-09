@@ -119,6 +119,9 @@
     <Compile Include="UIElements\HynrFilterGridPanel.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrFilterListDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrListGroupDialog.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -245,6 +248,7 @@
     <Compile Include="ViewModel\ItemViewModelBase.vb" />
     <Compile Include="ViewModel\IItemViewModel.vb" />
     <Compile Include="ViewModel\IViewModelBase.vb" />
+    <Compile Include="ViewModel\ListViewModel.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />
     <Compile Include="ViewModel\MainViewModelBase.vb" />
     <Compile Include="ViewModel\GroupedListViewModelBase.vb" />
@@ -256,6 +260,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrFilterListDialog.resx">
+      <DependentUpon>HynrFilterListDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrFlowCard.resx">
       <DependentUpon>HynrFlowCard.vb</DependentUpon>
@@ -349,6 +356,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart--pencil.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

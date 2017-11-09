@@ -10,6 +10,7 @@ Public Class HynrUISettings
     Private _DefaultGridColor As Color = Color.LightGray
     Private _DefaultGridBackcolor As Color = Color.White
     Private _DefaultCompanyColor As Color = Color.IndianRed
+    Private _DefaultSubHeaderColor As Color = Color.LightGray
     Private _DefaultLabelstripForecolor As Color = Color.White
 
     Private _SelectedBackcolor As Color = _DefaultSelectedBackcolor
@@ -55,6 +56,15 @@ Public Class HynrUISettings
         End Get
         Set(ByVal value As Color)
             _CompanyColor = value
+        End Set
+    End Property
+    Private _SubHeaderColor As Color = _DefaultSubHeaderColor
+    Public Property SubHeaderColor() As Color
+        Get
+            Return _SubHeaderColor
+        End Get
+        Set(ByVal value As Color)
+            _SubHeaderColor = value
         End Set
     End Property
     Private _LabelstripForecolor As Color = _DefaultLabelstripForecolor

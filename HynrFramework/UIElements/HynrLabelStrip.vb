@@ -32,6 +32,16 @@ Public Class HynrLabelStrip
             End If
         End Set
     End Property
+    Private _IsSubHeader As Boolean = False
+    Public Property IsSubHeader() As Boolean
+        Get
+            Return _IsSubHeader
+        End Get
+        Set(ByVal value As Boolean)
+            _IsSubHeader = value
+            If Not IsNothing(HynrSettings) Then ApplyHynrSettings()
+        End Set
+    End Property
     Private LazyBindingViewModel As IViewModelBase
     Private LazyBindingDataMember As String
     Private LazyBindingDisplayProperty As String
@@ -43,8 +53,14 @@ Public Class HynrLabelStrip
         Items.Add(_Label)
     End Sub
     Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
-        BackColor = HynrSettings.CompanyColor
-        _Label.ForeColor = HynrSettings.LabelstripColor
+        If IsSubHeader Then
+            BackColor = HynrSettings.SubHeaderColor
+            _Label.ForeColor = Drawing.Color.Black
+        Else
+            BackColor = HynrSettings.CompanyColor
+            _Label.ForeColor = HynrSettings.LabelstripColor
+        End If
+
         RenderMode = ToolStripRenderMode.System
         GripStyle = ToolStripGripStyle.Hidden
     End Sub

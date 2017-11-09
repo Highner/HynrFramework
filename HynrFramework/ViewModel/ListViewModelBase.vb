@@ -38,7 +38,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #End Region
 
 #Region "Properties"
-    Protected Property _DataController As datacontrollerclass
+    Public Property _DataController As datacontrollerclass
     Protected WithEvents _WindowFactory As IListViewWindowFactory(Of dataitem)
     Private WithEvents _Timer As Timer
     Private WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)

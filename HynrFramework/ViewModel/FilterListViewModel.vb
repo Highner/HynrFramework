@@ -2,7 +2,7 @@
 Imports System.Windows.Input
 
 Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxFilterItem, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As CheckboxFilterDataItemViewModel(Of dataitem))
-    Inherits ListViewModelBase(Of entityitme, dataitem, datacontrollerclass, viewmodelitem)
+    Inherits ListViewModel(Of entityitme, dataitem, datacontrollerclass, viewmodelitem)
     Implements IFilterListViewModel(Of viewmodelitem)
 
 #Region "Commands"
@@ -36,6 +36,11 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
             _CheckedItems = value
             OnPropertyChanged("CheckedItems")
         End Set
+    End Property
+    Public ReadOnly Property CheckedItemsCount() As Integer
+        Get
+            Return CheckedItems.Count
+        End Get
     End Property
 #End Region
 
@@ -77,6 +82,7 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
             If CheckedItems.Contains(item) Then CheckedItems.Remove(item)
         End If
         OnPropertyChanged("CheckedItems")
+        OnPropertyChanged("CheckedItemsCount")
         RaiseEvent ItemCheckedChanged(item)
     End Sub
 #End Region
