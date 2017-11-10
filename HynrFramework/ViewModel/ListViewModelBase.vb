@@ -339,6 +339,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         SelectedItems = Nothing
         OnPropertyChanged("SelectedItems")
     End Sub
+    Protected Overridable Sub ClearListLight()
+        ItemList.Clear()
+    End Sub
     Protected Overrides Sub GetData()
         GetDataAsync()
     End Sub
@@ -346,7 +349,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         DataLoaded = False
         IsBusy = True
         CancelLoading()
-        ItemList.Clear()
+        ClearListLight()
         Dim dataitemlist As IEnumerable(Of dataitem) = Nothing
         CancellationSource = New Threading.CancellationTokenSource
         Try

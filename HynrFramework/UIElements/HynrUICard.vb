@@ -57,6 +57,14 @@
         End Set
     End Property
     Private BusyIndicator As New MatrixCircularProgressControl
+    Public Property IsSubHeader() As Boolean
+        Get
+            Return LabelStrip.IsSubHeader
+        End Get
+        Set(ByVal value As Boolean)
+            LabelStrip.IsSubHeader = value
+        End Set
+    End Property
 #End Region
 
 #Region "Methods"

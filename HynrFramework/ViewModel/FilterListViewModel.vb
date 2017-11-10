@@ -85,6 +85,10 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
         OnPropertyChanged("CheckedItemsCount")
         RaiseEvent ItemCheckedChanged(item)
     End Sub
+    Protected Overrides Sub ClearListLight()
+        MyBase.ClearListLight()
+        CheckedItems.Clear()
+    End Sub
 #End Region
 
 #Region "Events"

@@ -17,7 +17,7 @@
     End Sub
     Public Sub New(ByRef datacontext As IFilterListViewModel(Of CheckboxFilterDataItemViewModel(Of dataitem)), ByVal header As String, ByVal enablecancel As Boolean)
         Me.New(datacontext, header)
-        Me.ButtonCancel.Visible = enablecancel
+        MyBase.CancelVisible = enablecancel
     End Sub
 
     Private Sub InitializeComponent()

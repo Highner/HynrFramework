@@ -5,6 +5,18 @@
 
     Public WithEvents ButtonOK As System.Windows.Forms.Button
 
+    Public Property CancelVisible() As Boolean
+        Get
+            Return ButtonCancel.Visible
+        End Get
+        Set(ByVal value As Boolean)
+            ButtonCancel.Visible = value
+            If value = False Then
+                ButtonOK.Location = ButtonCancel.Location
+            End If
+        End Set
+    End Property
+
     Public Sub New()
         MyBase.New
         InitializeComponent()
@@ -12,6 +24,13 @@
     Public Sub New(ByRef settings As HynrUISettings, ByRef datacontext As Object)
         MyBase.New(settings, datacontext)
         InitializeComponent()
+    End Sub
+
+    Public Sub New(ByRef settings As HynrUISettings, ByRef datacontext As Object, ByVal cancelvisible As Boolean)
+        MyBase.New(settings, datacontext)
+        InitializeComponent()
+        Me.CancelVisible = cancelvisible
+
     End Sub
 
     Private Sub InitializeComponent()
@@ -48,7 +67,9 @@
         Me.ControlBox = False
         Me.Controls.Add(Me.ButtonOK)
         Me.Controls.Add(Me.ButtonCancel)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "HynrItemViewFormDialog"
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.ResumeLayout(False)
 
     End Sub
