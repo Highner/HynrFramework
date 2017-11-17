@@ -1,6 +1,6 @@
 ﻿Imports System.Reflection
 
-Module FilteredList
+Public Module FilteredList
     Function GenerateFilterParameters(ByRef listviewmodel As Object) As String
         Dim parameters As String = ""
         Dim props = listviewmodel.[GetType]().GetProperties().Where(Function(prprt) Attribute.IsDefined(prprt, GetType(ListViewModelFilterAttribute)))
@@ -56,17 +56,19 @@ Module FilteredList
         If Not useand Then lastseparator = ", " Else lastseparator = " and "
         Dim counter As Integer = 1
 
-        If list.Count > 1 Then
-            For Each s In list
-                If counter < list.Count - 1 Then
-                    text = text & s & ", "
-                ElseIf counter = list.Count - 1 Then
-                    text = text & s & lastseparator & list.Last
-                End If
-                counter = counter + 1
-            Next
-        ElseIf list.Count = 1 Then
-            text = list(0)
+        If Not IsNothing(list) Then
+            If list.Count > 1 Then
+                For Each s In list
+                    If counter < list.Count - 1 Then
+                        text = text & s & ", "
+                    ElseIf counter = list.Count - 1 Then
+                        text = text & s & lastseparator & list.Last
+                    End If
+                    counter = counter + 1
+                Next
+            ElseIf list.Count = 1 Then
+                text = list(0)
+            End If
         End If
         Return text
     End Function

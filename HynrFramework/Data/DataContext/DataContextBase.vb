@@ -2,9 +2,10 @@
 Imports System.Data.Entity
 Imports System.Linq.Dynamic
 Imports System.Reflection
+Imports HynrFramework
 
 Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
-    Implements IDataContext(Of entityclass)
+    Implements IDataContext(Of entityclass), IHasActivityLog
 
 #Region "Properties"
     Private WithEvents _ErrorLog As New BindingList(Of String)
@@ -38,10 +39,6 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
 #End Region
 
 #Region "Methods"
-#End Region
-
-#Region "ChangeNotification"
-
 #End Region
 
 #Region "Error"
@@ -102,4 +99,15 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
     End Function
 #End Region
 
+#Region "Activity Log"
+    Public Sub SaveActivity(activitydataitem As ActivityData) Implements IHasActivityLog.SaveActivity
+        If GetType(dbcontextclass).GetInterfaces().Contains(GetType(IHasActivityLog)) Then
+            Dim context As IHasActivityLog = DBContext
+            context.SaveActivity(activitydataitem)
+        End If
+    End Sub
+#End Region
+
+#Region "Events"
+#End Region
 End Class

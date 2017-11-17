@@ -8,7 +8,7 @@ Imports System.Text
 
 
 ''' <summary>
-''' only contructor and CreateNewItem need to be specified in inherited class
+''' only CreateNewItem needs to be specified in inherited class
 ''' </summary>
 Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, datacontrollerclass As IDataController(Of entityitme, dataitem), viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits ViewModelBase

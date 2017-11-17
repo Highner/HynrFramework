@@ -12,7 +12,7 @@
         LabelStrip.LabelText = header
         ItemList = datacontext
 
-        FilterGridPanel.AddGrid(Of dataitem)(ItemList, header, True)
+        FilterGridPanel.AddGrid(Of dataitem)(ItemList, "Item", True)
 
     End Sub
     Public Sub New(ByRef datacontext As IFilterListViewModel(Of CheckboxFilterDataItemViewModel(Of dataitem)), ByVal header As String, ByVal enablecancel As Boolean)

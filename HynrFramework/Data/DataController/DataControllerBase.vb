@@ -28,6 +28,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         If DataContext.AddObject(newentityitem) = True Then
             If DataContext.Save() Then
                 dataitem.ID = newentityitem.ID
+                If IsActivity() Then SaveActivity(GetActivityLogCreateData(dataitem))
                 Return GetItem(dataitem.ID)
             End If
         End If
@@ -61,6 +62,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         InitializeConnection()
         Dim entityitem = DataContext.GetObject(dataitem.ID)
         If Not IsNothing(entityitem) Then
+            If IsActivity() Then SaveActivity(GetActivityLogChangeData(dataitem, entityitem))
             Dim newdataitem = ToEntity(dataitem, entityitem)
             If DataContext.Save() Then
                 Return newdataitem
@@ -71,7 +73,10 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     Public Overridable Function DeleteItem(dataitem As dataclass) As Boolean Implements IDataController(Of entityclass, dataclass).DeleteItem
         InitializeConnection()
         If DataContext.DeleteObject(dataitem.ID) = True Then
-            Return DataContext.Save()
+            If DataContext.Save() Then
+                If IsActivity() Then SaveActivity(GetActivityLogDeleteData(dataitem))
+                Return True
+            End If
         End If
         Return False
     End Function
@@ -85,6 +90,67 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         DataContext = Nothing
         DataContext = GetInstance(GetType(datacontextclass))
     End Sub
+#End Region
+
+#Region "Activity Log"
+    Public Overridable Function GetActivityLogChangeData(dataitem As dataclass, entityitem As entityclass) As ActivityData
+        Dim activitylogdataitem = CreateActivityLogData(dataitem)
+        If HasChangeMessage() Then
+            Dim messagedataitem As IHasActivityLogChangeMessage = dataitem
+            If messagedataitem.ChangeMessage = "" Then Return Nothing
+            activitylogdataitem.ActivityMessage = messagedataitem.ChangeMessage
+            messagedataitem.ChangeMessage = ""
+        Else
+            Dim changemessageitems As New List(Of String)
+            For Each item In GetDifferingProperties(dataitem, entityitem)
+                Dim newvalue As Object = item.GetValue(dataitem)
+                If Not IsNothing(newvalue) Then
+                    changemessageitems.Add(item.Name & " to " & newvalue.ToString)
+                End If
+            Next
+            If Not changemessageitems.Any Then Return Nothing
+            activitylogdataitem.ActivityMessage = "changed " & CreateStringListforText(changemessageitems, True) & " in " & GetActivityLogEntryName(dataitem)
+        End If
+        Return activitylogdataitem
+    End Function
+    Protected Overridable Function GetActivityLogCreateData(ByVal dataitem As dataclass) As ActivityData
+        Dim activitylogdataitem = CreateActivityLogData(dataitem)
+        activitylogdataitem.ActivityMessage = "created " & GetActivityLogEntryName(dataitem)
+        Return activitylogdataitem
+    End Function
+    Protected Overridable Function GetActivityLogDeleteData(ByVal dataitem As dataclass) As ActivityData
+        Dim activitylogdataitem = CreateActivityLogData(dataitem)
+        activitylogdataitem.ActivityMessage = "deleted " & GetActivityLogEntryName(dataitem)
+        Return activitylogdataitem
+    End Function
+
+
+    Protected Sub SaveActivity(activitydataitem As ActivityData)
+        If Not IsNothing(activitydataitem) Then
+            If GetType(datacontextclass).GetInterfaces().Contains(GetType(IHasActivityLog)) Then
+                Dim context As IHasActivityLog = DataContext
+                context.SaveActivity(activitydataitem)
+            End If
+        End If
+    End Sub
+    Protected Function IsActivity() As Boolean
+        If GetType(dataclass).GetInterfaces().Contains(GetType(IHasActivityLogName)) Then Return True Else Return False
+    End Function
+    Protected Function HasChangeMessage() As Boolean
+        If GetType(dataclass).GetInterfaces().Contains(GetType(IHasActivityLogChangeMessage)) Then Return True Else Return False
+    End Function
+    Protected Function GetActivityLogEntryName(ByVal dataitem As dataclass) As String
+        Dim entity As IHasActivityLogName = dataitem
+        Return entity.ActivityLogName
+    End Function
+    Protected Function CreateActivityLogData(ByVal dataitem As dataclass) As ActivityData
+        Dim activitydataitem As New ActivityData
+        activitydataitem.IsPublic = True
+        activitydataitem.ObjectType = dataitem.GetType().FullName
+        activitydataitem.ValueDate = Date.Today
+        activitydataitem.ObjectID = dataitem.ID
+        Return activitydataitem
+    End Function
 #End Region
 
 #Region "Methods"
@@ -114,5 +180,6 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Return dataitem
     End Function
 #End Region
+
 
 End Class

@@ -28,11 +28,37 @@ Public Module ObjectMapper
         If Not IsNothing(obj) Then
             Dim sourceProperties = obj.[GetType]().GetProperties()
             For Each sourceProperty As PropertyInfo In sourceProperties
-                Dim val = sourceProperty.GetValue(obj, Nothing)
-                If TypeOf (val) Is String Then
-                    sourceProperty.SetValue(obj, val.ToString.Trim)
+                If sourceProperty.CanWrite Then
+                    Dim val = sourceProperty.GetValue(obj, Nothing)
+                    If TypeOf (val) Is String Then
+                        sourceProperty.SetValue(obj, val.ToString.Trim)
+                    End If
                 End If
             Next
         End If
     End Sub
+    Public Function GetDifferingProperties(ByVal firstitem As Object, seconditem As Object) As IEnumerable(Of PropertyInfo)
+        Dim props As New List(Of PropertyInfo)
+        If Not IsNothing(firstitem) AndAlso Not IsNothing(seconditem) Then
+
+            Dim firstproperties As PropertyInfo() = Nothing
+            firstproperties = firstitem.[GetType]().GetProperties()
+
+            Dim secondproperties As PropertyInfo() = Nothing
+            secondproperties = seconditem.[GetType]().GetProperties()
+
+            For Each firstproperty As PropertyInfo In firstproperties
+                Dim sharedprop As PropertyInfo = Nothing
+                sharedprop = (From p In secondproperties Where p.Name = firstproperty.Name AndAlso p.PropertyType.IsAssignableFrom(firstproperty.PropertyType)).FirstOrDefault
+
+                If Not IsNothing(sharedprop) Then
+
+                    If Not firstproperty.GetValue(firstitem) = sharedprop.GetValue(seconditem) Then
+                        props.Add(firstproperty)
+                    End If
+                End If
+            Next
+        End If
+        Return props
+    End Function
 End Module
