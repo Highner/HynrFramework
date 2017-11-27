@@ -20,6 +20,13 @@
         MyBase.CancelVisible = enablecancel
     End Sub
 
+    Public Function GetDialogResult(ByVal resultproperty As String) As String()
+        Dim viewmodel As ViewModelBase = ItemList
+        viewmodel.RefreshAllCommand.Execute()
+        ShowDialog()
+        If DialogResult = System.Windows.Forms.DialogResult.OK AndAlso ItemList.CheckedItems.Any Then Return ItemList.CheckedItems.Select(Function(x) x.Data.GetType().GetProperty(resultproperty).GetValue(x.Data).ToString).ToArray Else Return Nothing
+    End Function
+
     Private Sub InitializeComponent()
         Me.FilterGridPanel = New HynrFramework.HynrFilterGridPanel()
         Me.LabelStrip = New HynrFramework.HynrLabelStrip()

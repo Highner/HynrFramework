@@ -142,6 +142,12 @@
     <Compile Include="UIElements\HynrUICard.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrUICardCrud.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UIElements\HynrUICardStandard.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ViewModel\CheckboxFilterDataItemViewModel.vb" />
     <Compile Include="Data\Common\ICheckboxFilterItem.vb" />
     <Compile Include="Data\Common\IIsCheckable.vb" />
@@ -280,6 +286,9 @@
       <DependentUpon>HynrFilterGridPanel.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrForm.resx">
+      <DependentUpon>HynrForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrItemViewForm.resx">
       <DependentUpon>HynrItemViewForm.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -298,6 +307,12 @@
     <EmbeddedResource Include="UIElements\HynrUICard.resx">
       <DependentUpon>HynrUICard.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrUICardCrud.resx">
+      <DependentUpon>HynrUICardCrud.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIElements\HynrUICardStandard.resx">
+      <DependentUpon>HynrUICardStandard.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\MatrixCircularProgressControl.resx">
       <DependentUpon>MatrixCircularProgressControl.vb</DependentUpon>

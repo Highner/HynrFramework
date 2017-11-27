@@ -6,7 +6,7 @@ Public Class HynrTextBox
     Inherits TextBox
 
 #Region "Properties"
-    Private LazyBindingViewModel As IViewModelBase
+    Private LazyBindingViewModel As Object
     Private LazyBindingDisplayProperty As String
     Private LazyBindingDataMember As String
     Private _EmptyText As String
@@ -58,13 +58,13 @@ Public Class HynrTextBox
     ''' <param name="viewmodel"></param>
     ''' <param name="displayproperty"></param>
     ''' <param name="labeltext"></param>
-    Public Sub BindToViewModel(ByRef viewmodel As IViewModelBase, ByVal displayproperty As String, Optional ByVal labeltext As String = "")
+    Public Sub BindToViewModel(ByVal viewmodel As IViewModelBase, ByVal displayproperty As String, Optional ByVal labeltext As String = "")
         _Label.Text = labeltext
         If labeltext <> "" Then IncludeLabel = True
         PrepareBinding(viewmodel, displayproperty)
         DataBindings.Add("Text", LazyBindingViewModel, LazyBindingDisplayProperty, True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
     End Sub
-    Public Sub BindToListViewModel(ByRef listviewmodel As IViewModelBase, ByVal displayproperty As String, Optional ByVal labeltext As String = "")
+    Public Sub BindToListViewModel(ByVal listviewmodel As IViewModelBase, ByVal displayproperty As String, Optional ByVal labeltext As String = "")
         _Label.Text = labeltext
         If labeltext <> "" Then IncludeLabel = True
         PrepareBinding(listviewmodel, displayproperty)
@@ -82,7 +82,7 @@ Public Class HynrTextBox
             End Try
         End If
     End Sub
-    Private Sub PrepareBinding(ByRef viewmodel As IViewModelBase, ByVal displayproperty As String)
+    Private Sub PrepareBinding(ByVal viewmodel As IViewModelBase, ByVal displayproperty As String)
         LazyBindingDisplayProperty = displayproperty
         LazyBindingViewModel = viewmodel
         If IsNothing(DataBindings.Item("IsBusy")) Then DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)

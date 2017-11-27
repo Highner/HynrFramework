@@ -102,7 +102,7 @@ Public Class HynrGrid
         col.DisplayMember = displaymember
     End Sub
     Private Sub OnBindingComplete() Handles Me.DataBindingComplete
-        If ColumnCount = 0 Then AutoGenerateColumns = True
+        If ColumnCount = 0 Then AutoGenerateColumns = True Else AutoGenerateColumns = False
     End Sub
     Private Sub view_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles Me.DataError
         If e.Exception.Message = "DataGridViewComboBoxCell value is not valid." Then
@@ -290,7 +290,6 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                 RaiseEvent FileDropped(Me.Rows(hittest.RowIndex).DataBoundItem, files(0))
             End If
 
-
         End If
     End Sub
     Private Sub FileDrop_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragOver
@@ -320,14 +319,15 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End If
     End Sub
 
-    Private Sub HandleFileDrops(sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
+    Protected Overridable Sub HandleFileDrops(sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
         Dim cursorLocation As Point = Me.PointToClient(New Point(e.X, e.Y))
         Dim hittest As System.Windows.Forms.DataGridView.HitTestInfo = Me.HitTest(cursorLocation.X, cursorLocation.Y)
         Dim item As viewmodelitem = Nothing
-        If FileDropToItemOnly Then
-            If hittest.ColumnIndex <> -1 AndAlso hittest.RowIndex <> -1 Then
-                item = Me.Rows(hittest.RowIndex).DataBoundItem
-            Else
+
+        If hittest.ColumnIndex <> -1 AndAlso hittest.RowIndex <> -1 Then
+            item = Me.Rows(hittest.RowIndex).DataBoundItem
+        Else
+            If FileDropToItemOnly Then
                 Exit Sub
             End If
         End If
@@ -365,6 +365,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                     Next
                     objOL = Nothing
                     objMI = Nothing
+                    RaiseEvent FileDropped(item, myTempFile)
                 Else
                     ' If its a attachment we need to pull the file itself out of memory
                     Dim ms As MemoryStream = CType(e.Data.GetData("FileContents", True), MemoryStream)
@@ -393,12 +394,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End Try
         FileDrop_DragLeave()
     End Sub
-
-
 #End Region
 
 #Region "Binding"
-    Public Sub BindToListViewModel(ByRef listviewmodel As IViewModelBase)
+    Public Sub BindToListViewModel(ByVal listviewmodel As IViewModelBase)
         LazyBindingViewModel = listviewmodel
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         AddHandler listviewmodel.LoadingCompleted, AddressOf CompleteBinding

@@ -19,7 +19,7 @@ Public Class HynrForm
         End Set
     End Property
 
-    Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
+    Public Overridable Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         '  BackColor = HynrSettings.SelectedBackColor
     End Sub
 
@@ -31,5 +31,17 @@ Public Class HynrForm
 
     Private Sub FirstLoadToApplyHynrSettings(sender As Object, e As EventArgs) Handles MyBase.Load
         If Not IsNothing(HynrSettings) Then HynrSettings.ApplyToControlContainer(Me)
+    End Sub
+
+    Private Sub InitializeComponent()
+        Me.SuspendLayout()
+        '
+        'HynrForm
+        '
+        Me.ClientSize = New System.Drawing.Size(284, 261)
+        Me.Name = "HynrForm"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.ResumeLayout(False)
+
     End Sub
 End Class

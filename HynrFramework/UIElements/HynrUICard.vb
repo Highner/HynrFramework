@@ -12,14 +12,6 @@
             ApplyHynrSettings()
         End Set
     End Property
-    Public Property ToolStripVisible As Boolean
-        Get
-            Return ToolStrip.Visible
-        End Get
-        Set(value As Boolean)
-            ToolStrip.Visible = value
-        End Set
-    End Property
     Public Property LabelText As String
         Get
             Return LabelStrip.LabelText
@@ -75,7 +67,7 @@
         Controls.Add(BusyIndicator)
     End Sub
 
-    Public Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
+    Public Overridable Sub ApplyHynrSettings() Implements IHasHynrSettings.ApplyHynrSettings
         LabelStrip.HynrSettings = HynrSettings
     End Sub
 

@@ -95,7 +95,7 @@ Public Class HynrGridCrudToolstrip
         Items.Add(SaveButton)
         Items.Add(RefreshButton)
     End Sub
-    Public Sub BindToListView(ByRef listview As ICrudObject)
+    Public Sub BindToListView(ByVal listview As ICrudObject)
         ListViewModel = listview
         BindButtons()
     End Sub

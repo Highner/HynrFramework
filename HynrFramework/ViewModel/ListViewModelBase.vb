@@ -143,6 +143,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub AddItemToList(ByRef viewmodelitem As viewmodelitem)
         _OriginalItemList.Insert(0, viewmodelitem)
         ApplyFilter()
+        RaiseEvent ItemAdded()
     End Sub
     Private Sub RemoveItemFromList(ByVal viewmodelitem As viewmodelitem)
         RemoveItemFromList(viewmodelitem.Data.ID)
@@ -152,6 +153,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         If Not IsNothing(item) Then
             _OriginalItemList.Remove(item)
             ApplyFilter()
+            RaiseEvent ItemDeleted()
         End If
     End Sub
     Protected Sub ReplaceItemInList(ByVal viewmodelitem As viewmodelitem)
@@ -180,11 +182,13 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Private Sub TimerTick() Handles _Timer.Tick
         If Not IsBusy Then RefreshAllCommand.Execute(Nothing)
     End Sub
-    Protected Sub DataItemChanged(ByRef dataitem As IHasID) Handles _WindowFactory.FormClosed
+    Protected Sub DataItemChanged(ByVal dataitem As IHasID) Handles _WindowFactory.FormClosed
         Dim id As Integer = dataitem.ID
         Dim changedlistitem = (From i In ItemList Where i.ID = id Select i).Single
-        changedlistitem.Data = dataitem
+        'changedlistitem.Data = dataitem
+        changedlistitem.Data = _DataController.GetItem(id)
         changedlistitem.AllPropertiesChanged()
+        RaiseEvent ItemChanged()
     End Sub
 #End Region
 
@@ -422,5 +426,8 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Event UpdateItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).UpdateItemCommandExecuted
     Public Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
     Public Event DeleteSelectedItemsCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemsCommandExecuted
+    Public Event ItemAdded() Implements IListViewModelBase.ItemAdded
+    Public Event ItemDeleted() Implements IListViewModelBase.ItemDeleted
+    Public Event ItemChanged() Implements IListViewModelBase.ItemChanged
 #End Region
 End Class

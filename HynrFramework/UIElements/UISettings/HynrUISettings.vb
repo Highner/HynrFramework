@@ -93,7 +93,7 @@ Public Class HynrUISettings
 #End Region
 
 #Region "METHODS"
-    Public Sub ApplyToControlContainer(ByRef container As ContainerControl)
+    Public Sub ApplyToControlContainer(ByVal container As ContainerControl)
         For Each control In container.Controls
             If TypeOf (control) Is IHasHynrSettings Then
                 Dim hynrcontrol As IHasHynrSettings = control

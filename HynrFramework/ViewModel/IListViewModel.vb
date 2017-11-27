@@ -7,7 +7,7 @@
     Property CanSave As Boolean
 
     Event SelectedItemChanged()
-    Event ItemListChanged()
+
     Event CreateCommandExecuted(ByVal item As viewmodelitem)
     Event UpdateAllCommandExecuted()
     Event UpdateItemCommandExecuted(ByVal item As viewmodelitem)
