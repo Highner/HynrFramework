@@ -94,9 +94,9 @@ Public Class HynrGrid
             End If
         End If
     End Sub
-    Public Sub BindGridCombobox(ByRef columnname As String, ByRef datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
+    Public Sub BindGridCombobox(ByVal columnname As String, ByVal datasource As Object, ByVal datapropertyname As String, ByVal valuemember As String, ByVal displaymember As String)
         Dim col As DataGridViewComboBoxColumn = Columns(columnname)
-        col.DataSource = New BindingSource(datasource, String.Empty)
+        col.DataSource = datasource
         col.DataPropertyName = datapropertyname
         col.ValueMember = valuemember
         col.DisplayMember = displaymember
@@ -423,6 +423,6 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #Region "Events"
     Public Event ItemDoubleClick(ByRef item As viewmodelitem)
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
-    Public Event FileDropped(ByRef item As viewmodelitem, ByRef data As Object)
+    Public Event FileDropped(item As viewmodelitem, data As Object)
 #End Region
 End Class

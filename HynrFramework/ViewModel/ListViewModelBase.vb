@@ -165,6 +165,13 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             ApplyFilter()
         End If
     End Sub
+    Public Function GetItemFromList(id As Object) As viewmodelitem
+        Dim item = (From i In _OriginalItemList Where i.Data.ID = id Select i).FirstOrDefault
+        If Not IsNothing(item) Then
+            Return item
+        End If
+        Return Nothing
+    End Function
     Public Sub SetTimer(ByVal interval As Integer)
         If IsNothing(_Timer) Then
             _Timer = New Timer

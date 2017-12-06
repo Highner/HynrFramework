@@ -61,5 +61,12 @@ Public Class HynrToolStripDropDownItem
             Enabled = True
         End If
     End Sub
+    Private Sub MeClicked() Handles Me.Click
+        RaiseEvent Clicked(Text)
+    End Sub
+#End Region
+
+#Region "Events"
+    Public Event Clicked(text As String)
 #End Region
 End Class
