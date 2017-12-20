@@ -13,5 +13,5 @@
     Event UpdateItemCommandExecuted(ByVal item As viewmodelitem)
     Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem)
     Event DeleteSelectedItemsCommandExecuted()
-
+    Event FileDropped(item As Object, data As Object)
 End Interface

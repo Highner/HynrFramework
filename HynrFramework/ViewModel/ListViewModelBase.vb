@@ -5,7 +5,7 @@ Imports System.Windows.Input
 Imports System.Linq.Dynamic
 Imports System.ComponentModel
 Imports System.Text
-
+Imports HynrFramework
 
 ''' <summary>
 ''' only CreateNewItem needs to be specified in inherited class
@@ -192,10 +192,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Protected Sub DataItemChanged(ByVal dataitem As IHasID) Handles _WindowFactory.FormClosed
         Dim id As Integer = dataitem.ID
         Dim changedlistitem = (From i In ItemList Where i.ID = id Select i).Single
-        'changedlistitem.Data = dataitem
         changedlistitem.Data = _DataController.GetItem(id)
         changedlistitem.AllPropertiesChanged()
         RaiseEvent ItemChanged()
+    End Sub
+    Public Sub RaiseFileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).RaiseFileDropped
+        RaiseEvent FileDropped(item, data)
     End Sub
 #End Region
 
@@ -436,5 +438,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Event ItemAdded() Implements IListViewModelBase.ItemAdded
     Public Event ItemDeleted() Implements IListViewModelBase.ItemDeleted
     Public Event ItemChanged() Implements IListViewModelBase.ItemChanged
+    Public Event FileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).FileDropped
 #End Region
 End Class

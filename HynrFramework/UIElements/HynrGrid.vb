@@ -203,7 +203,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 
     Property FireItemDoubleClick As Boolean = False
     Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
-    Private LazyBindingViewModel As IViewModelBase
+    Private LazyBindingViewModel As IListViewModelBase
     Public Property FileDropToItemOnly As Boolean = True
 
     Public Overloads Property IsBusy As Boolean Implements IViewModelBase.IsBusy
@@ -397,10 +397,11 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #End Region
 
 #Region "Binding"
-    Public Sub BindToListViewModel(ByVal listviewmodel As IViewModelBase)
+    Public Sub BindToListViewModel(ByVal listviewmodel As IListViewModelBase)
         LazyBindingViewModel = listviewmodel
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         AddHandler listviewmodel.LoadingCompleted, AddressOf CompleteBinding
+        AddHandler FileDropped, AddressOf listviewmodel.RaiseFileDropped
     End Sub
     Private Sub CompleteBinding()
         DataBindings.Clear()
