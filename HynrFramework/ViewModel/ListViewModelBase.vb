@@ -199,6 +199,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub RaiseFileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).RaiseFileDropped
         RaiseEvent FileDropped(item, data)
     End Sub
+    Public Sub RaiseItemAdded()
+        RaiseEvent ItemAdded()
+    End Sub
 #End Region
 
 #Region "Filter"

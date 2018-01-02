@@ -247,10 +247,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Private Sub ColorRows()
         Dim back = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "BackColor").Any
         Dim front = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "ForeColor").Any
-        If back Or front Then
+        If back OrElse front Then
             For Each row As DataGridViewRow In Rows
                 If back Then row.DefaultCellStyle.BackColor = row.DataBoundItem.BackColor
-                If front Then row.DefaultCellStyle.BackColor = row.DataBoundItem.ForeColor
+                If front Then row.DefaultCellStyle.ForeColor = row.DataBoundItem.ForeColor
             Next
         End If
     End Sub
@@ -357,7 +357,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                     Dim objOL As New Microsoft.Office.Interop.Outlook.Application
                     Dim objMI As Microsoft.Office.Interop.Outlook.MailItem
                     If objOL.ActiveExplorer.Selection.Count > 1 Then
-                        MsgBox("You can only drag and drop one item at a time into this screen. The first item you selected will be used.", "One Item At A Time")
+                        'MsgBox("You can only drag and drop one item at a time into this screen. The first item you selected will be used.", "One Item At A Time")
                     End If
                     For Each objMI In objOL.ActiveExplorer.Selection()
                         objMI.SaveAs(myTempFile)
