@@ -89,6 +89,9 @@ Public Class ItemViewModelBase(Of dataclass As IHasID)
     Protected Sub RaiseCheckedChanged()
         RaiseEvent CheckedChanged(Me, Nothing)
     End Sub
+    Protected Sub RaiseColorChanged()
+        RaiseEvent ColorChanged(Me, Nothing)
+    End Sub
     Private Sub ValueChanged() Handles Me.PropertyChanged
         If Not IsBusy Then
             Dim can As Boolean = CanSave
@@ -109,5 +112,6 @@ Public Class ItemViewModelBase(Of dataclass As IHasID)
     Public Event CanSaveChanged As IItemViewModel(Of dataclass).CanSaveChangedEventHandler Implements IItemViewModel(Of dataclass).CanSaveChanged
     Public Event IsSelectedChanged As IItemViewModel(Of dataclass).IsSelectedChangedEventHandler Implements IItemViewModel(Of dataclass).IsSelectedChanged
     Public Event CheckedChanged As IItemViewModel(Of dataclass).CheckedChangedEventHandler Implements IItemViewModel(Of dataclass).CheckedChanged
+    Public Event ColorChanged As IItemViewModel(Of dataclass).ColorChangedEventHandler Implements IItemViewModel(Of dataclass).ColorChanged
 #End Region
 End Class

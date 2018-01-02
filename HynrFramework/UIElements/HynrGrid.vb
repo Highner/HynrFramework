@@ -417,6 +417,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                 col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
             End If
         Next
+        For Each viewmodelitem In BindingSourceDataSource
+            AddHandler viewmodelitem.ColorChanged, AddressOf ColorRows
+        Next
+
         ColorRows()
     End Sub
 #End Region

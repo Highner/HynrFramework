@@ -20,4 +20,5 @@ Public Interface IItemViewModel(Of dataitem As IHasID)
     Event CanSaveChanged(sender As Object, e As EventArgs)
     Event IsSelectedChanged(sender As Object, e As EventArgs)
     Event CheckedChanged(sender As Object, e As EventArgs)
+    Event ColorChanged(sender As Object, e As EventArgs)
 End Interface
