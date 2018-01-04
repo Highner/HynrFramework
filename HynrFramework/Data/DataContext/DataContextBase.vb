@@ -1,16 +1,21 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.Entity
+Imports System.Data.Entity.Core.Objects
+Imports System.Data.Entity.Infrastructure
 Imports System.Linq.Dynamic
-Imports System.Reflection
 Imports HynrFramework
 
-Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
+Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContext)
     Implements IDataContext(Of entityclass), IHasActivityLog
 
 #Region "Properties"
     Private WithEvents _ErrorLog As New BindingList(Of String)
     Protected ShowError As Boolean = True
     Private _DBContext As dbcontextclass = GetInstance(GetType(dbcontextclass))
+    Private _ObjectContext As ObjectContext
+    Private _ObjectSet As ObjectSet(Of entityclass)
+    Private _AutoRefreshWrapper As AutoRefreshWrapper(Of entityclass)
+    Public Property AutoRefresh As Boolean = False Implements IDataContext(Of entityclass).AutoRefresh
 
     Public Property DBContext As dbcontextclass
         Get
@@ -18,6 +23,7 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
         End Get
         Set(value As dbcontextclass)
             _DBContext = value
+            If AutoRefresh Then InitializeAutoRefresh()
         End Set
     End Property
     Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass).ErrorLog
@@ -29,9 +35,20 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
 
 #Region "Constructor"
     Public Sub New()
+        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
+    End Sub
+    Public Sub New(autorefresh As Boolean)
+        Me.AutoRefresh = autorefresh
+        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
     End Sub
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context
+        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
+    End Sub
+    Public Sub New(autorefresh As Boolean, ByRef context As dbcontextclass)
+        Me.AutoRefresh = autorefresh
+        DBContext = context
+        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
     End Sub
     Protected Overrides Sub Finalize()
         DBContext.Dispose()
@@ -39,6 +56,11 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
 #End Region
 
 #Region "Methods"
+    Private Sub InitializeAutoRefresh()
+
+
+
+    End Sub
 #End Region
 
 #Region "Error"
@@ -109,5 +131,6 @@ Public Class DataContextBase(Of entityclass, dbcontextclass As DbContext)
 #End Region
 
 #Region "Events"
+
 #End Region
 End Class

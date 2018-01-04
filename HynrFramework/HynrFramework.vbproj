@@ -105,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Common\ActivityData.vb" />
+    <Compile Include="Data\Common\AutoRefreshWrapper.vb" />
+    <Compile Include="Data\Common\INotifyRefresh.vb" />
+    <Compile Include="Data\Common\ServiceBrokerUtility.vb" />
     <Compile Include="Data\DataContext\IHasActivityLog.vb" />
     <Compile Include="Data\DataContext\IHasActivityLogChangeMessage.vb" />
     <Compile Include="Data\DataContext\IHasActivityLogName.vb" />

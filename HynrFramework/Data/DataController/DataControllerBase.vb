@@ -86,9 +86,10 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Next
         Return True
     End Function
-    Protected Overridable Sub InitializeConnection()
+    Protected Overridable Sub InitializeConnection(Optional autorefresh As Boolean = Nothing)
         DataContext = Nothing
         DataContext = GetInstance(GetType(datacontextclass))
+        If Not IsNothing(autorefresh) Then DataContext.AutoRefresh = autorefresh
     End Sub
 #End Region
 
@@ -180,6 +181,4 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Return dataitem
     End Function
 #End Region
-
-
 End Class
