@@ -12,8 +12,11 @@ Public Interface IDataContext(Of T1)
     Function GetAllObjectsQuery() As IQueryable(Of T1)
     Function GetAllObjectsQuery(ByRef entities As DbContext) As IQueryable(Of T1)
     Function GetObjects(parameters As Object) As IEnumerable(Of T1)
+    Function GetObjectsFromQuery(query As IQueryable(Of T1)) As IEnumerable(Of T1)
 
     Sub AddError(ByVal ex As Exception, ByVal errortype As String)
 
     ReadOnly Property ErrorLog As List(Of String)
+
+    Event CollectionChanged()
 End Interface

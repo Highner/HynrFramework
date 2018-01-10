@@ -63,6 +63,8 @@ Public Class ItemViewModelBase(Of dataclass As IHasID)
             End If
         End Set
     End Property
+    <Browsable(False)>
+    Public Property SelectedCellIndex As Integer
 #End Region
 
 #Region "Constructor"
@@ -81,7 +83,7 @@ Public Class ItemViewModelBase(Of dataclass As IHasID)
         RaiseEvent Updated(Me, Nothing)
     End Sub
     Private Sub RaiseDoubleClickedEvent()
-        RaiseEvent DoubleClicked(Me, Nothing)
+        RaiseEvent DoubleClicked(Me, SelectedCellIndex)
     End Sub
     Private Sub RaiseClickedEvent()
         RaiseEvent Clicked(Me, Nothing)

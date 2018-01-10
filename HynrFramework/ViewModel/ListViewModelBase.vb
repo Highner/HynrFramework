@@ -134,6 +134,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         _WindowFactory = windowfactory
         _DataController = datacontroller
     End Sub
+    Protected Overrides Sub Finalize()
+        CancelLoading()
+    End Sub
 #End Region
 
 #Region "Methods"
@@ -202,6 +205,13 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub RaiseItemAdded()
         RaiseEvent ItemAdded()
     End Sub
+    ''' <summary>
+    ''' override in order to define action for certain columns clicked in datagridview
+    ''' </summary>
+    ''' <returns></returns>
+    Protected Overridable Function AlternativeDoubleClickAction() As Boolean
+        Return True
+    End Function
 #End Region
 
 #Region "Filter"
@@ -272,10 +282,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         IsBusy = False
     End Sub
     Private Sub ExecuteOpenEditForm()
-        Dim dataitem As dataitem = OpenEditForm()
-        If Not IsNothing(dataitem) Then
-            _DataController.UpdateItem(dataitem)
-            DataItemChanged(dataitem)
+        If AlternativeDoubleClickAction() Then
+            Dim dataitem As dataitem = OpenEditForm()
+            If Not IsNothing(dataitem) Then
+                _DataController.UpdateItem(dataitem)
+                DataItemChanged(dataitem)
+            End If
         End If
     End Sub
     Private Sub ExecuteCreateNewItem()

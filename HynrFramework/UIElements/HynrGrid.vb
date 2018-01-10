@@ -227,14 +227,20 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
     End Sub
+    Protected Overrides Sub Finalize()
+        RemoveHandler LazyBindingViewModel.LoadingCompleted, AddressOf CompleteBinding
+    End Sub
     Private Sub SelectedItemChanged()
         SelectedItem = _BindingSource.Current
     End Sub
-    Private Sub ItemDoubleClicked() Handles Me.MouseDoubleClick
-        If Not IsNothing(SelectedItem) Then
-            SelectedItem.DoubleClickCommand.Execute(Nothing)
+    Private Sub ItemDoubleClicked(ender As Object, e As DataGridViewCellEventArgs) Handles Me.CellDoubleClick
+        If e.RowIndex <> -1 AndAlso e.ColumnIndex <> -1 Then
+            If Not IsNothing(SelectedItem) Then
+                SelectedItem.SelectedCellIndex = e.ColumnIndex
+                SelectedItem.DoubleClickCommand.Execute(Nothing)
+            End If
+            RaiseEvent ItemDoubleClick(SelectedItem)
         End If
-        RaiseEvent ItemDoubleClick(SelectedItem)
     End Sub
     Private Sub SelectedItemsChanged() Handles Me.SelectionChanged
         Dim list As New List(Of viewmodelitem)
@@ -257,30 +263,10 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Private Sub SortClicked() Handles Me.Sorted
         ColorRows()
     End Sub
-    Private Sub Grid_RowPostPaint(sender As Object, e As DataGridViewRowPostPaintEventArgs) ' Handles Me.RowPostPaint
-        If Rows(e.RowIndex).Selected Then
-            Rows(e.RowIndex).DefaultCellStyle.SelectionBackColor = Color.Empty
-            If Not IsNothing(HynrSettings) Then
-
-                Using pen As New Pen(HynrSettings.SelectedBackColor)
-                    Dim penWidth As Integer = 2
-
-                    pen.Width = penWidth
-
-                    Dim x As Integer = e.RowBounds.Left + (penWidth / 2)
-                    Dim y As Integer = e.RowBounds.Top + (penWidth / 2)
-                    Dim width As Integer = e.RowBounds.Width - penWidth
-                    Dim height As Integer = e.RowBounds.Height - penWidth
-
-                    e.Graphics.DrawRectangle(pen, x, y, width, height)
-                End Using
-            End If
-        End If
-    End Sub
 #End Region
 
 #Region "FileDrop"
-    Private Sub FileDragDrop(sender As System.Object, e As System.Windows.Forms.DragEventArgs) 'Handles Me.DragDrop
+    Private Sub FileDragDrop(sender As System.Object, e As System.Windows.Forms.DragEventArgs) 'Handles Me.DragDrop, probably no longer necessary!!?!
         Dim files() As Object = e.Data.GetData(DataFormats.FileDrop)
         If files.Length = 1 Then
             Dim cursorLocation As Point = Me.PointToClient(New Point(e.X, e.Y))
@@ -293,20 +279,23 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End If
     End Sub
     Private Sub FileDrop_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragOver
-        If Me.AllowDrop Then
-            Dim clientPoint As Point = Me.PointToClient(New Point(e.X, e.Y))
-            Dim aktRow As Integer = Me.HitTest(clientPoint.X, clientPoint.Y).RowIndex
-            For Each dRow As DataGridViewRow In Me.Rows
+        If AllowDrop Then
+            Dim clientPoint As Point = PointToClient(New Point(e.X, e.Y))
+            Dim aktRow As Integer = HitTest(clientPoint.X, clientPoint.Y).RowIndex
+            For Each dRow As DataGridViewRow In Rows
                 dRow.DefaultCellStyle.BackColor = Color.White
             Next
             If aktRow <> -1 Then
-                Me.Rows(aktRow).DefaultCellStyle.BackColor = Color.LightGray
+                Rows(aktRow).DefaultCellStyle.BackColor = Color.LightGray
             End If
         End If
     End Sub
     Private Sub FileDrop_DragLeave() Handles Me.DragLeave
         Me.DefaultCellStyle.BackColor = _BackColor
         Me.DefaultCellStyle.SelectionBackColor = _SelectionColor
+        For Each row As DataGridViewRow In Rows
+            If Not SelectedRows.Contains(row) Then row.DefaultCellStyle.BackColor = _BackColor
+        Next
     End Sub
 
     Private Sub FileDragEnter(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles Me.DragEnter
@@ -356,9 +345,6 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                 If InStr(myTempFile, ".msg") > 0 Then
                     Dim objOL As New Microsoft.Office.Interop.Outlook.Application
                     Dim objMI As Microsoft.Office.Interop.Outlook.MailItem
-                    If objOL.ActiveExplorer.Selection.Count > 1 Then
-                        'MsgBox("You can only drag and drop one item at a time into this screen. The first item you selected will be used.", "One Item At A Time")
-                    End If
                     For Each objMI In objOL.ActiveExplorer.Selection()
                         objMI.SaveAs(myTempFile)
                         Exit For
@@ -404,24 +390,28 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         AddHandler FileDropped, AddressOf listviewmodel.RaiseFileDropped
     End Sub
     Private Sub CompleteBinding()
-        DataBindings.Clear()
-        DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItem", LazyBindingViewModel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
-        DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
-        'necessary for the summary grid
-        If Me.ColumnCount > 0 Then MyBase.OnColumnAdded(New DataGridViewColumnEventArgs(Me.Columns(Me.Columns.Count - 1)))
-        For Each col As DataGridViewColumn In Columns
-            If col.ValueType = GetType(Decimal) Then
-                col.DefaultCellStyle.Format = "N2"
-                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-            End If
-        Next
-        For Each viewmodelitem In BindingSourceDataSource
-            AddHandler viewmodelitem.ColorChanged, AddressOf ColorRows
-        Next
+        Try 'TODO: better solution than try/catch. when form closes while loading, loading complete event will crash this (null verweis, not sure where though)
+            DataBindings.Clear()
+            DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+            DataBindings.Add("SelectedItem", LazyBindingViewModel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+            DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+            DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
+            'necessary for the summary grid
+            If Me.ColumnCount > 0 Then MyBase.OnColumnAdded(New DataGridViewColumnEventArgs(Me.Columns(Me.Columns.Count - 1)))
+            For Each col As DataGridViewColumn In Columns
+                If col.ValueType = GetType(Decimal) Then
+                    col.DefaultCellStyle.Format = "N2"
+                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                End If
+            Next
+            For Each viewmodelitem In BindingSourceDataSource
+                AddHandler viewmodelitem.ColorChanged, AddressOf ColorRows
+            Next
 
-        ColorRows()
+            ColorRows()
+        Catch
+        End Try
+
     End Sub
 #End Region
 

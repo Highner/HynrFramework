@@ -26,6 +26,7 @@ Public Class AutoRefreshWrapper(Of T)
 
     Public Sub OnRefresh() Implements INotifyRefresh.OnRefresh
         Try
+
             RaiseEvent CollectionChanged(Me, New NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset))
         Catch ex As Exception
             System.Diagnostics.Debug.Print("Error in OnRefresh: {0}", ex.Message)

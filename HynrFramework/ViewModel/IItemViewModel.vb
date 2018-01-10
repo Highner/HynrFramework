@@ -15,7 +15,7 @@ Public Interface IItemViewModel(Of dataitem As IHasID)
 
     Event Deleted(sender As Object, e As EventArgs)
     Event Updated(sender As Object, e As EventArgs)
-    Event DoubleClicked(sender As Object, e As EventArgs)
+    Event DoubleClicked(sender As Object, cellindex As Integer)
     Event Clicked(sender As Object, e As EventArgs)
     Event CanSaveChanged(sender As Object, e As EventArgs)
     Event IsSelectedChanged(sender As Object, e As EventArgs)

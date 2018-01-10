@@ -2,7 +2,9 @@
 Imports System.Data.Entity
 Imports System.Data.Entity.Core.Objects
 Imports System.Data.Entity.Infrastructure
+Imports System.Data.SqlClient
 Imports System.Linq.Dynamic
+Imports System.Reflection
 Imports HynrFramework
 
 Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContext)
@@ -12,10 +14,12 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
     Private WithEvents _ErrorLog As New BindingList(Of String)
     Protected ShowError As Boolean = True
     Private _DBContext As dbcontextclass = GetInstance(GetType(dbcontextclass))
+
+    'autorefresh
     Private _ObjectContext As ObjectContext
-    Private _ObjectSet As ObjectSet(Of entityclass)
     Private _AutoRefreshWrapper As AutoRefreshWrapper(Of entityclass)
     Public Property AutoRefresh As Boolean = False Implements IDataContext(Of entityclass).AutoRefresh
+
 
     Public Property DBContext As dbcontextclass
         Get
@@ -23,7 +27,6 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
         End Get
         Set(value As dbcontextclass)
             _DBContext = value
-            If AutoRefresh Then InitializeAutoRefresh()
         End Set
     End Property
     Private ReadOnly Property ErrorLog As List(Of String) Implements IDataContext(Of entityclass).ErrorLog
@@ -35,31 +38,41 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
 
 #Region "Constructor"
     Public Sub New()
-        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
     End Sub
     Public Sub New(autorefresh As Boolean)
         Me.AutoRefresh = autorefresh
-        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
     End Sub
     Public Sub New(ByRef context As dbcontextclass)
         DBContext = context
-        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
     End Sub
     Public Sub New(autorefresh As Boolean, ByRef context As dbcontextclass)
         Me.AutoRefresh = autorefresh
         DBContext = context
-        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
     End Sub
     Protected Overrides Sub Finalize()
         DBContext.Dispose()
+        If Not IsNothing(_ObjectContext) Then _ObjectContext.Dispose()
+        _AutoRefreshWrapper = Nothing
     End Sub
 #End Region
 
 #Region "Methods"
-    Private Sub InitializeAutoRefresh()
+    Private Sub InitializeAutoRefresh(query As IQueryable(Of entityclass))
 
+        If Not IsNothing(_ObjectContext) Then _ObjectContext.Dispose()
+        _AutoRefreshWrapper = Nothing
 
+        Dim internalQueryField = query.[GetType]().GetFields(BindingFlags.NonPublic Or BindingFlags.Instance).FirstOrDefault(Function(f) f.Name.Equals("_internalQuery"))
+        Dim internalQuery = internalQueryField.GetValue(query)
+        Dim objectQueryField = internalQuery.[GetType]().GetFields(BindingFlags.NonPublic Or BindingFlags.Instance).FirstOrDefault(Function(f) f.Name.Equals("_objectQuery"))
+        Dim objectQuery = TryCast(objectQueryField.GetValue(internalQuery), ObjectQuery(Of entityclass))
 
+        _ObjectContext = (CType(_DBContext, IObjectContextAdapter)).ObjectContext
+        _AutoRefreshWrapper = New AutoRefreshWrapper(Of entityclass)(objectQuery, RefreshMode.StoreWins)
+        AddHandler _AutoRefreshWrapper.CollectionChanged, AddressOf OnCollectionChanged
+    End Sub
+    Private Sub OnCollectionChanged(sender As Object, e As EventArgs)
+        MsgBox("Change")
     End Sub
 #End Region
 
@@ -105,7 +118,7 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
         Return True
     End Function
     Public Overridable Function GetAllObjects() As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjects
-        Return DBContext.Set(GetType(entityclass))
+        Return GetObjectsFromQuery(DBContext.Set(GetType(entityclass)))
     End Function
     Public Overridable Function GetObject(id As Object) As entityclass Implements IDataContext(Of entityclass).GetObject
         Return DBContext.Set(GetType(entityclass)).Find(id)
@@ -119,6 +132,12 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
     Public Function GetAllObjectsQuery(ByRef entities As DbContext) As IQueryable(Of entityclass) Implements IDataContext(Of entityclass).GetAllObjectsQuery
         Return entities.Set(GetType(entityclass)).AsQueryable
     End Function
+    Public Function GetObjectsFromQuery(query As IQueryable(Of entityclass)) As IEnumerable(Of entityclass) Implements IDataContext(Of entityclass).GetObjectsFromQuery
+        If AutoRefresh Then
+            InitializeAutoRefresh(query)
+        End If
+        Return query.ToList
+    End Function
 #End Region
 
 #Region "Activity Log"
@@ -131,6 +150,6 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
 #End Region
 
 #Region "Events"
-
+    Event CollectionChanged As IDataContext(Of entityclass).CollectionChangedEventHandler Implements IDataContext(Of entityclass).CollectionChanged
 #End Region
 End Class
