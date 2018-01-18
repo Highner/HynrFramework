@@ -205,6 +205,12 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Property CancellationSource As Threading.CancellationTokenSource Implements IBindableListControl(Of dataitem, viewmodelitem).CancellationSource
     Private LazyBindingViewModel As IListViewModelBase
     Public Property FileDropToItemOnly As Boolean = True
+    Public Property AllowFileDrag As Boolean = False
+    Private _SelfDrop As Boolean = False
+    Private _IsFirstClick As Boolean = True
+    Private _IsDoubelClick As Boolean = True
+    Private WithEvents _DoubleClickTimer As Timer = New Timer
+    Private _Milliseconds As Integer = 0
 
     Public Overloads Property IsBusy As Boolean Implements IViewModelBase.IsBusy
         Get
@@ -299,86 +305,137 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     End Sub
 
     Private Sub FileDragEnter(sender As System.Object, e As System.Windows.Forms.DragEventArgs) Handles Me.DragEnter
-        _BackColor = Me.DefaultCellStyle.BackColor
-        _SelectionColor = Me.DefaultCellStyle.SelectionBackColor
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Or e.Data.GetDataPresent("FileGroupDescriptor") Then
-            e.Effect = DragDropEffects.Copy
-        Else
-            e.Effect = DragDropEffects.None
+        If Not _SelfDrop Then
+            _BackColor = Me.DefaultCellStyle.BackColor
+            _SelectionColor = Me.DefaultCellStyle.SelectionBackColor
+            If e.Data.GetDataPresent(DataFormats.FileDrop) Or e.Data.GetDataPresent("FileGroupDescriptor") Then
+                e.Effect = DragDropEffects.Copy
+            Else
+                e.Effect = DragDropEffects.None
+            End If
         End If
     End Sub
 
     Protected Overridable Sub HandleFileDrops(sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
-        Dim cursorLocation As Point = Me.PointToClient(New Point(e.X, e.Y))
-        Dim hittest As System.Windows.Forms.DataGridView.HitTestInfo = Me.HitTest(cursorLocation.X, cursorLocation.Y)
-        Dim item As viewmodelitem = Nothing
+        If Not _SelfDrop Then
+            Dim cursorLocation As Point = Me.PointToClient(New Point(e.X, e.Y))
+            Dim hittest As System.Windows.Forms.DataGridView.HitTestInfo = Me.HitTest(cursorLocation.X, cursorLocation.Y)
+            Dim item As viewmodelitem = Nothing
 
-        If hittest.ColumnIndex <> -1 AndAlso hittest.RowIndex <> -1 Then
-            item = Me.Rows(hittest.RowIndex).DataBoundItem
-        Else
-            If FileDropToItemOnly Then
-                Exit Sub
+            If hittest.ColumnIndex <> -1 AndAlso hittest.RowIndex <> -1 Then
+                item = Me.Rows(hittest.RowIndex).DataBoundItem
+            Else
+                If FileDropToItemOnly Then
+                    Exit Sub
+                End If
+            End If
+
+            Try
+                If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+                    ' We have a file so lets pass it to the calling form
+                    Dim Filename As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                    'HandleFileDrops = Filename(0)
+                    RaiseEvent FileDropped(item, Filename(0))
+                ElseIf e.Data.GetDataPresent("FileGroupDescriptor") Then
+                    ' We have a embedded file. First lets try to get the file name out of memory
+                    Dim theStream As Stream = CType(e.Data.GetData("FileGroupDescriptor"), Stream)
+                    Dim fileGroupDescriptor(512) As Byte
+                    theStream.Read(fileGroupDescriptor, 0, 512)
+                    Dim fileName As System.Text.StringBuilder = New System.Text.StringBuilder("")
+                    Dim i As Integer = 76
+                    While Not (fileGroupDescriptor(i) = 0)
+                        fileName.Append(Convert.ToChar(fileGroupDescriptor(i)))
+                        System.Math.Min(System.Threading.Interlocked.Increment(i), i - 1)
+                    End While
+                    theStream.Close()
+                    ' We should have the file name or if its a email the subject line. Create our temp file based on the temp path and this info
+                    Dim myTempFile As String = Path.GetTempPath & fileName.ToString
+                    ' Look to see if this is a email message. If so save that temporarily and get the temp file.
+                    If InStr(myTempFile, ".msg") > 0 Then
+                        Dim objOL As New Microsoft.Office.Interop.Outlook.Application
+                        Dim objMI As Microsoft.Office.Interop.Outlook.MailItem
+                        For Each objMI In objOL.ActiveExplorer.Selection()
+                            objMI.SaveAs(myTempFile)
+                            'myTempFile = objMI.EntryID
+                            Exit For
+                        Next
+                        objOL = Nothing
+                        objMI = Nothing
+                    Else
+                        ' If its a attachment we need to pull the file itself out of memory
+                        Dim ms As MemoryStream = CType(e.Data.GetData("FileContents", True), MemoryStream)
+                        Dim FileBytes(CInt(ms.Length)) As Byte
+                        ' read the raw data into our variable
+                        ms.Position = 0
+                        ms.Read(FileBytes, 0, CInt(ms.Length))
+                        ms.Close()
+                        ' save the raw data into our temp file
+                        Dim fs As FileStream = New FileStream(myTempFile, FileMode.OpenOrCreate, FileAccess.Write)
+                        fs.Write(FileBytes, 0, FileBytes.Length)
+                        fs.Close()
+                    End If
+                    ' Make sure we have a actual file and also if we do make sure we erase it when done
+                    If File.Exists(myTempFile) Then
+                        ' Assign the file name to the add dialog
+                        'HandleFileDrops = myTempFile
+                        RaiseEvent FileDropped(item, myTempFile)
+                        'Call AddTempFileToArray(myTempFile)
+                    End If
+                Else
+                    Throw New System.Exception("An exception has occurred.")
+                End If
+            Catch ex As Exception
+                MsgBox("Could not copy file from memory. Please save the file to your hard drive first and then retry your drag and drop.", "Drag and Drop Failed")
+            End Try
+            FileDrop_DragLeave()
+        End If
+    End Sub
+#End Region
+
+#Region "File Drag"
+    Private Sub Form1_MouseDown(ByVal sender As Object, ByVal e As MouseEventArgs) Handles Me.MouseDown
+        If AllowFileDrag Then
+            Dim hit As DataGridView.HitTestInfo = HitTest(e.X, e.Y)
+            If hit.RowIndex < 0 Then Exit Sub
+            If hit.ColumnIndex < 0 Then Exit Sub
+            If _IsFirstClick Then
+                _IsFirstClick = False
+                Invalidate()
+                _DoubleClickTimer.Start()
+            Else
+                If _Milliseconds < SystemInformation.DoubleClickTime Then
+                    _IsDoubelClick = True
+                End If
             End If
         End If
+    End Sub
+    Private Sub MouseDownDrag()
+        If AllowFileDrag Then
+            Dim list As New List(Of viewmodelitem)
+            For Each row As DataGridViewRow In SelectedRows
+                list.Add(row.DataBoundItem)
+            Next
+            _SelfDrop = True
+            ExecuteDoDragDrop(list)
+            _SelfDrop = False
+        End If
+    End Sub
+    Private Sub doubleClickTimer_Tick(ByVal sender As Object, ByVal e As EventArgs) Handles _DoubleClickTimer.Tick
+        _Milliseconds += 100
+        If _Milliseconds >= SystemInformation.DoubleClickTime Then
+            _DoubleClickTimer.[Stop]()
+            If Not _IsDoubelClick Then MouseDownDrag()
+            _IsFirstClick = True
+            _IsDoubelClick = False
+            _Milliseconds = 0
+        End If
+    End Sub
+    ''' <summary>
+    ''' override this in order to create correct dataobject for dragdrop operation and execute DoDragDrop(dataobject, DragDropEffects.All) action
+    ''' </summary>
+    ''' <param name="list"></param>
+    Protected Overridable Sub ExecuteDoDragDrop(list As List(Of viewmodelitem))
 
-        Try
-            If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-                ' We have a file so lets pass it to the calling form
-                Dim Filename As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                'HandleFileDrops = Filename(0)
-                RaiseEvent FileDropped(item, Filename(0))
-            ElseIf e.Data.GetDataPresent("FileGroupDescriptor") Then
-                ' We have a embedded file. First lets try to get the file name out of memory
-                Dim theStream As Stream = CType(e.Data.GetData("FileGroupDescriptor"), Stream)
-                Dim fileGroupDescriptor(512) As Byte
-                theStream.Read(fileGroupDescriptor, 0, 512)
-                Dim fileName As System.Text.StringBuilder = New System.Text.StringBuilder("")
-                Dim i As Integer = 76
-                While Not (fileGroupDescriptor(i) = 0)
-                    fileName.Append(Convert.ToChar(fileGroupDescriptor(i)))
-                    System.Math.Min(System.Threading.Interlocked.Increment(i), i - 1)
-                End While
-                theStream.Close()
-                ' We should have the file name or if its a email the subject line. Create our temp file based on the temp path and this info
-                Dim myTempFile As String = Path.GetTempPath & fileName.ToString
-                ' Look to see if this is a email message. If so save that temporarily and get the temp file.
-                If InStr(myTempFile, ".msg") > 0 Then
-                    Dim objOL As New Microsoft.Office.Interop.Outlook.Application
-                    Dim objMI As Microsoft.Office.Interop.Outlook.MailItem
-                    For Each objMI In objOL.ActiveExplorer.Selection()
-                        objMI.SaveAs(myTempFile)
-                        Exit For
-                    Next
-                    objOL = Nothing
-                    objMI = Nothing
-                    RaiseEvent FileDropped(item, myTempFile)
-                Else
-                    ' If its a attachment we need to pull the file itself out of memory
-                    Dim ms As MemoryStream = CType(e.Data.GetData("FileContents", True), MemoryStream)
-                    Dim FileBytes(CInt(ms.Length)) As Byte
-                    ' read the raw data into our variable
-                    ms.Position = 0
-                    ms.Read(FileBytes, 0, CInt(ms.Length))
-                    ms.Close()
-                    ' save the raw data into our temp file
-                    Dim fs As FileStream = New FileStream(myTempFile, FileMode.OpenOrCreate, FileAccess.Write)
-                    fs.Write(FileBytes, 0, FileBytes.Length)
-                    fs.Close()
-                End If
-                ' Make sure we have a actual file and also if we do make sure we erase it when done
-                If File.Exists(myTempFile) Then
-                    ' Assign the file name to the add dialog
-                    'HandleFileDrops = myTempFile
-                    RaiseEvent FileDropped(item, myTempFile)
-                    'Call AddTempFileToArray(myTempFile)
-                End If
-            Else
-                Throw New System.Exception("An exception has occurred.")
-            End If
-        Catch ex As Exception
-            MsgBox("Could not copy file from memory. Please save the file to your hard drive first and then retry your drag and drop.", "Drag and Drop Failed")
-        End Try
-        FileDrop_DragLeave()
     End Sub
 #End Region
 
@@ -407,11 +464,9 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             For Each viewmodelitem In BindingSourceDataSource
                 AddHandler viewmodelitem.ColorChanged, AddressOf ColorRows
             Next
-
             ColorRows()
         Catch
         End Try
-
     End Sub
 #End Region
 

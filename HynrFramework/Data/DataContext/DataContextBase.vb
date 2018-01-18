@@ -72,7 +72,6 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
         AddHandler _AutoRefreshWrapper.CollectionChanged, AddressOf OnCollectionChanged
     End Sub
     Private Sub OnCollectionChanged(sender As Object, e As EventArgs)
-        MsgBox("Change")
     End Sub
 #End Region
 

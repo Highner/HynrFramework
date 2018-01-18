@@ -146,7 +146,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub AddItemToList(ByRef viewmodelitem As viewmodelitem)
         _OriginalItemList.Insert(0, viewmodelitem)
         ApplyFilter()
-        RaiseEvent ItemAdded()
+        RaiseEvent ItemAdded(viewmodelitem)
     End Sub
     Private Sub RemoveItemFromList(ByVal viewmodelitem As viewmodelitem)
         RemoveItemFromList(viewmodelitem.Data.ID)
@@ -202,8 +202,8 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub RaiseFileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).RaiseFileDropped
         RaiseEvent FileDropped(item, data)
     End Sub
-    Public Sub RaiseItemAdded()
-        RaiseEvent ItemAdded()
+    Public Sub RaiseItemAdded(item As Object)
+        RaiseEvent ItemAdded(item)
     End Sub
     ''' <summary>
     ''' override in order to define action for certain columns clicked in datagridview
@@ -450,7 +450,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Event UpdateItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).UpdateItemCommandExecuted
     Public Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem) Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemCommandExecuted
     Public Event DeleteSelectedItemsCommandExecuted() Implements IListViewModel(Of viewmodelitem).DeleteSelectedItemsCommandExecuted
-    Public Event ItemAdded() Implements IListViewModelBase.ItemAdded
+    Public Event ItemAdded(item As Object) Implements IListViewModelBase.ItemAdded
     Public Event ItemDeleted() Implements IListViewModelBase.ItemDeleted
     Public Event ItemChanged() Implements IListViewModelBase.ItemChanged
     Public Event FileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).FileDropped
