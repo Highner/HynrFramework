@@ -243,9 +243,18 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         If e.RowIndex <> -1 AndAlso e.ColumnIndex <> -1 Then
             If Not IsNothing(SelectedItem) Then
                 SelectedItem.SelectedCellIndex = e.ColumnIndex
-                SelectedItem.DoubleClickCommand.Execute(Nothing)
+                SelectedItem.DoubleClickCommand.Execute()
             End If
-            RaiseEvent ItemDoubleClick(SelectedItem)
+            RaiseEvent ItemClick(SelectedItem, e.ColumnIndex)
+        End If
+    End Sub
+    Private Sub ItemClicked(ender As Object, e As DataGridViewCellEventArgs) Handles Me.CellClick
+        If e.RowIndex <> -1 AndAlso e.ColumnIndex <> -1 Then
+            If Not IsNothing(SelectedItem) Then
+                SelectedItem.SelectedCellIndex = e.ColumnIndex
+                SelectedItem.ClickCommand.Execute()
+            End If
+            RaiseEvent ItemClick(SelectedItem, e.ColumnIndex)
         End If
     End Sub
     Private Sub SelectedItemsChanged() Handles Me.SelectionChanged
@@ -382,7 +391,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                         'Call AddTempFileToArray(myTempFile)
                     End If
                 Else
-                    Throw New System.Exception("An exception has occurred.")
+                    RaiseEvent FileDropped(item, e.Data)
+                    'Throw New System.Exception("An exception has occurred.")
                 End If
             Catch ex As Exception
                 MsgBox("Could not copy file from memory. Please save the file to your hard drive first and then retry your drag and drop.", "Drag and Drop Failed")
@@ -445,6 +455,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
         AddHandler listviewmodel.LoadingCompleted, AddressOf CompleteBinding
         AddHandler FileDropped, AddressOf listviewmodel.RaiseFileDropped
+        AddHandler ItemDoubleClick, AddressOf listviewmodel.RaiseItemDoubleClicked
+        AddHandler ItemClick, AddressOf listviewmodel.RaiseItemClicked
     End Sub
     Private Sub CompleteBinding()
         Try 'TODO: better solution than try/catch. when form closes while loading, loading complete event will crash this (null verweis, not sure where though)
@@ -471,7 +483,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
 #End Region
 
 #Region "Events"
-    Public Event ItemDoubleClick(ByRef item As viewmodelitem)
+    Public Event ItemDoubleClick(item As viewmodelitem, index As Integer)
+    Public Event ItemClick(item As viewmodelitem, index As Integer)
     Public Event LoadingCompleted() Implements IViewModelBase.LoadingCompleted
     Public Event FileDropped(item As viewmodelitem, data As Object)
 #End Region

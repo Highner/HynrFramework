@@ -14,4 +14,6 @@
     Event DeleteSelectedItemCommandExecuted(ByVal item As viewmodelitem)
     Event DeleteSelectedItemsCommandExecuted()
     Event FileDropped(item As Object, data As Object)
+    Event ItemClicked(item As viewmodelitem, index As Integer)
+    Event ItemDoubleClicked(item As viewmodelitem, index As Integer)
 End Interface

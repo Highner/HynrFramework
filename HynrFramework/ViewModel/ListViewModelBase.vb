@@ -205,6 +205,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub RaiseItemAdded(item As Object)
         RaiseEvent ItemAdded(item)
     End Sub
+    Public Sub RaiseItemClicked(item As Object, index As Integer) Implements IListViewModel(Of viewmodelitem).RaiseItemClicked
+        RaiseEvent ItemClicked(item, index)
+    End Sub
+    Public Sub RaiseItemDoubleClicked(item As Object, index As Integer) Implements IListViewModel(Of viewmodelitem).RaiseItemDoubleClicked
+        RaiseEvent ItemDoubleClicked(item, index)
+    End Sub
     ''' <summary>
     ''' override in order to define action for certain columns clicked in datagridview
     ''' </summary>
@@ -411,7 +417,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         'If selectedindex >= 0 Then
         '    If (ItemList.Count >= selectedindex - 1) Then SelectedItem = ItemList(selectedindex) Else SelectedItem = ItemList(0)
         'End If
-        If ItemList.Any Then SelectedItem = ItemList(0)
+        If ItemList.Any Then
+            SelectedItem = ItemList(0)
+            SelectedItems.Add(SelectedItem)
+        End If
     End Sub
     ''' <summary>
     ''' Override this in order to add additional event handlers to the item
@@ -454,5 +463,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Event ItemDeleted() Implements IListViewModelBase.ItemDeleted
     Public Event ItemChanged() Implements IListViewModelBase.ItemChanged
     Public Event FileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).FileDropped
+    Public Event ItemClicked(item As viewmodelitem, index As Integer) Implements IListViewModel(Of viewmodelitem).ItemClicked
+    Public Event ItemDoubleClicked(item As viewmodelitem, index As Integer) Implements IListViewModel(Of viewmodelitem).ItemDoubleClicked
 #End Region
 End Class
