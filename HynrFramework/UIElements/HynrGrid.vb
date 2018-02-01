@@ -158,6 +158,14 @@ Public Class HynrGrid
 #End Region
 End Class
 
+
+
+
+
+
+
+
+
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits HynrGrid
     Implements IBindableListControl(Of dataitem, viewmodelitem)
@@ -232,6 +240,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         MyBase.New
         DataSource = _BindingSource
         AddHandler _BindingSource.CurrentItemChanged, AddressOf SelectedItemChanged
+        _DoubleClickTimer.Interval = 30
     End Sub
     Protected Overrides Sub Finalize()
         RemoveHandler LazyBindingViewModel.LoadingCompleted, AddressOf CompleteBinding
@@ -245,7 +254,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
                 SelectedItem.SelectedCellIndex = e.ColumnIndex
                 SelectedItem.DoubleClickCommand.Execute()
             End If
-            RaiseEvent ItemClick(SelectedItem, e.ColumnIndex)
+            RaiseEvent ItemDoubleClick(SelectedItem, e.ColumnIndex)
         End If
     End Sub
     Private Sub ItemClicked(ender As Object, e As DataGridViewCellEventArgs) Handles Me.CellClick
@@ -317,11 +326,11 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         If Not _SelfDrop Then
             _BackColor = Me.DefaultCellStyle.BackColor
             _SelectionColor = Me.DefaultCellStyle.SelectionBackColor
-            If e.Data.GetDataPresent(DataFormats.FileDrop) Or e.Data.GetDataPresent("FileGroupDescriptor") Then
-                e.Effect = DragDropEffects.Copy
-            Else
-                e.Effect = DragDropEffects.None
-            End If
+            'If e.Data.GetDataPresent(DataFormats.FileDrop) Or e.Data.GetDataPresent("FileGroupDescriptor") Then
+            e.Effect = DragDropEffects.Copy
+            ' Else
+            'e.Effect = DragDropEffects.Copy
+            'End If
         End If
     End Sub
 
@@ -397,8 +406,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             Catch ex As Exception
                 MsgBox("Could not copy file from memory. Please save the file to your hard drive first and then retry your drag and drop.", "Drag and Drop Failed")
             End Try
-            FileDrop_DragLeave()
         End If
+        FileDrop_DragLeave()
     End Sub
 #End Region
 
@@ -431,7 +440,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         End If
     End Sub
     Private Sub doubleClickTimer_Tick(ByVal sender As Object, ByVal e As EventArgs) Handles _DoubleClickTimer.Tick
-        _Milliseconds += 100
+        _Milliseconds += 30
         If _Milliseconds >= SystemInformation.DoubleClickTime Then
             _DoubleClickTimer.[Stop]()
             If Not _IsDoubelClick Then MouseDownDrag()
@@ -460,11 +469,15 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     End Sub
     Private Sub CompleteBinding()
         Try 'TODO: better solution than try/catch. when form closes while loading, loading complete event will crash this (null verweis, not sure where though)
-            DataBindings.Clear()
+            DeleteBinding("BindingSourceDataSource")
+            DeleteBinding("SelectedItem")
+            DeleteBinding("SelectedItems")
+            DeleteBinding("IsBusy")
             DataBindings.Add("BindingSourceDataSource", LazyBindingViewModel, "ItemList", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
             DataBindings.Add("SelectedItem", LazyBindingViewModel, "SelectedItem", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
             DataBindings.Add("SelectedItems", LazyBindingViewModel, "SelectedItems", True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
             DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
+
             'necessary for the summary grid
             If Me.ColumnCount > 0 Then MyBase.OnColumnAdded(New DataGridViewColumnEventArgs(Me.Columns(Me.Columns.Count - 1)))
             For Each col As DataGridViewColumn In Columns
@@ -479,6 +492,12 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             ColorRows()
         Catch
         End Try
+    End Sub
+    Private Sub DeleteBinding(bindingproperty As String)
+        Dim binding = DataBindings.Item(bindingproperty)
+        If Not IsNothing(binding) Then
+            DataBindings.Remove(binding)
+        End If
     End Sub
 #End Region
 

@@ -230,7 +230,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Dim filterparameters As String = GenerateFilterParameters(Me)
         If Not filterparameters = "" Then
             Dim newlist As New ObservableListSource(Of viewmodelitem)
-            Dim filteredlist = Await Task.Run(Function() _OriginalItemList.ToList.Where(filterparameters).ToList, CancellationSource.Token)
+            Dim filteredlist = Await Task.Run(Function() FilterFunction(_OriginalItemList.ToList, filterparameters), CancellationSource.Token)
             For Each item In filteredlist
                 newlist.Add(item)
             Next
@@ -239,6 +239,9 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             ItemList = _OriginalItemList
         End If
     End Sub
+    Protected Overridable Function FilterFunction(itemlist As IEnumerable(Of viewmodelitem), filterparameters As String) As List(Of viewmodelitem)
+        Return itemlist.Where(filterparameters).ToList
+    End Function
 
     Public Function GetUniqueItemsForFilter(ByVal propertyname As String) As String() Implements IListViewModel(Of viewmodelitem).GetUniqueItemsForFilter
         If _OriginalItemList.Any Then
