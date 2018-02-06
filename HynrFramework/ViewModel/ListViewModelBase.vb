@@ -239,6 +239,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             ItemList = _OriginalItemList
         End If
     End Sub
+    ''' <summary>
+    ''' override in case custom filter is required
+    ''' </summary>
+    ''' <param name="itemlist"></param>
+    ''' <param name="filterparameters"></param>
+    ''' <returns></returns>
     Protected Overridable Function FilterFunction(itemlist As IEnumerable(Of viewmodelitem), filterparameters As String) As List(Of viewmodelitem)
         Return itemlist.Where(filterparameters).ToList
     End Function
@@ -440,7 +446,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         AddHandler newvmitem.CanSaveChanged, AddressOf ToggleCanSave
         Return newvmitem
     End Function
-    Private Sub CancelLoading() 'not working
+    Private Sub CancelLoading() 'not working (i think)
         If Not IsNothing(CancellationSource) Then
             CancellationSource.Cancel()
         End If

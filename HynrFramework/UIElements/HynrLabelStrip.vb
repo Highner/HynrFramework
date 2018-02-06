@@ -42,6 +42,14 @@ Public Class HynrLabelStrip
             If Not IsNothing(HynrSettings) Then ApplyHynrSettings()
         End Set
     End Property
+    Public Property Highlighted() As Boolean
+        Get
+            Return (Label.Font.Style = Drawing.FontStyle.Bold)
+        End Get
+        Set(ByVal value As Boolean)
+            If value Then Label.Font = New Drawing.Font(Label.Font, Drawing.FontStyle.Bold) Else Label.Font = New Drawing.Font(Label.Font, Drawing.FontStyle.Regular)
+        End Set
+    End Property
     Private LazyBindingViewModel As IViewModelBase
     Private LazyBindingDataMember As String
     Private LazyBindingDisplayProperty As String
