@@ -147,6 +147,7 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
                     rootnode.Nodes.Add(childnode)
                 Next
             Next
+            RaiseEvent LoadingCompleted()
         End If
     End Sub
     Private Sub DataSourceChanged() Handles _BindingSource.DataSourceChanged
