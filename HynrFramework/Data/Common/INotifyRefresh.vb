@@ -1,7 +1,8 @@
 ﻿
+Imports System.Data.SqlClient
+
 Interface INotifyRefresh
-    Inherits Specialized.INotifyCollectionChanged
+    'Inherits Specialized.INotifyCollectionChanged
 
-    Sub OnRefresh()
-
+    Sub OnRefresh(e As SqlNotificationEventArgs)
 End Interface

@@ -1,4 +1,5 @@
 ﻿Imports System.Data.Entity
+Imports System.Data.SqlClient
 
 Public Interface IDataController(Of T1 As IHasID, T2 As IHasID) 'T1 = entityitem, T2 = dataitem
     Function CreateNewItem(ByVal dataitem As T2) As T2 'returns dataitem
@@ -13,5 +14,8 @@ Public Interface IDataController(Of T1 As IHasID, T2 As IHasID) 'T1 = entityitem
     Function ToData(ByVal entityitem As T1) As T2 'returns dataitem
 
     Property DataContext As IDataContext(Of T1)
+    Property AutoRefresh As Boolean
+    Property AutoRefreshWrapper As AutoRefreshWrapper(Of T1)
 
+    Event CollectionChanged(e As SqlNotificationEventArgs)
 End Interface

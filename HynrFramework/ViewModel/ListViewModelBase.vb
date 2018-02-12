@@ -6,6 +6,7 @@ Imports System.Linq.Dynamic
 Imports System.ComponentModel
 Imports System.Text
 Imports HynrFramework
+Imports System.Data.SqlClient
 
 ''' <summary>
 ''' only CreateNewItem needs to be specified in inherited class
@@ -39,10 +40,13 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 
 #Region "Properties"
     Public Property _DataController As datacontrollerclass
+    Private WithEvents _DataControllerEvents As IDataController(Of entityitme, dataitem)
     Protected WithEvents _WindowFactory As IListViewWindowFactory(Of dataitem)
     Private WithEvents _Timer As Timer
     Private WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private WithEvents _ItemList As New ObservableListSource(Of viewmodelitem)
+    Private WithEvents _AutoRefreshWrapper As AutoRefreshWrapper(Of entityitme)
+    Protected _Refresh As Boolean = True
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
         Get
@@ -126,6 +130,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #Region "Constructor"
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
+        _DataControllerEvents = _DataController
     End Sub
     Public Sub New(ByRef windowfactory As IListViewWindowFactory(Of dataitem))
         _WindowFactory = windowfactory
@@ -133,6 +138,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IListViewWindowFactory(Of dataitem) = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
+        _DataControllerEvents = _DataController
     End Sub
     Protected Overrides Sub Finalize()
         CancelLoading()
@@ -290,9 +296,11 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         IsBusy = True
         Dim dataitem As dataitem = OpenNewForm()
         If Not IsNothing(dataitem) Then
+            _Refresh = False
             dataitem = _DataController.CreateNewItem(dataitem)
             Dim item = DataToItem(dataitem)
             AddItemToList(item)
+            _Refresh = True
         End If
         IsBusy = False
     End Sub
@@ -308,8 +316,10 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Private Sub ExecuteCreateNewItem()
         Dim item = CreateNewItem()
         If Not IsNothing(item) Then
+            _Refresh = False
             _DataController.CreateNewItem(item)
             RaiseEvent CreateCommandExecuted(DataToItem(item))
+            _Refresh = True
         End If
     End Sub
     Private Sub UpdateAll()
@@ -355,11 +365,13 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     End Sub
     Protected Overridable Sub DeleteItem(sender As Object, e As EventArgs)
         If Not IsBusy Then
+            _Refresh = False
             Dim vmitem As viewmodelitem = sender
             If _DataController.DeleteItem(vmitem.Data) = True Then
                 RemoveItemFromList(vmitem)
                 RaiseEvent DeleteSelectedItemCommandExecuted(vmitem)
             End If
+            _Refresh = True
         End If
     End Sub
     Protected Overridable Sub DeleteSelectedItem()
@@ -400,6 +412,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Catch ex As Exception
             _DataController.DataContext.AddError(ex, "ListViewModel GetData")
         End Try
+        _AutoRefreshWrapper = _DataController.AutoRefreshWrapper
         If IsNothing(dataitemlist) Then dataitemlist = New List(Of dataitem)
         DataToList(dataitemlist)
         ToggleCanSave()
@@ -458,6 +471,12 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         FilteredListCount = ItemList.Count
     End Sub
 
+#End Region
+
+#Region "Auto Refresh"
+    Protected Overridable Sub OnCollectionChanged(e As SqlNotificationEventArgs) Handles _AutoRefreshWrapper.CollectionChanged
+        If _Refresh Then RefreshAllCommand.Execute()
+    End Sub
 #End Region
 
 #Region "Events"

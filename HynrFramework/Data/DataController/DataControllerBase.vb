@@ -3,12 +3,18 @@ Imports System.Data.Entity.Infrastructure
 Imports HynrFramework
 Imports System.Data.SqlClient
 Imports System.Data.Entity.Core.Objects
+Imports System.Reflection
 
 Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, datacontextclass As IDataContext(Of entityclass))
     Implements IDataController(Of entityclass, dataclass)
 
 #Region "Properties"
     Public Property DataContext As IDataContext(Of entityclass) Implements IDataController(Of entityclass, dataclass).DataContext
+
+    'autorefresh
+    Private _ObjectContext As ObjectContext
+    Public Property AutoRefreshWrapper As AutoRefreshWrapper(Of entityclass) Implements IDataController(Of entityclass, dataclass).AutoRefreshWrapper
+    Public Property AutoRefresh As Boolean = False Implements IDataController(Of entityclass, dataclass).AutoRefresh
 #End Region
 
 #Region "Constructor"
@@ -86,10 +92,9 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Next
         Return True
     End Function
-    Protected Overridable Sub InitializeConnection(Optional autorefresh As Boolean = Nothing)
+    Protected Overridable Sub InitializeConnection()
         DataContext = Nothing
         DataContext = GetInstance(GetType(datacontextclass))
-        If Not IsNothing(autorefresh) Then DataContext.AutoRefresh = autorefresh
     End Sub
 #End Region
 
@@ -155,7 +160,27 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
 #End Region
 
 #Region "Methods"
+    Protected Function ToAutoRefresh(query As IQueryable(Of entityclass)) As IQueryable(Of entityclass)
+        InitializeAutoRefresh(query)
+        Return query
+    End Function
+    Private Sub InitializeAutoRefresh(query As IQueryable(Of entityclass))
 
+        If Not IsNothing(_ObjectContext) Then _ObjectContext.Dispose()
+        AutoRefreshWrapper = Nothing
+
+        Dim internalQueryField = query.[GetType]().GetFields(BindingFlags.NonPublic Or BindingFlags.Instance).FirstOrDefault(Function(f) f.Name.Equals("_internalQuery"))
+        Dim internalQuery = internalQueryField.GetValue(query)
+        Dim objectQueryField = internalQuery.[GetType]().GetFields(BindingFlags.NonPublic Or BindingFlags.Instance).FirstOrDefault(Function(f) f.Name.Equals("_objectQuery"))
+        Dim objectQuery = TryCast(objectQueryField.GetValue(internalQuery), ObjectQuery(Of entityclass))
+
+        _ObjectContext = (CType(DataContext.GetSQLDBContext, IObjectContextAdapter)).ObjectContext
+        AutoRefreshWrapper = New AutoRefreshWrapper(Of entityclass)(objectQuery, RefreshMode.StoreWins)
+        'AddHandler AutoRefreshWrapper.CollectionChanged, AddressOf OnCollectionChanged
+    End Sub
+    'Private Sub OnCollectionChanged(e As SqlNotificationEventArgs)
+    '    RaiseEvent CollectionChanged(e)
+    'End Sub
 #End Region
 
 #Region "Data Mapping"
@@ -180,5 +205,9 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         MapProperties(dataitem, entityitem)
         Return dataitem
     End Function
+#End Region
+
+#Region "Events"
+    Public Event CollectionChanged As IDataController(Of entityclass, dataclass).CollectionChangedEventHandler Implements IDataController(Of entityclass, dataclass).CollectionChanged
 #End Region
 End Class

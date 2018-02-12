@@ -4,6 +4,7 @@ Imports System.Data.Entity.Core.Objects
 Imports System.Data.Entity
 Imports HynrFramework
 Imports System.Data.Entity.Core.Objects.DataClasses
+Imports System.Data.SqlClient
 
 Public Class AutoRefreshWrapper(Of T)
     Implements IEnumerable(Of T)
@@ -24,14 +25,13 @@ Public Class AutoRefreshWrapper(Of T)
         Return GetEnumerator()
     End Function
 
-    Public Sub OnRefresh() Implements INotifyRefresh.OnRefresh
+    Public Sub OnRefresh(e As SqlNotificationEventArgs) Implements INotifyRefresh.OnRefresh
         Try
-
-            RaiseEvent CollectionChanged(Me, New NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset))
+            RaiseEvent CollectionChanged(e)
         Catch ex As Exception
-            System.Diagnostics.Debug.Print("Error in OnRefresh: {0}", ex.Message)
+            Debug.Print("Error in OnRefresh: {0}", ex.Message)
         End Try
     End Sub
 
-    Public Event CollectionChanged As NotifyCollectionChangedEventHandler Implements INotifyCollectionChanged.CollectionChanged
+    Public Event CollectionChanged(e As SqlNotificationEventArgs)
 End Class

@@ -20,7 +20,7 @@ Module ServiceBrokerUtility
         'Dim csInEF = ctx.Connection.ConnectionString
         'Dim csName = csInEF.Replace("name=", "").Trim()
         'Dim csForEF = csInEF 'System.Configuration.ConfigurationManager.ConnectionStrings(csName).ConnectionString
-        Dim newConnectionString = New System.Data.EntityClient.EntityConnectionStringBuilder(ctx.Connection.ConnectionString).ProviderConnectionString
+        Dim newConnectionString = New EntityClient.EntityConnectionStringBuilder(ctx.Connection.ConnectionString).ProviderConnectionString
         If Not connectionStrings.Contains(newConnectionString) Then
             connectionStrings.Add(newConnectionString)
             SqlDependency.Start(newConnectionString)
@@ -38,7 +38,11 @@ Module ServiceBrokerUtility
             collections.Add(dependency.Id, collection)
             CallContext.SetData(sqlDependencyCookie, dependency.Id)
             AddHandler dependency.OnChange, AddressOf dependency_OnChange
-            ctx.Refresh(refreshMode, collection)
+            Try
+                ctx.Refresh(refreshMode, collection)
+            Catch ex As Exception
+                Debug.Print(ex.Message)
+            End Try
         Finally
             CallContext.SetData(sqlDependencyCookie, oldCookie)
         End Try
@@ -49,7 +53,6 @@ Module ServiceBrokerUtility
             Debug.Print("SqlNotification:  A statement was provided that cannot be notified.")
             Return
         End If
-
         Try
             Dim id = (CType(sender, SqlDependency)).Id
             Dim collection As IEnumerable
@@ -58,10 +61,10 @@ Module ServiceBrokerUtility
                 AutoRefresh(collection)
                 Dim notifyRefresh = TryCast(collection, INotifyRefresh)
                 'If notifyRefresh IsNot Nothing Then System.Windows.Application.Current.Dispatcher.BeginInvoke(notifyRefresh.OnRefresh)
-                If notifyRefresh IsNot Nothing Then notifyRefresh.OnRefresh()
+                If notifyRefresh IsNot Nothing Then notifyRefresh.OnRefresh(e)
             End If
         Catch ex As Exception
-            System.Diagnostics.Debug.Print("Error in OnChange: {0}", ex.Message)
+            Debug.Print("Error in OnChange: {0}", ex.Message)
         End Try
     End Sub
 End Module
