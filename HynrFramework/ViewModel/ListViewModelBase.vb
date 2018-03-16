@@ -40,7 +40,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 
 #Region "Properties"
     Public Property _DataController As datacontrollerclass
-    Private WithEvents _DataControllerEvents As IDataController(Of entityitme, dataitem)
     Protected WithEvents _WindowFactory As IListViewWindowFactory(Of dataitem)
     Private WithEvents _Timer As Timer
     Private WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
@@ -70,7 +69,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             End If
         End Get
         Set(ByVal value As viewmodelitem)
-            If Not value.Equals(_SelectedItem) Then
+            If Not IsNothing(value) AndAlso Not value.Equals(_SelectedItem) Then
                 If Not IsNothing(_SelectedItem) Then _SelectedItem.IsSelected = False
                 _SelectedItem = value
                 value.IsSelected = True
@@ -130,7 +129,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #Region "Constructor"
     Public Sub New()
         _DataController = GetInstance(GetType(datacontrollerclass))
-        _DataControllerEvents = _DataController
     End Sub
     Public Sub New(ByRef windowfactory As IListViewWindowFactory(Of dataitem))
         _WindowFactory = windowfactory
@@ -138,7 +136,6 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Public Sub New(ByRef datacontroller As datacontrollerclass, Optional ByRef windowfactory As IListViewWindowFactory(Of dataitem) = Nothing)
         _WindowFactory = windowfactory
         _DataController = datacontroller
-        _DataControllerEvents = _DataController
     End Sub
     Protected Overrides Sub Finalize()
         CancelLoading()
@@ -146,6 +143,18 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #End Region
 
 #Region "Methods"
+    Public Sub SetItemList(list As IEnumerable(Of viewmodelitem))
+        _OriginalItemList = list
+        ApplyFilter()
+        RaiseLoadingCompleted()
+    End Sub
+    Public Sub AddToItemList(list As IEnumerable(Of viewmodelitem))
+        For Each item In list
+            _OriginalItemList.Add(item)
+        Next
+        ApplyFilter()
+        RaiseLoadingCompleted()
+    End Sub
     Private Sub ToggleCanSave()
         CanSave = (From c In _OriginalItemList Where c.CanSave = True).Any
     End Sub
@@ -222,7 +231,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     ''' </summary>
     ''' <returns></returns>
     Protected Overridable Function AlternativeDoubleClickAction() As Boolean
-        Return True
+        Return False
     End Function
 #End Region
 
@@ -231,19 +240,22 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     ''' add bound properties with ListViewModelFilterAttribute to inherited listviewmodelclass for every filter parameter
     ''' </summary>
     Protected Async Sub ApplyFilter()
-        If Not IsNothing(CancellationSource) Then CancellationSource.Cancel()
-        CancellationSource = New Threading.CancellationTokenSource
-        Dim filterparameters As String = GenerateFilterParameters(Me)
-        If Not filterparameters = "" Then
-            Dim newlist As New ObservableListSource(Of viewmodelitem)
-            Dim filteredlist = Await Task.Run(Function() FilterFunction(_OriginalItemList.ToList, filterparameters), CancellationSource.Token)
-            For Each item In filteredlist
-                newlist.Add(item)
-            Next
-            ItemList = newlist
-        Else
-            ItemList = _OriginalItemList
-        End If
+        Try
+            If Not IsNothing(CancellationSource) Then CancellationSource.Cancel()
+            CancellationSource = New Threading.CancellationTokenSource
+            Dim filterparameters As String = GenerateFilterParameters(Me)
+            If Not filterparameters = "" Then
+                Dim newlist As New ObservableListSource(Of viewmodelitem)
+                Dim filteredlist = Await Task.Run(Function() FilterFunction(_OriginalItemList.ToList, filterparameters), CancellationSource.Token)
+                For Each item In filteredlist
+                    newlist.Add(item)
+                Next
+                ItemList = newlist
+            Else
+                ItemList = _OriginalItemList
+            End If
+        Catch
+        End Try
     End Sub
     ''' <summary>
     ''' override in case custom filter is required
@@ -305,7 +317,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         IsBusy = False
     End Sub
     Private Sub ExecuteOpenEditForm()
-        If AlternativeDoubleClickAction() Then
+        If Not AlternativeDoubleClickAction() Then
             Dim dataitem As dataitem = OpenEditForm()
             If Not IsNothing(dataitem) Then
                 _DataController.UpdateItem(dataitem)
@@ -410,6 +422,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         Try
             dataitemlist = Await Task.Run(Function() GetItems(), CancellationSource.Token)
         Catch ex As Exception
+            Debug.Print(ex.Message)
             _DataController.DataContext.AddError(ex, "ListViewModel GetData")
         End Try
         _AutoRefreshWrapper = _DataController.AutoRefreshWrapper

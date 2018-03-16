@@ -74,7 +74,7 @@ Public MustInherit Class ViewModelBase
         IsBusy = False
         DataLoaded = True
     End Sub
-    Protected Sub RaiseLoadingCompleted()
+    Public Sub RaiseLoadingCompleted()
         RaiseEvent LoadingCompleted()
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)

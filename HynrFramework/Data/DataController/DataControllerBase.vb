@@ -176,11 +176,7 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
 
         _ObjectContext = (CType(DataContext.GetSQLDBContext, IObjectContextAdapter)).ObjectContext
         AutoRefreshWrapper = New AutoRefreshWrapper(Of entityclass)(objectQuery, RefreshMode.StoreWins)
-        'AddHandler AutoRefreshWrapper.CollectionChanged, AddressOf OnCollectionChanged
     End Sub
-    'Private Sub OnCollectionChanged(e As SqlNotificationEventArgs)
-    '    RaiseEvent CollectionChanged(e)
-    'End Sub
 #End Region
 
 #Region "Data Mapping"

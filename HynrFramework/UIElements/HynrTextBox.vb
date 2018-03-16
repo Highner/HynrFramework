@@ -76,7 +76,8 @@ Public Class HynrTextBox
             Dim item = DataBindings.Item("Text")
             Try
                 If Not IsNothing(item) Then DataBindings.Remove(item)
-                DataBindings.Add("Text", LazyBindingViewModel, LazyBindingDataMember & LazyBindingDisplayProperty, True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+                Dim binding = New Binding("Text", LazyBindingViewModel, LazyBindingDataMember & LazyBindingDisplayProperty, True, DataSourceUpdateMode.OnPropertyChanged, Nothing)
+                DataBindings.Add(binding)
             Catch
                 'i really dont get it
             End Try
@@ -99,6 +100,7 @@ Public Class HynrTextBox
         SelectionStart = 0
         SelectionLength = Text.Length
     End Sub
+
 #End Region
 
 #Region "Events"

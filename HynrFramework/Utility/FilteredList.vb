@@ -9,6 +9,32 @@ Public Module FilteredList
             If Not IsNothing(prop.GetValue(listviewmodel)) Then
                 Dim att As ListViewModelFilterAttribute = prop.GetCustomAttribute(GetType(ListViewModelFilterAttribute))
                 Select Case att.ValueType.ToLower
+                    Case "string()"
+                        If Not IsDBNull(prop.GetValue(listviewmodel)) And Not IsNothing(prop.GetValue(listviewmodel)) Then
+                            Dim arr As String() = prop.GetValue(listviewmodel)
+                            If arr.Count > 0 Then
+                                If prevparamexists Then parameters = parameters + " and "
+
+                                parameters = parameters + "("
+                                Dim values As String() = prop.GetValue(listviewmodel)
+                                Dim secondprevparameterexists As Boolean = False
+
+
+                                For Each filtervalue In values
+                                    If secondprevparameterexists Then parameters = parameters + " or "
+                                    If att.ExactMatch Then
+                                        parameters = parameters + att.FilteredField + " = " + Chr(34) + filtervalue.ToString.Trim + Chr(34)
+                                    Else
+                                        parameters = parameters + att.FilteredField + ".ToLower().Contains(" + Chr(34) + filtervalue.ToString.ToLower.Trim + Chr(34) + ")"
+                                    End If
+                                    secondprevparameterexists = True
+                                Next
+
+                                parameters = parameters + ")"
+
+                                prevparamexists = True
+                            End If
+                        End If
                     Case "string"
                         If Not IsDBNull(prop.GetValue(listviewmodel)) And Not (prop.GetValue(listviewmodel) = "") Then
                             If prevparamexists Then parameters = parameters + " and "
