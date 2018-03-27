@@ -25,7 +25,7 @@ Public Module FilteredList
                                     If att.ExactMatch Then
                                         parameters = parameters + att.FilteredField + " = " + Chr(34) + filtervalue.ToString.Trim + Chr(34)
                                     Else
-                                        parameters = parameters + att.FilteredField + ".ToLower().Contains(" + Chr(34) + filtervalue.ToString.ToLower.Trim + Chr(34) + ")"
+                                        parameters = parameters + att.FilteredField + ".ToLower() = " + Chr(34) + filtervalue.ToString.ToLower.Trim + Chr(34)
                                     End If
                                     secondprevparameterexists = True
                                 Next
