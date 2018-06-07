@@ -186,10 +186,14 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     ''' can return "nothing" in case item not to be added to list.
     ''' </summary>
     Public Overridable Function ToData(entityitem As entityclass) As dataclass Implements IDataController(Of entityclass, dataclass).ToData
-        Dim newdataitem As Object
-        newdataitem = GetInstance(GetType(dataclass))
-        MapProperties(entityitem, newdataitem)
-        Return newdataitem
+        If Not IsNothing(entityitem) Then
+            Dim newdataitem As Object
+            newdataitem = GetInstance(GetType(dataclass))
+            MapProperties(entityitem, newdataitem)
+            Return newdataitem
+        Else
+            Return Nothing
+        End If
     End Function
 
     ''' <summary>

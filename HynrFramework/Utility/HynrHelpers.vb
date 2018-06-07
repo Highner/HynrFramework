@@ -35,4 +35,9 @@ Public Module HynrHelpers
             Return Nothing
         End Try
     End Function
+    Public Function GetGenericTypes(obj As Type) As Type()
+        Dim generic As Type = obj.GetGenericTypeDefinition()
+        Dim typeArguments As Type() = generic.GenericTypeArguments()
+        Return typeArguments
+    End Function
 End Module

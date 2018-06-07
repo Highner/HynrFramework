@@ -6,7 +6,7 @@ Imports System.Windows.Forms
 Imports HynrFramework
 Imports Microsoft.Office.Interop
 
-Public Class HynrGrid
+Public Class HynrGridBase
     Inherits DataHelper.DataGridViewSummary.DataGridViewSummary
     Implements IHasHynrSettings
     Implements INotifyPropertyChanged
@@ -167,7 +167,7 @@ End Class
 
 
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
-    Inherits HynrGrid
+    Inherits HynrGridBase
     Implements IBindableListControl(Of dataitem, viewmodelitem)
 
 #Region "Properties"

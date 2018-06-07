@@ -492,6 +492,14 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     End Sub
 #End Region
 
+#Region "Grid"
+    Public Overridable Function CreateGrid(databound As Boolean) As HynrGrid(Of dataitem, viewmodelitem)
+        Dim grid = New HynrGrid(Of dataitem, viewmodelitem)
+        If databound Then grid.BindToListViewModel(Me)
+        Return grid
+    End Function
+#End Region
+
 #Region "Events"
     Public Event SelectedItemChanged() Implements IListViewModel(Of viewmodelitem).SelectedItemChanged
     Public Event ItemListChanged() Implements IListViewModel(Of viewmodelitem).ItemListChanged
