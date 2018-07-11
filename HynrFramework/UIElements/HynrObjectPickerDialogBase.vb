@@ -1,13 +1,13 @@
 ﻿Imports System.Windows.Forms
 
-Public Class HynrObjectPickerDialog
+Public MustInherit Class HynrObjectPickerDialogBase
     Inherits HynrForm
 
+#Region "Properties"
     Public WithEvents ButtonCancel As System.Windows.Forms.Button
     Public WithEvents LabelStrip As HynrLabelStrip
     Public WithEvents ButtonOK As System.Windows.Forms.Button
-
-    Private WithEvents Items As Object
+    Friend WithEvents GridPanel As Panel
 
     Public Property CancelVisible() As Boolean
         Get
@@ -38,59 +38,40 @@ Public Class HynrObjectPickerDialog
             LabelStrip.LabelText = value
         End Set
     End Property
+#End Region
 
+#Region "Constructor"
     Public Sub New()
-        MyBase.New
+        MyBase.New(New HynrUISettings)
         InitializeComponent()
     End Sub
     Public Sub New(ByVal settings As HynrUISettings)
         MyBase.New(settings)
         InitializeComponent()
     End Sub
-
     Public Sub New(ByVal settings As HynrUISettings, ByVal cancelvisible As Boolean)
         MyBase.New(settings)
         InitializeComponent()
         Me.CancelVisible = cancelvisible
     End Sub
+#End Region
 
+#Region "Base Methods"
     Public Overrides Sub ApplyHynrSettings()
         MyBase.ApplyHynrSettings()
         If Not IsNothing(LabelStrip) Then LabelStrip.HynrSettings = HynrSettings
     End Sub
+#End Region
 
-    Public Function GetItems(ByRef lvm As Object, ByVal header As String, multiselect As Boolean) As Object
-        Items = lvm
+#Region "Methods"
 
-        Dim Grid = lvm.CreateGrid(True)
-        Grid.Location = New Drawing.Point(0, 21)
-        Grid.Anchor = CType(((AnchorStyles.Top Or AnchorStyles.Left) Or AnchorStyles.Right Or AnchorStyles.Bottom), AnchorStyles)
-        Grid.Size = New Drawing.Size(Me.Size.Width, Me.Size.Height - 21)
-
-        Grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Grid.AllowUserToAddRows = False
-        Grid.AllowUserToDeleteRows = False
-        Grid.AllowUserToResizeColumns = False
-        Grid.AllowUserToResizeRows = False
-        Grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-        Grid.MultiSelect = multiselect
-
-        LabelStrip.LabelText = header
-        lvm.RefreshAllCommand.Execute()
-        'Grid.BindToListViewModel(Items)
-        Controls.Add(Grid)
-        If ShowDialog() = System.Windows.Forms.DialogResult.OK Then
-            Return Grid.SelectedRows(0).DataBoundItem
-        Else
-            Return Nothing
-        End If
-    End Function
-
+#End Region
 
     Private Sub InitializeComponent()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.LabelStrip = New HynrFramework.HynrLabelStrip()
+        Me.GridPanel = New System.Windows.Forms.Panel()
         Me.SuspendLayout()
         '
         'ButtonCancel
@@ -126,12 +107,23 @@ Public Class HynrObjectPickerDialog
         Me.LabelStrip.TabIndex = 2
         Me.LabelStrip.Text = "LabelStrip"
         '
+        'GridPanel
+        '
+        Me.GridPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GridPanel.Location = New System.Drawing.Point(12, 28)
+        Me.GridPanel.Name = "GridPanel"
+        Me.GridPanel.Size = New System.Drawing.Size(427, 254)
+        Me.GridPanel.TabIndex = 3
+        '
         'HynrObjectPickerDialog
         '
         Me.AcceptButton = Me.ButtonOK
         Me.CancelButton = Me.ButtonCancel
         Me.ClientSize = New System.Drawing.Size(451, 323)
         Me.ControlBox = False
+        Me.Controls.Add(Me.GridPanel)
         Me.Controls.Add(Me.LabelStrip)
         Me.Controls.Add(Me.ButtonOK)
         Me.Controls.Add(Me.ButtonCancel)

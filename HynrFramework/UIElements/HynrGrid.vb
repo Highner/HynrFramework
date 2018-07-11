@@ -62,6 +62,7 @@ Public Class HynrGridBase
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
         Controls.Add(BusyIndicator)
+        IsBusy = False
     End Sub
     Protected Sub OnPropertyChanged(ByVal strPropertyName As String)
         If Me.PropertyChangedEvent IsNot Nothing Then

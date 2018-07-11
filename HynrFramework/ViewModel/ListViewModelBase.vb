@@ -274,7 +274,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
             If Not IsNothing(propinfo) Then
                 For Each item In _OriginalItemList.OrderBy(propertyname)
                     Dim val = propinfo.GetValue(item, Nothing)
-                    If Not IsNothing(val) Then ar.Add(val)
+                    If Not IsNothing(val) AndAlso Not ar.Contains(val) Then ar.Add(val)
                 Next
                 Return ar.Distinct.ToArray
             End If

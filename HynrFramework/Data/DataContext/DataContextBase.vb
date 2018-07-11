@@ -81,7 +81,12 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
     End Function
     Public Overridable Function DeleteObject(id As Object) As Boolean Implements IDataContext(Of entityclass).DeleteObject
         Try
-            DBContext.Set(GetType(entityclass)).Remove(GetObject(id))
+            If GetType(entityclass).GetInterfaces().Contains(GetType(IHasSoftDelete)) Then
+                Dim entity As IHasSoftDelete = DBContext.Set(GetType(entityclass)).Find(id)
+                entity.Deleted = True
+            Else
+                DBContext.Set(GetType(entityclass)).Remove(GetObject(id))
+            End If
         Catch ex As Exception
             AddError(ex, "DB DeleteObject")
             Return False
