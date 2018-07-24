@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Data.Entity
 Imports System.Data.OleDb
 Imports System.Drawing
 Imports System.Windows.Forms
@@ -192,5 +193,15 @@ Public Module HynrHelpers
             bitmaps.Add(New Bitmap(1, 1))
         End If
         Return ImagesToSingleImage(bitmaps.ToArray)
+    End Function
+
+    Public Function CheckConnection(context As DbContext) As Boolean
+        Try
+            context.Database.Connection.Open()
+            context.Database.Connection.Close()
+        Catch __unusedSqlException1__ As SqlClient.SqlException
+            Return False
+        End Try
+        Return True
     End Function
 End Module

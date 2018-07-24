@@ -1,7 +1,5 @@
 ﻿Public Class HynrFilterListDialog(Of dataitem As ICheckboxFilterItem)
     Inherits HynrItemViewFormDialog
-
-    Friend WithEvents LabelStrip As HynrLabelStrip
     Friend WithEvents FilterGridPanel As HynrFilterGridPanel
 
     Public Property ItemList As IFilterListViewModel(Of CheckboxFilterDataItemViewModel(Of dataitem))
@@ -27,9 +25,16 @@
         If DialogResult = System.Windows.Forms.DialogResult.OK AndAlso ItemList.CheckedItems.Any Then Return ItemList.CheckedItems.Select(Function(x) x.Data.GetType().GetProperty(resultproperty).GetValue(x.Data).ToString).ToArray Else Return Nothing
     End Function
 
+    Public Function GetDialogResult() As IEnumerable(Of dataitem)
+        Dim list As New List(Of dataitem)
+        Dim viewmodel As ViewModelBase = ItemList
+        viewmodel.RefreshAllCommand.Execute()
+        ShowDialog()
+        If DialogResult = System.Windows.Forms.DialogResult.OK AndAlso ItemList.CheckedItems.Any Then Return ItemList.CheckedItems.Select(Function(x) x.Data).ToList Else Return list
+    End Function
+
     Private Sub InitializeComponent()
         Me.FilterGridPanel = New HynrFramework.HynrFilterGridPanel()
-        Me.LabelStrip = New HynrFramework.HynrLabelStrip()
         Me.SuspendLayout()
         '
         'ButtonCancel
@@ -49,28 +54,17 @@
         Me.FilterGridPanel.Size = New System.Drawing.Size(427, 271)
         Me.FilterGridPanel.TabIndex = 2
         '
-        'LabelStrip
-        '
-        Me.LabelStrip.HynrSettings = Nothing
-        Me.LabelStrip.IsSubHeader = False
-        Me.LabelStrip.LabelText = ""
-        Me.LabelStrip.Location = New System.Drawing.Point(0, 0)
-        Me.LabelStrip.Name = "LabelStrip"
-        Me.LabelStrip.Size = New System.Drawing.Size(451, 25)
-        Me.LabelStrip.TabIndex = 3
-        Me.LabelStrip.Text = "HynrLabelStrip1"
-        '
         'HynrFilterListDialog
         '
+        Me.CancelVisible = True
         Me.ClientSize = New System.Drawing.Size(451, 340)
-        Me.Controls.Add(Me.LabelStrip)
         Me.Controls.Add(Me.FilterGridPanel)
+        Me.LabelStripVisible = True
         Me.Name = "HynrFilterListDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Controls.SetChildIndex(Me.ButtonCancel, 0)
         Me.Controls.SetChildIndex(Me.ButtonOK, 0)
         Me.Controls.SetChildIndex(Me.FilterGridPanel, 0)
-        Me.Controls.SetChildIndex(Me.LabelStrip, 0)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
