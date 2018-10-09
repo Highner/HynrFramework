@@ -68,6 +68,7 @@ Public Class FilterListViewModel(Of entityitme As IHasID, dataitem As ICheckboxF
         For Each item In ItemList
             If item.Checked Then item.Checked = False
         Next
+        CheckedItems.Clear()
     End Sub
     Public Overrides Function DataToItem(ByRef dataitem As dataitem) As viewmodelitem
         Dim newvmitem = MyBase.DataToItem(dataitem)

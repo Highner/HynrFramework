@@ -132,10 +132,13 @@
     <Compile Include="UIElements\HynrComboBox.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UIElements\HynrExcelImporterDialog.Designer.vb">
-      <DependentUpon>HynrExcelImporterDialog.vb</DependentUpon>
-    </Compile>
     <Compile Include="UIElements\HynrExcelImporterDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIElements\HynrExcelImporterDialogBse.Designer.vb">
+      <DependentUpon>HynrExcelImporterDialogBase.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UIElements\HynrExcelImporterDialogBase.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UIElements\HynrFilterGrid.vb">
@@ -151,6 +154,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UIElements\HynrFormDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIElements\HynrObjectEditorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UIElements\HynrObjectPickerDialogList.vb">
@@ -298,6 +304,7 @@
     <Compile Include="ViewModel\IViewModelBase.vb" />
     <Compile Include="ViewModel\ListViewModel.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />
+    <Compile Include="ViewModel\ListViewModelNonGenericBase.vb" />
     <Compile Include="ViewModel\MainViewModelBase.vb" />
     <Compile Include="ViewModel\GroupedListViewModelBase.vb" />
     <Compile Include="ViewModel\ViewModelBase.vb" />
@@ -312,8 +319,8 @@
     <EmbeddedResource Include="UIElements\HynrCheckedFilterButton.resx">
       <DependentUpon>HynrCheckedFilterButton.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UIElements\HynrExcelImporterDialog.resx">
-      <DependentUpon>HynrExcelImporterDialog.vb</DependentUpon>
+    <EmbeddedResource Include="UIElements\HynrExcelImporterDialogBse.resx">
+      <DependentUpon>HynrExcelImporterDialogBase.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIElements\HynrFilterListDialog.resx">
       <DependentUpon>HynrFilterListDialog.vb</DependentUpon>

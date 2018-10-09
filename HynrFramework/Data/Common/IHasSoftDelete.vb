@@ -1,3 +1,3 @@
 ﻿Public Interface IHasSoftDelete
-    Property Deleted As Boolean
+    Property Deleted As Boolean?
 End Interface

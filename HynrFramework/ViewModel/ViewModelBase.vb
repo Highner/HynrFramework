@@ -12,7 +12,7 @@ Public MustInherit Class ViewModelBase
     <Browsable(False)>
     Public Property RefreshAllCommand As ICommand = New Command(AddressOf GetData)
     <Browsable(False)>
-    Public Property RefreshAllCommandAsync As ICommand = New Command(AddressOf ExecuteGetData)
+    Public Overridable Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf ExecuteGetData)
 #End Region
 
 #Region "Properties"
@@ -86,6 +86,14 @@ Public MustInherit Class ViewModelBase
         For Each prop In Me.[GetType]().GetProperties()
             OnPropertyChanged(prop.Name)
         Next
+    End Sub
+    Protected Async Sub ExecuteAsyncSub(methods As Action(), raiseloadingcompleted As Boolean)
+        IsBusy = True
+        For Each method In methods
+            Await Task.Run(Sub() method())
+        Next
+        If raiseloadingcompleted Then Me.RaiseLoadingCompleted()
+        IsBusy = False
     End Sub
 #End Region
 

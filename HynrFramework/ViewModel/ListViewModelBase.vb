@@ -33,7 +33,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     <Browsable(False)>
     Public Property CancelLoadCommand As ICommand = New Command(AddressOf CancelLoading)
     <Browsable(False)>
-    Public Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync) Implements ICrudObject.RefreshAllAsyncCommand
+    Public Overrides Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync) Implements ICrudObject.RefreshAllAsyncCommand
     <Browsable(False)>
     Public Property ClearListCommand As ICommand = New Command(AddressOf ClearList)
 #End Region
@@ -41,8 +41,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
 #Region "Properties"
     Public Property _DataController As datacontrollerclass
     Protected WithEvents _WindowFactory As IListViewWindowFactory(Of dataitem)
-    Private WithEvents _Timer As Timer
-    Private WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
+    Protected WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
     Private WithEvents _ItemList As New ObservableListSource(Of viewmodelitem)
     Private WithEvents _AutoRefreshWrapper As AutoRefreshWrapper(Of entityitme)
     Protected _Refresh As Boolean = True
@@ -190,29 +189,15 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
         End If
         Return Nothing
     End Function
-    Public Sub SetTimer(ByVal interval As Integer)
-        If IsNothing(_Timer) Then
-            _Timer = New Timer
-        End If
-        StopTimer()
-        _Timer.Interval = interval
-        StartTimer()
-    End Sub
-    Public Sub StopTimer()
-        _Timer.Stop()
-    End Sub
-    Public Sub StartTimer()
-        _Timer.Start()
-    End Sub
-    Private Sub TimerTick() Handles _Timer.Tick
-        If Not IsBusy Then RefreshAllCommand.Execute(Nothing)
-    End Sub
     Protected Sub DataItemChanged(ByVal dataitem As IHasID) Handles _WindowFactory.FormClosed
         Dim id As Integer = dataitem.ID
         Dim changedlistitem = (From i In ItemList Where i.ID = id Select i).Single
         changedlistitem.Data = _DataController.GetItem(id)
         changedlistitem.AllPropertiesChanged()
         RaiseEvent ItemChanged()
+    End Sub
+    Public Sub RefreshItem(item As viewmodelitem)
+        DataItemChanged(item.Data)
     End Sub
     Public Sub RaiseFileDropped(item As Object, data As Object) Implements IListViewModel(Of viewmodelitem).RaiseFileDropped
         RaiseEvent FileDropped(item, data)

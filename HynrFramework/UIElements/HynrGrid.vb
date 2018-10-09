@@ -105,6 +105,9 @@ Public Class HynrGridBase
     Private Sub OnBindingComplete() Handles Me.DataBindingComplete
         If ColumnCount = 0 Then AutoGenerateColumns = True Else AutoGenerateColumns = False
     End Sub
+    Private Sub OnRowsAddedColor() Handles Me.RowsAdded
+        ColorRows()
+    End Sub
     Private Sub view_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles Me.DataError
         If e.Exception.Message = "DataGridViewComboBoxCell value is not valid." Then
             Dim value As Object = Rows(e.RowIndex).Cells(e.ColumnIndex).Value
@@ -129,6 +132,31 @@ Public Class HynrGridBase
         Dim x As Integer = Me.Width / 2 - BusyIndicator.Width / 2
         Dim y As Integer = Me.Height / 2 - BusyIndicator.Height / 2
         BusyIndicator.Location = New Drawing.Point(x, y)
+    End Sub
+
+    Protected Sub ColorRows()
+        If Rows.Count > 0 Then
+            Dim back = (From p In Rows(0).DataBoundItem.GetType.GetProperties Where p.Name = "BackColor").Any
+            Dim front = (From p In Rows(0).DataBoundItem.GetType.GetProperties Where p.Name = "ForeColor").Any
+            Dim bold = (From p In Rows(0).DataBoundItem.GetType.GetProperties Where p.Name = "Bold").Any
+            If back OrElse front Then
+                For Each row As DataGridViewRow In Rows
+                    If back Then row.DefaultCellStyle.BackColor = row.DataBoundItem.BackColor
+                    If front Then row.DefaultCellStyle.ForeColor = row.DataBoundItem.ForeColor
+                Next
+            End If
+            If bold Then
+                For Each row As DataGridViewRow In Rows
+                    Dim fnt As Font = row.DefaultCellStyle.Font
+                    Dim bld As FontStyle
+                    If row.DataBoundItem.Bold Then bld = FontStyle.Bold Else bld = FontStyle.Regular
+                    row.DefaultCellStyle.Font = New Font(fnt.FontFamily, bld)
+                Next
+            End If
+        End If
+    End Sub
+    Private Sub SortClicked() Handles Me.Sorted
+        ColorRows()
     End Sub
 #End Region
 
@@ -275,28 +303,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         SelectedItems = list
     End Sub
 
-    Private Sub ColorRows()
-        Dim back = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "BackColor").Any
-        Dim front = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "ForeColor").Any
-        Dim bold = (From p In (GetType(viewmodelitem)).GetProperties Where p.Name = "Bold").Any
-        If back OrElse front Then
-            For Each row As DataGridViewRow In Rows
-                If back Then row.DefaultCellStyle.BackColor = row.DataBoundItem.BackColor
-                If front Then row.DefaultCellStyle.ForeColor = row.DataBoundItem.ForeColor
-            Next
-        End If
-        If bold Then
-            For Each row As DataGridViewRow In Rows
-                Dim fnt As Font = row.DefaultCellStyle.Font
-                Dim bld As FontStyle
-                If row.DataBoundItem.Bold Then bld = FontStyle.Bold Else bld = FontStyle.Regular
-                row.DefaultCellStyle.Font = New Font(fnt.FontFamily, bld)
-            Next
-        End If
-    End Sub
-    Private Sub SortClicked() Handles Me.Sorted
-        ColorRows()
-    End Sub
+
 #End Region
 
 #Region "FileDrop"
@@ -509,6 +516,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
             DataBindings.Remove(binding)
         End If
     End Sub
+
 #End Region
 
 #Region "Events"
