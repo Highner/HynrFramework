@@ -8,6 +8,7 @@ Public MustInherit Class HynrExcelImporterDialogBase
 #Region "Constructor"
     Public Sub New()
         InitializeComponent()
+
     End Sub
 #End Region
 
