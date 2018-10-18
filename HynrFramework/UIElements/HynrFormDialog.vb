@@ -77,6 +77,7 @@
         Me.Controls.Add(Me.ButtonCancel)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "HynrFormDialog"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.ResumeLayout(False)
 
     End Sub

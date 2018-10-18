@@ -1,7 +1,6 @@
 ﻿Imports System.Windows.Forms
 
 Public Class HynrObjectPickerDialogListView
-    Inherits HynrObjectPickerDialogBase
 
 #Region "Constructor"
     Public Sub New(cancelvisible As Boolean)

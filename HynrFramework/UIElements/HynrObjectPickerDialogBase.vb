@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 
-Public MustInherit Class HynrObjectPickerDialogBase
+Public Class HynrObjectPickerDialogBase
     Inherits HynrForm
 
 #Region "Properties"
@@ -8,7 +8,7 @@ Public MustInherit Class HynrObjectPickerDialogBase
     Public WithEvents LabelStrip As HynrLabelStrip
     Public WithEvents ButtonOK As System.Windows.Forms.Button
     Friend WithEvents CrudStrip As HynrGridCrudToolstrip
-    Friend WithEvents GridPanel As Panel
+    Public WithEvents GridPanel As Panel
 
     Public Property CancelVisible() As Boolean
         Get
