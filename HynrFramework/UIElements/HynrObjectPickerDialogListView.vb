@@ -1,18 +1,27 @@
 ﻿Imports System.Windows.Forms
 
 Public Class HynrObjectPickerDialogListView
+    Inherits HynrObjectPickerDialogBase
+
+#Region "Properties"
+    Private _Lvm As ICrudObject
+#End Region
 
 #Region "Constructor"
     Public Sub New(cancelvisible As Boolean)
         MyBase.New(New HynrUISettings, cancelvisible)
+        InitializeComponent()
     End Sub
     Public Sub New(cancelvisible As Boolean, crud As Boolean, create As Boolean, delete As Boolean, save As Boolean, refresh As Boolean)
         MyBase.New(New HynrUISettings, cancelvisible, crud, create, delete, save, refresh)
+        InitializeComponent()
     End Sub
 #End Region
 
 #Region "Methods"
     Public Function GetItems(ByRef lvm As Object, ByVal header As String, multiselect As Boolean) As List(Of Object)
+
+        _Lvm = lvm
 
         'create grid from listviewmodel and add it to panel
         Dim grid = CreateGrid(lvm, multiselect)
@@ -40,6 +49,8 @@ Public Class HynrObjectPickerDialogListView
         Return list
     End Function
     Public Function GetItems(Of t As ICheckboxFilterItem)(ByRef lvm As Object, ByVal header As String, multiselect As Boolean) As List(Of t)
+
+        _Lvm = lvm
 
         'create grid from listviewmodel and add it to panel
         CreateGrid(lvm, multiselect)
@@ -80,4 +91,18 @@ Public Class HynrObjectPickerDialogListView
         CrudStrip.BindToListView(listview)
     End Sub
 #End Region
+
+#Region "Buttons"
+    Protected Overrides Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+        Me.DialogResult = System.Windows.Forms.DialogResult.OK
+        Close()
+        _Lvm.UpdateAllCommand.Execute()
+    End Sub
+
+    Protected Overrides Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+        Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Close()
+    End Sub
+#End Region
+
 End Class

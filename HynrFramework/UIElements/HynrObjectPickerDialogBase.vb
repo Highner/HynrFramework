@@ -56,8 +56,9 @@ Public Class HynrObjectPickerDialogBase
         Me.CancelVisible = cancelvisible
     End Sub
     Public Sub New(ByVal settings As HynrUISettings, ByVal cancelvisible As Boolean, ByVal crud As Boolean, create As Boolean, delete As Boolean, save As Boolean, refresh As Boolean)
-        Me.New(settings, cancelvisible)
+        MyBase.New(settings)
         InitializeComponent()
+        Me.CancelVisible = cancelvisible
         CrudStrip.Visible = crud
         CrudStrip.CreateButtonEnabled = create
         CrudStrip.DeleteButtonEnabled = delete
@@ -66,9 +67,10 @@ Public Class HynrObjectPickerDialogBase
         AddCrudImages()
     End Sub
     Private Sub AddCrudImages()
-        CrudStrip.CreateImage = My.Resources.chart__pencil
-        CrudStrip.DeleteImage = My.Resources.chevron
-        CrudStrip.RefreshImage = My.Resources.navigation_000_button_white
+        CrudStrip.CreateImage = My.Resources.plus
+        CrudStrip.DeleteImage = My.Resources.minus
+        CrudStrip.RefreshImage = My.Resources.arrow_circle_double
+        CrudStrip.SaveImage = My.Resources.disk_black
     End Sub
 #End Region
 
@@ -85,12 +87,12 @@ Public Class HynrObjectPickerDialogBase
 #End Region
 
 #Region "Buttons"
-    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+    Protected Overridable Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Close()
     End Sub
 
-    Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
+    Protected Overridable Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Close()
     End Sub

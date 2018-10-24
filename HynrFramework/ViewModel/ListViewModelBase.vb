@@ -159,6 +159,7 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     End Sub
     Public Sub AddItemToList(ByRef viewmodelitem As viewmodelitem)
         _OriginalItemList.Insert(0, viewmodelitem)
+        SelectedItem = viewmodelitem
         ApplyFilter()
         RaiseEvent ItemAdded(viewmodelitem)
     End Sub

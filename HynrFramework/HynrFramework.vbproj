@@ -162,6 +162,9 @@
     <Compile Include="UIElements\HynrFormDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIElements\HynrGridPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UIElements\HynrObjectEditorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -451,6 +454,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\chart--pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disk-black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-circle-double.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
