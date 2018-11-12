@@ -193,7 +193,8 @@ Public Class ListViewModelBase(Of entityitme As IHasID, dataitem As IHasID, data
     Protected Sub DataItemChanged(ByVal dataitem As IHasID) Handles _WindowFactory.FormClosed
         Dim id As Integer = dataitem.ID
         Dim changedlistitem = (From i In ItemList Where i.ID = id Select i).Single
-        changedlistitem.Data = _DataController.GetItem(id)
+        Dim newdataitem = _DataController.GetItem(id)
+        If Not IsNothing(newdataitem) Then changedlistitem.Data = newdataitem Else changedlistitem.Data = dataitem
         changedlistitem.AllPropertiesChanged()
         RaiseEvent ItemChanged()
     End Sub
