@@ -53,10 +53,12 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
     End Function
     Protected Function EntitiesToItems(ByRef entities As IEnumerable(Of entityclass)) As IEnumerable(Of dataclass)
         Dim list As New List(Of dataclass)
-        For Each entityitem In entities
-            Dim newdataitem As dataclass = ToData(entityitem)
-            If Not IsNothing(newdataitem) Then list.Add(newdataitem)
-        Next
+        If Not IsNothing(entities) Then
+            For Each entityitem In entities
+                Dim newdataitem As dataclass = ToData(entityitem)
+                If Not IsNothing(newdataitem) Then list.Add(newdataitem)
+            Next
+        End If
         Return list
     End Function
     Public Overridable Function GetItem(id As Object) As dataclass Implements IDataController(Of entityclass, dataclass).GetItem
