@@ -5,6 +5,7 @@ Public Class HynrObjectPickerDialogListView
 
 #Region "Properties"
     Private _Lvm As ICrudObject
+    Private _SaveOnClose As Boolean = True
 #End Region
 
 #Region "Constructor"
@@ -19,8 +20,8 @@ Public Class HynrObjectPickerDialogListView
 #End Region
 
 #Region "Methods"
-    Public Function GetItems(ByRef lvm As Object, ByVal header As String, multiselect As Boolean) As List(Of Object)
-
+    Public Function GetItems(ByRef lvm As Object, ByVal header As String, multiselect As Boolean, Optional saveonclose As Boolean = True) As List(Of Object)
+        _SaveOnClose = saveonclose
         _Lvm = lvm
 
         'create grid from listviewmodel and add it to panel
@@ -96,7 +97,7 @@ Public Class HynrObjectPickerDialogListView
     Protected Overrides Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Close()
-        _Lvm.UpdateAllCommand.Execute()
+        If _SaveOnClose Then _Lvm.UpdateAllCommand.Execute()
     End Sub
 
     Protected Overrides Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click

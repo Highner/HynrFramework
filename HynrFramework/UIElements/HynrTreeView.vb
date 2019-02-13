@@ -73,6 +73,7 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
     Private LazyBindingViewModel As IViewModelBase
     Private _GroupHeader As String
     Public Property EnableDelete As Boolean = False
+    Public Property Multiselect As Boolean = True
 #End Region
 
 #Region "Methods"
@@ -191,7 +192,7 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
         End If
     End Sub
     Private Sub TreeViewTarget_DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles Me.DragEnter
-        If e.Data.GetDataPresent(GetType(TreeNode)) Then
+        If e.Data.GetDataPresent(GetType(TreeNode)) AndAlso (Multiselect Or (Not BindingSourceDataSource.Any)) Then
             e.Effect = DragDropEffects.Move
         End If
     End Sub
@@ -199,10 +200,10 @@ Public Class HynrTreeView(Of dataitem As IHasID, viewmodelitem As ItemViewModelB
         DoDragDrop(SelectedNode, DragDropEffects.Move)
     End Sub
     Private Sub TreeViewTarget_DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles Me.DragDrop
-        If e.Data.GetDataPresent(GetType(TreeNode)) Then
+        If e.Data.GetDataPresent(GetType(TreeNode)) AndAlso (Multiselect Or (Not BindingSourceDataSource.Any)) Then
             Dim item As TreeNode = e.Data.GetData(GetType(TreeNode))
             For Each newitem In TransformData(item)
-                If Not BindingSourceDataSource.Contains(newitem) Then BindingSourceDataSource.Add(newitem)
+                If Not BindingSourceDataSource.Contains(newitem) AndAlso ((Not Multiselect And Not BindingSourceDataSource.Any) Or (Multiselect)) Then BindingSourceDataSource.Add(newitem)
             Next
             PopulateTreeView()
         End If

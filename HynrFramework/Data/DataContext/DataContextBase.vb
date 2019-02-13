@@ -72,7 +72,14 @@ Public Class DataContextBase(Of entityclass As Class, dbcontextclass As DbContex
     End Function
     Public Overridable Function AddObject(ByRef entityobject As entityclass) As Boolean Implements IDataContext(Of entityclass).AddObject
         Try
-            DBContext.Set(GetType(entityclass)).Add(entityobject)
+            If GetType(entityclass).GetInterfaces().Contains(GetType(IHasSoftDelete)) Then
+                Dim entity As IHasSoftDelete = entityobject
+                entity.Deleted = False
+                DBContext.Set(GetType(entityclass)).Add(entity)
+            Else
+                DBContext.Set(GetType(entityclass)).Add(entityobject)
+
+            End If
         Catch ex As Exception
             AddError(ex, "DB AddObject")
             Return False

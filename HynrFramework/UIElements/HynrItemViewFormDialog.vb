@@ -87,6 +87,7 @@
         '
         'LabelStrip
         '
+        Me.LabelStrip.Highlighted = False
         Me.LabelStrip.HynrSettings = Nothing
         Me.LabelStrip.IsSubHeader = False
         Me.LabelStrip.LabelText = ""
@@ -108,6 +109,7 @@
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "HynrItemViewFormDialog"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

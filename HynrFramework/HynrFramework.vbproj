@@ -117,6 +117,7 @@
     <Compile Include="Data\DataContext\IHasActivityLog.vb" />
     <Compile Include="Data\DataContext\IHasActivityLogChangeMessage.vb" />
     <Compile Include="Data\DataContext\IHasActivityLogName.vb" />
+    <Compile Include="Data\DataController\DataControllerBaseLight.vb" />
     <Compile Include="UIElements\HynrFormDialogText.Designer.vb">
       <DependentUpon>HynrFormDialogText.vb</DependentUpon>
     </Compile>
@@ -318,6 +319,7 @@
     <Compile Include="ViewModel\IItemViewModel.vb" />
     <Compile Include="ViewModel\IViewModelBase.vb" />
     <Compile Include="ViewModel\ListViewModel.vb" />
+    <Compile Include="ViewModel\ListViewModelBaseLight.vb" />
     <Compile Include="ViewModel\ListViewModelBase.vb" />
     <Compile Include="ViewModel\ListViewModelNonGenericBase.vb" />
     <Compile Include="ViewModel\MainViewModelBase.vb" />
