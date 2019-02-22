@@ -50,7 +50,7 @@ Public Class HynrGridBase
         End Set
     End Property
     Private BusyIndicator As New MatrixCircularProgressControl
-
+    Private _HasColoredRows As Boolean
 #End Region
 
 #Region "Methods"
@@ -59,6 +59,7 @@ Public Class HynrGridBase
         RowHeadersVisible = False
         AllowUserToResizeRows = False
         AllowUserToAddRows = False
+        _HasColoredRows = False
         BusyIndicator.Height = 50
         BusyIndicator.Width = 50
         Controls.Add(BusyIndicator)
@@ -140,10 +141,13 @@ Public Class HynrGridBase
             Dim front = (From p In Rows(0).DataBoundItem.GetType.GetProperties Where p.Name = "ForeColor").Any
             Dim bold = (From p In Rows(0).DataBoundItem.GetType.GetProperties Where p.Name = "Bold").Any
             If back OrElse front Then
+                _HasColoredRows = True
                 For Each row As DataGridViewRow In Rows
                     If back Then row.DefaultCellStyle.BackColor = row.DataBoundItem.BackColor
                     If front Then row.DefaultCellStyle.ForeColor = row.DataBoundItem.ForeColor
                 Next
+            Else
+                _HasColoredRows = False
             End If
             If bold Then
                 For Each row As DataGridViewRow In Rows
@@ -157,6 +161,29 @@ Public Class HynrGridBase
     End Sub
     Private Sub SortClicked() Handles Me.Sorted
         ColorRows()
+    End Sub
+
+    Private Sub HandleRowPrePaint(ByVal sender As Object, ByVal e As DataGridViewRowPrePaintEventArgs) Handles Me.RowPrePaint
+        Dim state As DataGridViewElementStates = e.State And DataGridViewElementStates.Selected
+        If state = DataGridViewElementStates.Selected Then
+            e.PaintParts = e.PaintParts And Not (DataGridViewPaintParts.Focus Or DataGridViewPaintParts.SelectionBackground)
+        End If
+    End Sub
+
+    Private Sub HandleRowPostPaint(ByVal sender As Object, ByVal e As DataGridViewRowPostPaintEventArgs) Handles Me.RowPostPaint
+        Const intBorderWidth As Integer = 2
+        Dim rowRect As Rectangle
+        Dim state As DataGridViewElementStates
+        state = e.State And DataGridViewElementStates.Selected
+        If state = DataGridViewElementStates.Selected Then
+            Dim iBorder As Integer = Convert.ToInt32(intBorderWidth)
+            Dim columnsWidth As Integer = Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
+            Dim intRectStart As Integer = RowHeadersWidth - 40
+            rowRect = New Rectangle(intRectStart, e.RowBounds.Top + iBorder - 1, columnsWidth - HorizontalScrollingOffset + 1, e.RowBounds.Height - iBorder)
+            Using Pen As Pen = New Pen(Color.LightSlateGray, intBorderWidth)
+                e.Graphics.DrawRectangle(Pen, rowRect)
+            End Using
+        End If
     End Sub
 #End Region
 
@@ -272,7 +299,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         _DoubleClickTimer.Interval = 30
     End Sub
     Protected Overrides Sub Finalize()
-        RemoveHandler LazyBindingViewModel.LoadingCompleted, AddressOf CompleteBinding
+        If Not IsNothing(LazyBindingViewModel) Then RemoveHandler LazyBindingViewModel.LoadingCompleted, AddressOf CompleteBinding
     End Sub
     Private Sub SelectedItemChanged()
         SelectedItem = _BindingSource.Current
@@ -479,6 +506,8 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
     Public Sub BindToListViewModel(ByVal listviewmodel As IListViewModelBase)
         LazyBindingViewModel = listviewmodel
         DataBindings.Add("IsBusy", LazyBindingViewModel, "IsBusy", True, DataSourceUpdateMode.Never, True)
+        Dim initiallist = New ObservableListSource(Of viewmodelitem)
+        BindingSourceDataSource = initiallist
         AddHandler listviewmodel.LoadingCompleted, AddressOf CompleteBinding
         AddHandler FileDropped, AddressOf listviewmodel.RaiseFileDropped
         AddHandler ItemDoubleClick, AddressOf listviewmodel.RaiseItemDoubleClicked

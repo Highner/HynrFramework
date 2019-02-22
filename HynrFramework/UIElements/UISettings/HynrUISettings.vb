@@ -4,7 +4,7 @@ Imports System.Windows.Forms
 Public Class HynrUISettings
 #Region "COLORS"
     Private _DefaultBackground As Color = Color.White
-    Private _DefaultSelectedBackcolor As Color = Color.AliceBlue
+    Private _DefaultSelectedBackcolor As Color = Color.DodgerBlue
     Private _DefaultSelectedForecolor As Color = Color.Black
     Private _DefaultMarked As Color = Color.LightYellow
     Private _DefaultGridColor As Color = Color.LightGray
