@@ -28,7 +28,13 @@ Public Class HynrPanel
             _IsBusy = value
             ToggleBusyIndicator(_IsBusy)
             OnPropertyChanged("IsBusy")
+            OnPropertyChanged("IsNotBusy")
         End Set
+    End Property
+    Public ReadOnly Property IsNotBusy As Boolean
+        Get
+            Return Not IsBusy
+        End Get
     End Property
     Private BusyIndicator As New MatrixCircularProgressControl
     Private LazyBindingViewModel As IViewModelBase

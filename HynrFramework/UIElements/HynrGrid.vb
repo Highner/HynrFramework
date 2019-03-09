@@ -216,12 +216,6 @@ End Class
 
 
 
-
-
-
-
-
-
 Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(Of dataitem))
     Inherits HynrGridBase
     Implements IBindableListControl(Of dataitem, viewmodelitem)
@@ -308,6 +302,7 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         If e.RowIndex <> -1 AndAlso e.ColumnIndex <> -1 Then
             If Not IsNothing(SelectedItem) Then
                 SelectedItem.SelectedCellIndex = e.ColumnIndex
+                'BlinkRow(e.RowIndex)
                 SelectedItem.DoubleClickCommand.Execute()
             End If
             RaiseEvent ItemDoubleClick(SelectedItem, e.ColumnIndex)
@@ -329,7 +324,15 @@ Public Class HynrGrid(Of dataitem As IHasID, viewmodelitem As ItemViewModelBase(
         Next
         SelectedItems = list
     End Sub
+    Private Sub BlinkRow(rowindex As Integer)
+        Dim row = Rows(rowindex)
+        Dim backcolor = row.DefaultCellStyle.SelectionBackColor
+        row.DefaultCellStyle.SelectionBackColor = Color.Red
 
+        Threading.Thread.Sleep(1000)
+
+        row.DefaultCellStyle.SelectionBackColor = backcolor
+    End Sub
 
 #End Region
 

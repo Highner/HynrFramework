@@ -167,15 +167,16 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         Return query
     End Function
     Private Sub InitializeAutoRefresh(query As IQueryable(Of entityclass))
+        'InitializeConnection()
 
-        If Not IsNothing(_ObjectContext) Then _ObjectContext.Dispose()
+        'If Not IsNothing(_ObjectContext) Then _ObjectContext.Dispose()
         AutoRefreshWrapper = Nothing
 
         Dim internalQueryField = query.[GetType]().GetFields(BindingFlags.NonPublic Or BindingFlags.Instance).FirstOrDefault(Function(f) f.Name.Equals("_internalQuery"))
         Dim internalQuery = internalQueryField.GetValue(query)
         Dim objectQueryField = internalQuery.[GetType]().GetFields(BindingFlags.NonPublic Or BindingFlags.Instance).FirstOrDefault(Function(f) f.Name.Equals("_objectQuery"))
         Dim objectQuery = TryCast(objectQueryField.GetValue(internalQuery), ObjectQuery(Of entityclass))
-
+        Dim lala = objectQuery.Context
         _ObjectContext = (CType(DataContext.GetSQLDBContext, IObjectContextAdapter)).ObjectContext
         AutoRefreshWrapper = New AutoRefreshWrapper(Of entityclass)(objectQuery, RefreshMode.StoreWins)
     End Sub

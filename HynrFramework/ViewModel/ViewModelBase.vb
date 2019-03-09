@@ -12,6 +12,8 @@ Public MustInherit Class ViewModelBase
     <Browsable(False)>
     Public Property RefreshAllCommand As ICommand = New Command(AddressOf GetData)
     <Browsable(False)>
+    Public Property CancelAllCommand As ICommand = New Command(AddressOf GetData)
+    <Browsable(False)>
     Public Overridable Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf ExecuteGetData)
 #End Region
 
@@ -69,6 +71,7 @@ Public MustInherit Class ViewModelBase
     Private Async Sub ExecuteGetData()
         DataLoaded = False
         IsBusy = True
+        If Not IsNothing(CancellationSource) Then CancellationSource.Cancel()
         CancellationSource = New Threading.CancellationTokenSource
         Await Task.Run(Sub() GetData(), CancellationSource.Token)
         IsBusy = False
@@ -87,13 +90,22 @@ Public MustInherit Class ViewModelBase
             OnPropertyChanged(prop.Name)
         Next
     End Sub
-    Protected Async Sub ExecuteAsyncSub(methods As Action(), raiseloadingcompleted As Boolean)
+    Protected Async Sub ExecuteAsyncSub(methods As Action(), Optional completedevent As EventHandler = Nothing)
         IsBusy = True
         For Each method In methods
             Await Task.Run(Sub() method())
         Next
-        If raiseloadingcompleted Then Me.RaiseLoadingCompleted()
+        If Not IsNothing(completedevent) Then completedevent(Me, Nothing)
         IsBusy = False
+    End Sub
+    Protected Async Sub ExecuteAsyncSub(method As Action, Optional completedevent As EventHandler = Nothing)
+        IsBusy = True
+        Await Task.Run(Sub() method())
+        If Not IsNothing(completedevent) Then completedevent(Me, Nothing)
+        IsBusy = False
+    End Sub
+    Protected Sub CancelAll()
+
     End Sub
 #End Region
 

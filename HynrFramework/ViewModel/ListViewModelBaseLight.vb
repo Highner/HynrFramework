@@ -36,13 +36,15 @@ Public Class ListViewModelBaseLight(Of dataitem As IHasID, datacontrollerclass A
     Public Overrides Property RefreshAllAsyncCommand As ICommand = New Command(AddressOf GetDataAsync) Implements ICrudObject.RefreshAllAsyncCommand
     <Browsable(False)>
     Public Property ClearListCommand As ICommand = New Command(AddressOf ClearList)
+    <Browsable(False)>
+    Public Property RefreshAllForceNonAsyncCommand As ICommand = New Command(AddressOf GetDataNonAsync)
 #End Region
 
 #Region "Properties"
     Public Property _DataController As datacontrollerclass
     Protected WithEvents _WindowFactory As IListViewWindowFactory(Of dataitem)
     Protected WithEvents _OriginalItemList As New ObservableListSource(Of viewmodelitem)
-    Private WithEvents _ItemList As New ObservableListSource(Of viewmodelitem)
+    Protected WithEvents _ItemList As New ObservableListSource(Of viewmodelitem)
     Protected _Refresh As Boolean = True
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
     Public Property ItemList() As ObservableListSource(Of viewmodelitem)
@@ -410,6 +412,20 @@ Public Class ListViewModelBaseLight(Of dataitem As IHasID, datacontrollerclass A
     End Sub
     Protected Overridable Sub ClearListLight()
         ItemList.Clear()
+    End Sub
+    Private Sub GetDataNonAsync()
+        DataLoaded = False
+        IsBusy = True
+        CancelLoading()
+        ClearListLight()
+        Dim dataitemlist As IEnumerable(Of dataitem) = Nothing
+        dataitemlist = GetItems()
+        If IsNothing(dataitemlist) Then dataitemlist = New List(Of dataitem)
+        DataToList(dataitemlist)
+        ToggleCanSave()
+        IsBusy = False
+        DataLoaded = True
+        RaiseLoadingCompleted()
     End Sub
     Protected Overrides Sub GetData()
         GetDataAsync()

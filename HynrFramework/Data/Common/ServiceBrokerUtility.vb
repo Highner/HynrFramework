@@ -20,18 +20,19 @@ Module ServiceBrokerUtility
         'Dim csInEF = ctx.Connection.ConnectionString
         'Dim csName = csInEF.Replace("name=", "").Trim()
         'Dim csForEF = csInEF 'System.Configuration.ConfigurationManager.ConnectionStrings(csName).ConnectionString
+
         Dim newConnectionString = New EntityClient.EntityConnectionStringBuilder(ctx.Connection.ConnectionString).ProviderConnectionString
         If Not connectionStrings.Contains(newConnectionString) Then
             connectionStrings.Add(newConnectionString)
-            SqlDependency.Start(newConnectionString)
-        End If
 
+        End If
+        SqlDependency.Start(newConnectionString)
         ServiceBrokerUtility.ctx = ctx
         ServiceBrokerUtility.refreshMode = refreshMode
-        AutoRefresh(collection)
+        ApplyAutoRefresh(collection)
     End Sub
 
-    Sub AutoRefresh(ByVal collection As IEnumerable)
+    Private Sub ApplyAutoRefresh(ByVal collection As IEnumerable)
         Dim oldCookie = CallContext.GetData(sqlDependencyCookie)
         Try
             Dim dependency = New SqlDependency()
@@ -43,7 +44,7 @@ Module ServiceBrokerUtility
             Catch ex As Exception
                 Debug.Print(ex.Message)
             End Try
-        Finally
+        Catch
             CallContext.SetData(sqlDependencyCookie, oldCookie)
         End Try
     End Sub
@@ -58,7 +59,7 @@ Module ServiceBrokerUtility
             Dim collection As IEnumerable
             If collections.TryGetValue(id, collection) Then
                 collections.Remove(id)
-                AutoRefresh(collection)
+                ApplyAutoRefresh(collection)
                 Dim notifyRefresh = TryCast(collection, INotifyRefresh)
                 'If notifyRefresh IsNot Nothing Then System.Windows.Application.Current.Dispatcher.BeginInvoke(notifyRefresh.OnRefresh)
                 If notifyRefresh IsNot Nothing Then notifyRefresh.OnRefresh(e)
