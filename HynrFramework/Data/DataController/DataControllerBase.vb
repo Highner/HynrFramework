@@ -40,6 +40,18 @@ Public Class DataControllerBase(Of entityclass As IHasID, dataclass As IHasID, d
         End If
         Return Nothing
     End Function
+    Public Overridable Function CreateNewItems(dataitems As IEnumerable(Of dataclass)) As Boolean Implements IDataController(Of entityclass, dataclass).CreateNewItems
+        InitializeConnection()
+        For Each dataitem In dataitems
+            Dim newentityitem As entityclass = GetInstance(GetType(entityclass))
+            ToEntity(dataitem, newentityitem)
+            If Not DataContext.AddObject(newentityitem) = True Then
+                Return False
+            End If
+        Next
+        Return DataContext.Save()
+        Return Nothing
+    End Function
     ''' <summary>
     ''' override this with a call to GetItems(parameters as string) or create custom call to datacontext and insert here if not ALL items are to be loaded
     ''' </summary>

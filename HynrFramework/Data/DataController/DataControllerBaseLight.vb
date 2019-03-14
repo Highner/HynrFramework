@@ -39,6 +39,9 @@ Public Class DataControllerBaseLight(Of dataclass As IHasID)
         Next
         Return True
     End Function
+
+    Public Function CreateNewItems(dataitem As IEnumerable(Of dataclass)) As Boolean Implements IDataControllerLight(Of dataclass).CreateNewItems
+    End Function
 #End Region
 
 

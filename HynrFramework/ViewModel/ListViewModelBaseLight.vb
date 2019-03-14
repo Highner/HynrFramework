@@ -143,6 +143,16 @@ Public Class ListViewModelBaseLight(Of dataitem As IHasID, datacontrollerclass A
 #End Region
 
 #Region "Methods"
+    Public Function Pick(multiselect As Boolean, crud As Boolean) As IEnumerable(Of viewmodelitem)
+        Dim picker As New HynrObjectPickerDialogListView(True, crud, crud, crud, crud, True)
+        Dim list = picker.GetItems(Me, "Select items", multiselect, crud)
+        Dim newlist As New List(Of viewmodelitem)
+        For Each item In list
+            Dim newitem As viewmodelitem = item
+            newlist.Add(newitem)
+        Next
+        Return newlist
+    End Function
     Public Sub SetItemList(list As IEnumerable(Of viewmodelitem))
         _OriginalItemList = list
         ApplyFilter()
