@@ -257,7 +257,8 @@ Public Class ListViewModelBaseLight(Of dataitem As IHasID, datacontrollerclass A
             Dim filterparameters As String = GenerateFilterParameters(Me)
             If Not filterparameters = "" Then
                 Dim newlist As New ObservableListSource(Of viewmodelitem)
-                Dim filteredlist = Await Task.Run(Function() FilterFunction(_OriginalItemList.ToList, filterparameters), CancellationSource.Token)
+                Dim filteredlist As List(Of viewmodelitem)
+                filteredlist = Await Task.Run(Function() FilterFunction(_OriginalItemList.ToList, filterparameters), CancellationSource.Token)
                 For Each item In filteredlist
                     newlist.Add(item)
                 Next
@@ -265,7 +266,7 @@ Public Class ListViewModelBaseLight(Of dataitem As IHasID, datacontrollerclass A
             Else
                 ItemList = _OriginalItemList
             End If
-        Catch
+        Catch ex As Exception
         End Try
     End Sub
     ''' <summary>
@@ -275,9 +276,11 @@ Public Class ListViewModelBaseLight(Of dataitem As IHasID, datacontrollerclass A
     ''' <param name="filterparameters"></param>
     ''' <returns></returns>
     Protected Overridable Function FilterFunction(itemlist As IEnumerable(Of viewmodelitem), filterparameters As String) As List(Of viewmodelitem)
-        Return itemlist.Where(filterparameters).ToList
+        Return FilterFunction(itemlist.Where(filterparameters))
     End Function
-
+    Protected Overridable Function FilterFunction(itemlist As IEnumerable(Of viewmodelitem)) As List(Of viewmodelitem)
+        Return itemlist.ToList
+    End Function
     Public Function GetUniqueItemsForFilter(ByVal propertyname As String) As String() Implements IListViewModel(Of viewmodelitem).GetUniqueItemsForFilter
         If _OriginalItemList.Any Then
             Dim ar As New List(Of String)
