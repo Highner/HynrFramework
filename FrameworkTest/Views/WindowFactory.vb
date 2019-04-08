@@ -14,8 +14,7 @@ Public Class WindowFactory(Of dataitem As IHasID)
     End Function
 
     Public Function OpenNewForm(ByVal datacontext As dataitem) As dataitem Implements IListViewWindowFactory(Of dataitem).OpenNewForm
-        'Dim form As New PersonView(New HynrUISettings, datacontext)
-        'Form.Show()
+        Return Nothing
     End Function
 
 End Class
